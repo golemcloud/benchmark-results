@@ -2,10 +2,17 @@
 
 import './style.css';
 import { marked } from 'marked';
+import sanitizeHtml from 'sanitize-html';
 import { Chart } from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
 import data from '../results/results.json';
-import { BenchmarkSuiteResult, BenchmarkSuiteResultCollection, type Metric } from './types';
+import {
+    BenchmarkSuiteResult,
+    BenchmarkSuiteResultCollection,
+    BenchmarkResult,
+    BenchmarkRunResult,
+    type Metric,
+} from './types';
 import { findLargestConfig, isMetric } from './utils';
 
 const typedData = data as BenchmarkSuiteResultCollection;
@@ -24,78 +31,168 @@ const CHART_COLORS = [
     'cyan',
 ];
 
-function renderResults() {
-    const app = document.querySelector<HTMLDivElement>('#app')!;
+function renderTable(
+    key: string,
+    results: BenchmarkRunResult[],
+    benchmarkName: string
+): HTMLElement {
+    const table = document.createElement('table');
+    table.className = 'benchmark-table';
+    table.id = `table-${benchmarkName.replace(/\s+/g, '-')}-${key}`;
+    table.setAttribute('data-benchmark', benchmarkName);
+    table.setAttribute('data-key', key);
 
-    let html = `
-    <h1>Benchmark Results</h1>
-    <div class="header">
-      <h2>${lastRun.suite}</h2>
-      <p><strong>Version:</strong> ${lastRun.version}</p>
-      <p><strong>Timestamp:</strong> ${new Date(lastRun.timestamp).toLocaleString()}</p>
-      <pre>${lastRun.environment}</pre>
-    </div>
-  `;
+    const thead = document.createElement('thead');
+    const tr = document.createElement('tr');
+    const headers = [
+        'Cluster Size',
+        'Size',
+        'Length',
+        'Avg',
+        'Min',
+        'Max',
+        'Median',
+        'P90',
+        'P95',
+        'P99',
+    ];
+    headers.forEach((header, index) => {
+        const th = document.createElement('th');
+        if (index >= 3) {
+            th.setAttribute('data-metric', header.toLowerCase());
+        }
+        th.textContent = header;
+        tr.appendChild(th);
+    });
+    thead.appendChild(tr);
+    table.appendChild(thead);
 
-    lastRun.results.forEach((benchmark) => {
-        html += `
-  <section class="benchmark">
-  <h3>${benchmark.name}</h3>
-  <div class="description">${marked.parse(benchmark.description)}</div>
-  `;
-
-        // Collect all unique duration keys
-        const allKeys = new Set<string>();
-        benchmark.results.forEach((runResult) => {
-            Object.keys(runResult.duration_results).forEach((key) => allKeys.add(key));
-        });
-
-        allKeys.forEach((key) => {
-            const hasData = benchmark.results.some((r) => r.duration_results[key]);
-            if (!hasData) return;
-
-            const tableId = `table-${benchmark.name.replace(/\s+/g, '-')}-${key}`;
-            html += `<h4>Duration Results for: ${key}</h4>`;
-            html += `<table id="${tableId}" class="benchmark-table" data-benchmark="${benchmark.name}" data-key="${key}"><thead><tr>`;
-            html += '<th>Cluster Size</th><th>Size</th><th>Length</th>';
-            html +=
-                '<th data-metric="avg">Avg</th><th data-metric="min">Min</th><th data-metric="max">Max</th><th data-metric="median">Median</th><th data-metric="p90">P90</th><th data-metric="p95">P95</th><th data-metric="p99">P99</th>';
-            html += '</tr></thead><tbody>';
-
-            benchmark.results.forEach((runResult) => {
-                const config = runResult.run_config;
-                const durationResult = runResult.duration_results[key];
-                if (durationResult) {
-                    html += '<tr>';
-                    html += `<td>${config.clusterSize}</td>`;
-                    html += `<td>${config.size}</td>`;
-                    html += `<td>${config.length}</td>`;
-                    html += `<td>${durationResult.avg.toFixed(2)}</td>`;
-                    html += `<td>${durationResult.min.toFixed(2)}</td>`;
-                    html += `<td>${durationResult.max.toFixed(2)}</td>`;
-                    html += `<td>${durationResult.median.toFixed(2)}</td>`;
-                    html += `<td>${durationResult.p90.toFixed(2)}</td>`;
-                    html += `<td>${durationResult.p95.toFixed(2)}</td>`;
-                    html += `<td>${durationResult.p99.toFixed(2)}</td>`;
-                    html += '</tr>';
-                }
+    const tbody = document.createElement('tbody');
+    results
+        .filter((r) => r.duration_results[key])
+        .forEach((runResult) => {
+            const tr = document.createElement('tr');
+            const config = runResult.run_config;
+            const durationResult = runResult.duration_results[key];
+            [
+                config.clusterSize,
+                config.size,
+                config.length,
+                durationResult.avg,
+                durationResult.min,
+                durationResult.max,
+                durationResult.median,
+                durationResult.p90,
+                durationResult.p95,
+                durationResult.p99,
+            ].forEach((value) => {
+                const td = document.createElement('td');
+                td.textContent = typeof value === 'number' ? value.toFixed(2) : String(value);
+                tr.appendChild(td);
             });
-
-            html += '</tbody></table>';
+            tbody.appendChild(tr);
         });
+    table.appendChild(tbody);
 
-        // Add single chart for the benchmark
-        const chartId = `chart-${benchmark.name.replace(/\s+/g, '-')}`;
-        html += `<div class="chart-container"><canvas id="${chartId}" class="chart" data-benchmark="${benchmark.name}"></canvas></div>`;
+    return table;
+}
 
-        // Add historical chart for the benchmark
-        const historicalChartId = `historical-chart-${benchmark.name.replace(/\s+/g, '-')}`;
-        html += `<div class="chart-container"><h4>Historical Trend</h4><canvas id="${historicalChartId}" class="historical-chart" data-benchmark="${benchmark.name}"></canvas></div>`;
+function renderBenchmark(benchmark: BenchmarkResult): HTMLElement {
+    const section = document.createElement('section');
+    section.className = 'benchmark';
 
-        html += '</section>';
+    const h3 = document.createElement('h3');
+    h3.textContent = benchmark.name;
+    section.appendChild(h3);
+
+    const descDiv = document.createElement('div');
+    descDiv.className = 'description';
+    descDiv.innerHTML = sanitizeHtml(marked.parse(benchmark.description));
+    section.appendChild(descDiv);
+
+    // Collect all unique duration keys
+    const allKeys = new Set<string>();
+    benchmark.results.forEach((runResult) => {
+        Object.keys(runResult.duration_results).forEach((key) => allKeys.add(key));
     });
 
-    app.innerHTML = html;
+    allKeys.forEach((key) => {
+        const hasData = benchmark.results.some((r) => r.duration_results[key]);
+        if (!hasData) return;
+
+        const h4 = document.createElement('h4');
+        h4.textContent = `Duration Results for: ${key}`;
+        section.appendChild(h4);
+
+        const table = renderTable(key, benchmark.results, benchmark.name);
+        section.appendChild(table);
+    });
+
+    // Add chart
+    const chartContainer = document.createElement('div');
+    chartContainer.className = 'chart-container';
+    const chartCanvas = document.createElement('canvas');
+    chartCanvas.id = `chart-${benchmark.name.replace(/\s+/g, '-')}`;
+    chartCanvas.className = 'chart';
+    chartCanvas.setAttribute('data-benchmark', benchmark.name);
+    chartContainer.appendChild(chartCanvas);
+    section.appendChild(chartContainer);
+
+    // Add historical chart
+    const historicalContainer = document.createElement('div');
+    historicalContainer.className = 'chart-container';
+    const historicalH4 = document.createElement('h4');
+    historicalH4.textContent = 'Historical Trend';
+    historicalContainer.appendChild(historicalH4);
+    const historicalCanvas = document.createElement('canvas');
+    historicalCanvas.id = `historical-chart-${benchmark.name.replace(/\s+/g, '-')}`;
+    historicalCanvas.className = 'historical-chart';
+    historicalCanvas.setAttribute('data-benchmark', benchmark.name);
+    historicalContainer.appendChild(historicalCanvas);
+    section.appendChild(historicalContainer);
+
+    return section;
+}
+
+function renderResults() {
+    const app = document.querySelector<HTMLDivElement>('#app')!;
+    app.innerHTML = ''; // Clear app
+
+    const h1 = document.createElement('h1');
+    h1.textContent = 'Benchmark Results';
+    app.appendChild(h1);
+
+    const header = document.createElement('div');
+    header.className = 'header';
+
+    const h2 = document.createElement('h2');
+    h2.textContent = lastRun.suite;
+    header.appendChild(h2);
+
+    const pVersion = document.createElement('p');
+    const strongVersion = document.createElement('strong');
+    strongVersion.textContent = 'Version: ';
+    pVersion.appendChild(strongVersion);
+    pVersion.appendChild(document.createTextNode(lastRun.version));
+    header.appendChild(pVersion);
+
+    const pTimestamp = document.createElement('p');
+    const strongTimestamp = document.createElement('strong');
+    strongTimestamp.textContent = 'Timestamp: ';
+    pTimestamp.appendChild(strongTimestamp);
+    pTimestamp.appendChild(document.createTextNode(new Date(lastRun.timestamp).toLocaleString()));
+    header.appendChild(pTimestamp);
+
+    const pre = document.createElement('pre');
+    pre.textContent = lastRun.environment;
+    header.appendChild(pre);
+
+    app.appendChild(header);
+
+    lastRun.results.forEach((benchmark) => {
+        const benchmarkElement = renderBenchmark(benchmark);
+        app.appendChild(benchmarkElement);
+    });
 }
 
 function init() {
