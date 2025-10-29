@@ -1,12 +1,12 @@
 // Main entry point for the benchmark results visualization app
 
 import './style.css';
-import {marked} from 'marked';
-import {Chart} from 'chart.js/auto';
+import { marked } from 'marked';
+import { Chart } from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
 import data from '../results/results.json';
-import {BenchmarkSuiteResult, BenchmarkSuiteResultCollection, type Metric} from './types';
-import {findLargestConfig, isMetric} from './utils';
+import { BenchmarkSuiteResult, BenchmarkSuiteResultCollection, type Metric } from './types';
+import { findLargestConfig, isMetric } from './utils';
 
 const typedData = data as BenchmarkSuiteResultCollection;
 const lastRun: BenchmarkSuiteResult = data.runs[typedData.runs.length - 1];
@@ -105,7 +105,7 @@ function init() {
 
 function getHistoricalChartData(benchmarkName: string, metric: Metric = 'median') {
     const benchmark = lastRun.results.find((b) => b.name === benchmarkName);
-    if (!benchmark) return {datasets: []};
+    if (!benchmark) return { datasets: [] };
 
     // Find the config with largest parameters
     const largestConfig = findLargestConfig(benchmark.results);
@@ -124,7 +124,7 @@ function getHistoricalChartData(benchmarkName: string, metric: Metric = 'median'
                         r.run_config.size === largestConfig.run_config.size &&
                         r.run_config.length === largestConfig.run_config.length &&
                         r.run_config.disableCompilationCache ===
-                        largestConfig.run_config.disableCompilationCache
+                            largestConfig.run_config.disableCompilationCache
                 );
                 if (!result || !result.duration_results[key]) {
                     return null;
@@ -145,12 +145,12 @@ function getHistoricalChartData(benchmarkName: string, metric: Metric = 'median'
         };
     });
 
-    return {datasets};
+    return { datasets };
 }
 
 function getChartData(benchmarkName: string, metric: Metric) {
     const benchmark = lastRun.results.find((b) => b.name === benchmarkName);
-    if (!benchmark) return {datasets: []};
+    if (!benchmark) return { datasets: [] };
 
     // Collect all unique keys
     const allKeys = new Set<string>();
@@ -201,7 +201,7 @@ function getChartData(benchmarkName: string, metric: Metric) {
             const sortedPoints = group.points.sort((a, b) => a.size - b.size);
             datasets.push({
                 label: `${key} - Cluster: ${group.clusterSize}, Length: ${group.length} (${metric.toUpperCase()})`,
-                data: sortedPoints.map((p) => ({x: p.size, y: p.value})),
+                data: sortedPoints.map((p) => ({ x: p.size, y: p.value })),
                 borderColor: CHART_COLORS[colorIndex % CHART_COLORS.length],
                 fill: false,
             });
@@ -209,7 +209,7 @@ function getChartData(benchmarkName: string, metric: Metric) {
         });
     });
 
-    return {datasets};
+    return { datasets };
 }
 
 function setupTableInteractivity() {
@@ -217,7 +217,7 @@ function setupTableInteractivity() {
     canvases.forEach((canvas) => {
         const benchmarkName = canvas.getAttribute('data-benchmark')!;
         const chartId = canvas.id;
-        const {datasets} = getChartData(benchmarkName, 'median');
+        const { datasets } = getChartData(benchmarkName, 'median');
         charts[chartId] = new Chart(canvas as HTMLCanvasElement, {
             type: 'line',
             data: {
@@ -229,10 +229,10 @@ function setupTableInteractivity() {
                 },
                 responsive: true,
                 scales: {
-                    x: {type: 'linear', title: {display: true, text: 'Size'}},
+                    x: { type: 'linear', title: { display: true, text: 'Size' } },
                     y: {
                         beginAtZero: true,
-                        title: {display: true, text: 'Duration (ms)'},
+                        title: { display: true, text: 'Duration (ms)' },
                     },
                 },
             },
@@ -275,7 +275,7 @@ function setupTableInteractivity() {
                     const chartId = `chart-${benchmarkName.replace(/\s+/g, '-')}`;
                     const chart = charts[chartId];
                     if (chart) {
-                        const {datasets} = getChartData(benchmarkName, metric);
+                        const { datasets } = getChartData(benchmarkName, metric);
                         chart.data.datasets = datasets;
                         chart.update();
                     }
@@ -284,7 +284,7 @@ function setupTableInteractivity() {
                     const historicalChartId = `historical-chart-${benchmarkName.replace(/\s+/g, '-')}`;
                     const historicalChart = charts[historicalChartId];
                     if (historicalChart) {
-                        const {datasets} = getHistoricalChartData(benchmarkName, metric);
+                        const { datasets } = getHistoricalChartData(benchmarkName, metric);
                         historicalChart.data.datasets = datasets;
                         historicalChart.update();
                     }
@@ -303,7 +303,7 @@ function setupTableInteractivity() {
     historicalCanvases.forEach((canvas) => {
         const benchmarkName = canvas.getAttribute('data-benchmark')!;
         const historicalChartId = canvas.id;
-        const {datasets} = getHistoricalChartData(benchmarkName);
+        const { datasets } = getHistoricalChartData(benchmarkName);
         charts[historicalChartId] = new Chart(canvas as HTMLCanvasElement, {
             type: 'line',
             data: {
@@ -317,7 +317,7 @@ function setupTableInteractivity() {
                 scales: {
                     x: {
                         type: 'time',
-                        title: {display: true, text: 'Run Timestamp'},
+                        title: { display: true, text: 'Run Timestamp' },
                         time: {
                             unit: 'day',
                             displayFormats: {
@@ -327,7 +327,7 @@ function setupTableInteractivity() {
                     },
                     y: {
                         beginAtZero: true,
-                        title: {display: true, text: 'Duration (ms)'},
+                        title: { display: true, text: 'Duration (ms)' },
                     },
                 },
             },

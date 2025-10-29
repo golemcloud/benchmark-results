@@ -1,4 +1,4 @@
-import {BenchmarkRunResult, Metric, MetricKeys, RunConfig} from './types';
+import { BenchmarkRunResult, Metric, MetricKeys, RunConfig } from './types';
 
 export function compareConfigs(a: RunConfig, b: RunConfig): number {
     if (a.clusterSize !== b.clusterSize) return b.clusterSize - a.clusterSize;
@@ -13,5 +13,5 @@ export function findLargestConfig(results: BenchmarkRunResult[]): BenchmarkRunRe
 }
 
 export function isMetric(metric: string): metric is Metric {
-    return MetricKeys.includes(metric)
+    return MetricKeys.includes(metric);
 }

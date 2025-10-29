@@ -50,5 +50,5 @@ export interface CountResult {
     per_iteration?: number[][];
 }
 
-export type Metric = Exclude<keyof DurationResult, "all" | "per_iteration">;
-export const MetricKeys = ["avg", "min", "max", "median", "p90", "p95", "p99"]
+export type Metric = Exclude<keyof DurationResult, 'all' | 'per_iteration'>;
+export const MetricKeys = ['avg', 'min', 'max', 'median', 'p90', 'p95', 'p99'];
