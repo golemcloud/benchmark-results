@@ -11,7 +11,7 @@ describe('Data types validation', () => {
     expect(typedData).toHaveProperty('runs');
     expect(Array.isArray(typedData.runs)).toBe(true);
 
-    typedData.runs.forEach(run => {
+    typedData.runs.forEach((run) => {
       expect(run).toHaveProperty('suite');
       expect(run).toHaveProperty('environment');
       expect(run).toHaveProperty('version');
@@ -19,7 +19,7 @@ describe('Data types validation', () => {
       expect(run).toHaveProperty('results');
       expect(Array.isArray(run.results)).toBe(true);
 
-      run.results.forEach(result => {
+      run.results.forEach((result) => {
         expect(result).toHaveProperty('name');
         expect(result).toHaveProperty('description');
         expect(result).toHaveProperty('runs');
