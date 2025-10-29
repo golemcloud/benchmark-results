@@ -37,9 +37,12 @@ function renderResults() {
         });
 
         allKeys.forEach(key => {
+            const hasData = benchmark.results.some(r => r.duration_results[key]);
+            if (!hasData) return;
+
             const tableId = `table-${benchmark.name.replace(/\s+/g, '-')}-${key}`;
             html += `<h4>Duration Results for: ${key}</h4>`;
-            html += `<table id="${tableId}" class="benchmark-table"><thead><tr>`;
+            html += `<table id="${tableId}" class="benchmark-table" data-benchmark="${benchmark.name}" data-key="${key}"><thead><tr>`;
             html += '<th>Cluster Size</th><th>Size</th><th>Length</th>';
             html += '<th data-metric="avg">Avg</th><th data-metric="min">Min</th><th data-metric="max">Max</th><th data-metric="median">Median</th><th data-metric="p90">P90</th><th data-metric="p95">P95</th><th data-metric="p99">P99</th>';
             html += '</tr></thead><tbody>';
@@ -64,7 +67,7 @@ function renderResults() {
             });
 
             html += '</tbody></table>';
-            html += `<div class="chart-container"><canvas class="chart" data-table="${tableId}"></canvas></div>`;
+            html += `<div class="chart-container"><canvas class="chart" data-benchmark="${benchmark.name}" data-key="${key}"></canvas></div>`;
         });
 
         html += '</section>';
@@ -78,11 +81,8 @@ function init() {
     setupTableInteractivity();
 }
 
-function getChartData(tableId: string, metric: string) {
-    const parts = tableId.split('-');
-    const benchmarkName = parts.slice(1, -1).join('-');
-    const key = parts[parts.length - 1];
-    const benchmark = lastRun.results.find(b => b.name.replace(/\s+/g, '-') === benchmarkName);
+function getChartData(benchmarkName: string, key: string, metric: string) {
+    const benchmark = lastRun.results.find(b => b.name === benchmarkName);
     if (!benchmark) return {labels: [], data: []};
     const points = benchmark.results
         .filter(r => r.duration_results[key])
@@ -97,8 +97,10 @@ function getChartData(tableId: string, metric: string) {
 function setupTableInteractivity() {
     const canvases = document.querySelectorAll('.chart');
     canvases.forEach(canvas => {
-        const tableId = canvas.getAttribute('data-table')!;
-        const {labels, data} = getChartData(tableId, 'median');
+        const benchmarkName = canvas.getAttribute('data-benchmark')!;
+        const key = canvas.getAttribute('data-key')!;
+        const tableId = `table-${benchmarkName.replace(/\s+/g, '-')}-${key}`;
+        const {labels, data} = getChartData(benchmarkName, key, 'median');
         charts[tableId] = new Chart(canvas as HTMLCanvasElement, {
             type: 'line',
             data: {
@@ -127,17 +129,19 @@ function setupTableInteractivity() {
             th.addEventListener('click', () => {
                 const metric = th.getAttribute('data-metric');
                 const tableId = table.id;
-                // Remove previous highlights
-                document.querySelectorAll('.benchmark-table').forEach(t => t.classList.remove('selected-metric-avg', 'selected-metric-min', 'selected-metric-max', 'selected-metric-median', 'selected-metric-p90', 'selected-metric-p95', 'selected-metric-p99'));
+                const benchmarkName = table.getAttribute('data-benchmark')!;
+                const key = table.getAttribute('data-key')!;
+                // Remove previous highlights from this table
+                table.classList.remove('selected-metric-avg', 'selected-metric-min', 'selected-metric-max', 'selected-metric-median', 'selected-metric-p90', 'selected-metric-p95', 'selected-metric-p99');
                 // Add highlight
                 if (metric) {
                     table.classList.add(`selected-metric-${metric}`);
                 }
-                
+
                 // Update chart
                 const chart = charts[tableId];
                 if (chart && metric) {
-                    const {data} = getChartData(tableId, metric);
+                    const {data} = getChartData(benchmarkName, key, metric);
                     chart.data.datasets[0].data = data;
                     chart.data.datasets[0].label = `${metric.toUpperCase()} Duration (ms)`;
                     chart.update();
@@ -148,7 +152,7 @@ function setupTableInteractivity() {
 
     // Select Median by default for each table
     tables.forEach(table => {
-    table.classList.add('selected-metric-median');
+        table.classList.add('selected-metric-median');
     });
 }
 
