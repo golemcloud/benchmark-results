@@ -103,7 +103,7 @@ function init() {
   setupTableInteractivity();
 }
 
-function getHistoricalChartData(benchmarkName: string) {
+function getHistoricalChartData(benchmarkName: string, metric = 'median') {
   const benchmark = lastRun.results.find((b) => b.name === benchmarkName);
   if (!benchmark) return { datasets: [] };
 
@@ -129,7 +129,7 @@ function getHistoricalChartData(benchmarkName: string) {
         if (!result || !result.duration_results[key]) return null;
         return {
           x: new Date(run.timestamp).getTime(),
-          y: result.duration_results[key].median,
+          y: result.duration_results[key][metric],
         };
       })
       .filter((p) => p !== null);
@@ -276,6 +276,15 @@ function setupTableInteractivity() {
           const { datasets } = getChartData(benchmarkName, metric);
           chart.data.datasets = datasets;
           chart.update();
+        }
+
+        // Update historical chart for the benchmark
+        const historicalChartId = `historical-chart-${benchmarkName.replace(/\s+/g, '-')}`;
+        const historicalChart = charts[historicalChartId];
+        if (historicalChart && metric) {
+          const { datasets } = getHistoricalChartData(benchmarkName, metric);
+          historicalChart.data.datasets = datasets;
+          historicalChart.update();
         }
       });
     });
