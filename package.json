@@ -1,0 +1,19 @@
+{
+  "name": "benchmark-results",
+  "version": "1.0.0",
+  "description": "Visualization of benchmark results",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "chart.js": "^4.4.0",
+    "typescript": "^5.0.0",
+    "vite": "^5.0.0",
+    "vitest": "^1.0.0",
+    "marked": "^12.0.0"
+  }
+}

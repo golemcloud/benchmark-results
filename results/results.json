@@ -1,0 +1,4663 @@
+{
+  "runs": [
+    {
+      "suite": "quick-all",
+      "environment": "CPU #0: vendor=Apple brand=Apple M4 Max\nCPU #1: vendor=Apple brand=Apple M4 Max\nCPU #2: vendor=Apple brand=Apple M4 Max\nCPU #3: vendor=Apple brand=Apple M4 Max\nCPU #4: vendor=Apple brand=Apple M4 Max\nCPU #5: vendor=Apple brand=Apple M4 Max\nCPU #6: vendor=Apple brand=Apple M4 Max\nCPU #7: vendor=Apple brand=Apple M4 Max\nCPU #8: vendor=Apple brand=Apple M4 Max\nCPU #9: vendor=Apple brand=Apple M4 Max\nCPU #10: vendor=Apple brand=Apple M4 Max\nCPU #11: vendor=Apple brand=Apple M4 Max\nCPU #12: vendor=Apple brand=Apple M4 Max\nCPU #13: vendor=Apple brand=Apple M4 Max\nCPU #14: vendor=Apple brand=Apple M4 Max\nCPU #15: vendor=Apple brand=Apple M4 Max\nTotal memory: 64 Gb\nSystem name=Darwin, os=macOS 26.0.1, kernel=25.0.0, hostname=Mac\n",
+      "version": "1.3.2-dev.3",
+      "timestamp": "2025-10-28T17:37:16.765726Z",
+      "results": [
+        {
+          "name": "cold-start-unknown-small-no-cache",
+          "description": "Benchmarks the first-time invocation of a component that have never been instantiated before.\nThis variant uses a relatively small Rust component. 'size' is the number of unique components,\nand 'length' is the time in seconds _per component_ to wait for pre-compilation.\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 2,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 2,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 2,
+              "disableCompilationCache": true
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 2,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 46.812,
+                  "min": 46.812,
+                  "max": 46.812,
+                  "median": 46.812,
+                  "p90": 46.812,
+                  "p95": 46.812,
+                  "p99": 46.812
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 2,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 55.4414,
+                  "min": 55.355,
+                  "max": 55.55,
+                  "median": 55.455,
+                  "p90": 55.5128,
+                  "p95": 55.5314,
+                  "p99": 55.54628
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 2,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 74.2674,
+                  "min": 73.715,
+                  "max": 75.494,
+                  "median": 73.8115,
+                  "p90": 75.4805,
+                  "p95": 75.48725,
+                  "p99": 75.49265
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "cold-start-unknown-medium-no-cache",
+          "description": "    Benchmarks the first-time invocation of a component that have never been instantiated before.\n    This variant uses a basic TypeScript component. 'size' is the number of unique components,\nand 'length' is the time in seconds _per component_ to wait for pre-compilation.\n    ",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 5,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 5,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 5,
+              "disableCompilationCache": true
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 5,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 608.62,
+                  "min": 608.62,
+                  "max": 608.62,
+                  "median": 608.62,
+                  "p90": 608.62,
+                  "p95": 608.62,
+                  "p99": 608.62
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 5,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 1588.0386,
+                  "min": 1565.589,
+                  "max": 1594.544,
+                  "median": 1593.114,
+                  "p90": 1594.2924,
+                  "p95": 1594.4182,
+                  "p99": 1594.51884
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 5,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 2695.7909,
+                  "min": 2623.635,
+                  "max": 2731.301,
+                  "median": 2705.597,
+                  "p90": 2723.8913,
+                  "p95": 2727.59615,
+                  "p99": 2730.56003
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "cold-start-unknown-large-no-cache",
+          "description": "Benchmarks the first-time invocation of a component that have never been instantiated before.\nThis variant uses a TypeScript component with a lot of linked AI libraries. 'size' is the number of unique components,\nand 'length' is the time in seconds _per component_ to wait for pre-compilation.\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 10,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 10,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 10,
+              "disableCompilationCache": true
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 10,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 1878.02,
+                  "min": 1878.02,
+                  "max": 1878.02,
+                  "median": 1878.02,
+                  "p90": 1878.02,
+                  "p95": 1878.02,
+                  "p99": 1878.02
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 10,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 4864.701,
+                  "min": 4634.82,
+                  "max": 4997.073,
+                  "median": 4920.517,
+                  "p90": 4974.2366,
+                  "p95": 4985.6548,
+                  "p99": 4994.78936
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 10,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 8216.929598,
+                  "min": 8167.404,
+                  "max": 8237.227,
+                  "median": 8229.9295,
+                  "p90": 8234.022999,
+                  "p95": 8235.625,
+                  "p99": 8236.9066
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "cold-start-unknown-small",
+          "description": "Benchmarks the first-time invocation of a component that have never been instantiated before.\nThis variant uses a relatively small Rust component. 'size' is the number of unique components,\nand 'length' is the time in seconds _per component_ to wait for pre-compilation.\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 2,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 2,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 2,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 58.014,
+                  "min": 58.014,
+                  "max": 58.014,
+                  "median": 58.014,
+                  "p90": 58.014,
+                  "p95": 58.014,
+                  "p99": 58.014
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 56.231,
+                  "min": 53.056,
+                  "max": 59.074,
+                  "median": 57.115,
+                  "p90": 58.3864,
+                  "p95": 58.730199999999996,
+                  "p99": 59.00524
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 48.4547,
+                  "min": 46.6,
+                  "max": 50.928,
+                  "median": 48.0125,
+                  "p90": 50.4663,
+                  "p95": 50.69715,
+                  "p99": 50.88183
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "cold-start-unknown-medium",
+          "description": "    Benchmarks the first-time invocation of a component that have never been instantiated before.\n    This variant uses a basic TypeScript component. 'size' is the number of unique components,\nand 'length' is the time in seconds _per component_ to wait for pre-compilation.\n    ",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 5,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 5,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 5,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 132.419998,
+                  "min": 132.419998,
+                  "max": 132.419998,
+                  "median": 132.419998,
+                  "p90": 132.419998,
+                  "p95": 132.419998,
+                  "p99": 132.419998
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 117.272,
+                  "min": 113.811,
+                  "max": 121.47,
+                  "median": 115.251,
+                  "p90": 121.2184,
+                  "p95": 121.3442,
+                  "p99": 121.44484
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 140.341,
+                  "min": 108.414,
+                  "max": 187.496,
+                  "median": 116.8995,
+                  "p90": 185.8706,
+                  "p95": 186.6833,
+                  "p99": 187.33346
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "cold-start-unknown-large",
+          "description": "Benchmarks the first-time invocation of a component that have never been instantiated before.\nThis variant uses a TypeScript component with a lot of linked AI libraries. 'size' is the number of unique components,\nand 'length' is the time in seconds _per component_ to wait for pre-compilation.\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 10,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 10,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 10,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 10,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 129.494,
+                  "min": 129.494,
+                  "max": 129.494,
+                  "median": 129.494,
+                  "p90": 129.494,
+                  "p95": 129.494,
+                  "p99": 129.494
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 10,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 118.2414,
+                  "min": 111.968,
+                  "max": 123.446,
+                  "median": 119.655,
+                  "p90": 122.2388,
+                  "p95": 122.8424,
+                  "p99": 123.32528
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 10,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 607.5691,
+                  "min": 117.934,
+                  "max": 722.505,
+                  "median": 713.5735,
+                  "p90": 722.1162,
+                  "p95": 722.3106,
+                  "p99": 722.46612
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "latency-small",
+          "description": "Benchmarks both the cold and hot latency of a invoking a component that can potentially\nbe swapped out of the executor's memory.\nThis variant uses a small rust component.\nThe `size` parameter is the number of workers to create. The `length` parameter is the number\nof hot invocations to be done per worker (the first one is separately recorded as cold).\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 2,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 500,
+              "length": 2,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 1000,
+              "length": 2,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "hot-invocation": {
+                  "avg": 133.96913,
+                  "min": 113.558,
+                  "max": 150.023,
+                  "median": 135.764998,
+                  "p90": 145.0421,
+                  "p95": 146.1307,
+                  "p99": 149.72102
+                },
+                "cold-invocation": {
+                  "avg": 223.98144,
+                  "min": 193.869,
+                  "max": 249.98,
+                  "median": 228.501,
+                  "p90": 246.9856,
+                  "p95": 248.2557,
+                  "p99": 249.28898
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 500,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "cold-invocation": {
+                  "avg": 924.518308,
+                  "min": 620.424,
+                  "max": 1139.362,
+                  "median": 907.2595,
+                  "p90": 1110.0262,
+                  "p95": 1122.02795,
+                  "p99": 1131.72234
+                },
+                "hot-invocation": {
+                  "avg": 641.958791,
+                  "min": 472.753,
+                  "max": 805.068,
+                  "median": 652.065,
+                  "p90": 790.1454,
+                  "p95": 798.9052,
+                  "p99": 802.68586
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1000,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "hot-invocation": {
+                  "avg": 1312.91311,
+                  "min": 943.341,
+                  "max": 1663.86,
+                  "median": 1353.904,
+                  "p90": 1593.0536,
+                  "p95": 1642.2822,
+                  "p99": 1659.56652
+                },
+                "cold-invocation": {
+                  "avg": 1829.301308,
+                  "min": 1388.227,
+                  "max": 2278.889,
+                  "median": 1758.1895,
+                  "p90": 2226.793,
+                  "p95": 2250.2197,
+                  "p99": 2268.34117
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "latency-medium",
+          "description": "Benchmarks both the cold and hot latency of a invoking a component that can potentially\nbe swapped out of the executor's memory.\nThis variant uses a simple TypeScript agent.\nThe `size` parameter is the number of workers to create. The `length` parameter is the number\nof hot invocations to be done per worker (the first one is separately recorded as cold).\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 5,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 500,
+              "length": 5,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 1000,
+              "length": 5,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "hot-invocation": {
+                  "avg": 149.12233,
+                  "min": 47.192,
+                  "max": 220.363,
+                  "median": 159.7235,
+                  "p90": 200.8104,
+                  "p95": 213.79125,
+                  "p99": 217.2967
+                },
+                "cold-invocation": {
+                  "avg": 545.99562,
+                  "min": 342.105,
+                  "max": 702.128,
+                  "median": 580.0905,
+                  "p90": 690.3201,
+                  "p95": 695.31745,
+                  "p99": 698.83229
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 500,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "hot-invocation": {
+                  "avg": 735.568463,
+                  "min": 276.714,
+                  "max": 1007.842,
+                  "median": 774.3265,
+                  "p90": 931.096,
+                  "p95": 946.17635,
+                  "p99": 983.41257
+                },
+                "cold-invocation": {
+                  "avg": 2158.20161,
+                  "min": 824.352,
+                  "max": 3125.179,
+                  "median": 2043.3175,
+                  "p90": 3101.1621,
+                  "p95": 3109.576,
+                  "p99": 3123.50143
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1000,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "cold-invocation": {
+                  "avg": 4263.812557,
+                  "min": 1681.371,
+                  "max": 6146.688,
+                  "median": 4189.498499,
+                  "p90": 6106.0079,
+                  "p95": 6123.64735,
+                  "p99": 6136.14847
+                },
+                "hot-invocation": {
+                  "avg": 1665.799818,
+                  "min": 607.626,
+                  "max": 2202.575,
+                  "median": 1848.158,
+                  "p90": 1938.1822,
+                  "p95": 1974.35095,
+                  "p99": 2069.3426
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "latency-large",
+          "description": "Benchmarks both the cold and hot latency of a invoking a component that can potentially\nbe swapped out of the executor's memory.\nThis variant uses a TypeScript agent with many AI dependencies.\nThe `size` parameter is the number of workers to create. The `length` parameter is the number\nof hot invocations to be done per worker (the first one is separately recorded as cold).\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 10,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 500,
+              "length": 10,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 1000,
+              "length": 10,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 10,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "hot-invocation": {
+                  "avg": 185.724234,
+                  "min": 91.984,
+                  "max": 347.679,
+                  "median": 180.725,
+                  "p90": 185.0163,
+                  "p95": 264.03025,
+                  "p99": 335.07422
+                },
+                "cold-invocation": {
+                  "avg": 495.03804,
+                  "min": 348.335,
+                  "max": 644.921,
+                  "median": 494.5305,
+                  "p90": 618.9297,
+                  "p95": 634.72515,
+                  "p99": 639.66905
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 500,
+                "length": 10,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "cold-invocation": {
+                  "avg": 1757.83852,
+                  "min": 779.501,
+                  "max": 2677.249,
+                  "median": 1780.556,
+                  "p90": 2606.2557,
+                  "p95": 2632.95315,
+                  "p99": 2657.3298
+                },
+                "hot-invocation": {
+                  "avg": 925.602434,
+                  "min": 382.603,
+                  "max": 1868.905,
+                  "median": 897.2015,
+                  "p90": 906.7334,
+                  "p95": 1463.6419,
+                  "p99": 1749.40634
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1000,
+                "length": 10,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "hot-invocation": {
+                  "avg": 12299.590159,
+                  "min": 1066.752999,
+                  "max": 96859.835,
+                  "median": 3696.816,
+                  "p90": 4640.3354,
+                  "p95": 94790.67635,
+                  "p99": 95655.0517
+                },
+                "cold-invocation": {
+                  "avg": 3471.59228,
+                  "min": 1633.65,
+                  "max": 5248.951,
+                  "median": 3539.7085,
+                  "p90": 4949.7234,
+                  "p95": 5118.3751,
+                  "p99": 5212.62518
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "sleep",
+          "description": "Launch 'size' workers and invoke a function on each in parallel that sleeps for 'length' milliseconds.\nThe result is the measured invocation time, which is affected by the amount of workers fitting in memory\nand also the scheduler that wakes them up.\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 10000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 10000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 500,
+              "length": 10000,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 10045.9387,
+                  "min": 10045.71,
+                  "max": 10046.263,
+                  "median": 10045.9585,
+                  "p90": 10046.128,
+                  "p95": 10046.1955,
+                  "p99": 10046.2495
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 10631.60188,
+                  "min": 10570.834,
+                  "max": 10675.287,
+                  "median": 10631.7275,
+                  "p90": 10672.8257,
+                  "p95": 10674.3189,
+                  "p99": 10675.06623
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 500,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 14534.50504,
+                  "min": 14094.608,
+                  "max": 14835.86,
+                  "median": 14560.692,
+                  "p90": 14805.633,
+                  "p95": 14824.695,
+                  "p99": 14834.41365
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "durability-overhead",
+          "description": "Invokes oplog-heavy functions in parallel on `size` number of workers,\nusing ephemeral components, and durable components with persistence on and off.\nThe invoked function gets the 'length' parameter to control the length of its inner loop.\nThe benchmark can be used to compare the overhead caused by of persistence (using a low\n`size`) and also the effect of heavy persistence load caused by parallel running workers\n(using high `size`).\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 5000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 5000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 1000,
+              "length": 5000,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 5000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "durable-non-persistent-invocation": {
+                  "avg": 1009.7168,
+                  "min": 983.279,
+                  "max": 1030.329999,
+                  "median": 1008.2865,
+                  "p90": 1025.2396,
+                  "p95": 1027.784799,
+                  "p99": 1029.82096
+                },
+                "ephemeral-invocation": {
+                  "avg": 150.1106,
+                  "min": 148.869,
+                  "max": 151.754,
+                  "median": 150.062,
+                  "p90": 151.574,
+                  "p95": 151.664,
+                  "p99": 151.736
+                },
+                "durable-persistent-invocation": {
+                  "avg": 988.8017,
+                  "min": 970.937,
+                  "max": 1000.838,
+                  "median": 989.228,
+                  "p90": 998.0507,
+                  "p95": 999.44435,
+                  "p99": 1000.55927
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 5000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ephemeral-invocation": {
+                  "avg": 567.85786,
+                  "min": 243.878,
+                  "max": 704.278,
+                  "median": 661.233,
+                  "p90": 700.6999,
+                  "p95": 702.38005,
+                  "p99": 703.53748
+                },
+                "durable-persistent-invocation": {
+                  "avg": 3229.45096,
+                  "min": 3093.235,
+                  "max": 3354.536,
+                  "median": 3231.5585,
+                  "p90": 3322.3378,
+                  "p95": 3338.20475,
+                  "p99": 3349.68401
+                },
+                "durable-non-persistent-invocation": {
+                  "avg": 2772.1682,
+                  "min": 2643.1,
+                  "max": 2875.418,
+                  "median": 2775.08,
+                  "p90": 2859.9716,
+                  "p95": 2865.5306,
+                  "p99": 2871.13823
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1000,
+                "length": 5000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "durable-non-persistent-invocation": {
+                  "avg": 21574.183754,
+                  "min": 19260.832,
+                  "max": 22993.37,
+                  "median": 21615.788,
+                  "p90": 22809.0693,
+                  "p95": 22912.28125,
+                  "p99": 22972.90199
+                },
+                "ephemeral-invocation": {
+                  "avg": 18516.959382,
+                  "min": 1841.986,
+                  "max": 25446.727,
+                  "median": 24013.6865,
+                  "p90": 25408.1319,
+                  "p95": 25428.58635,
+                  "p99": 25440.65859
+                },
+                "durable-persistent-invocation": {
+                  "avg": 22083.177072,
+                  "min": 19728.008,
+                  "max": 23491.427,
+                  "median": 22199.27,
+                  "p90": 23259.8446,
+                  "p95": 23384.8206,
+                  "p99": 23465.00537
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "throughput-echo",
+          "description": "Spawns `size` number of workers of various implementations, and calls the `echo` endpoint\na fixed number of times. The 'length' parameter is not used.\n`size` should be chosen in a way that all workers fit in the available executor's memory,\nand `size=1` can be used to test isolated throughput of a single worker.\nThe benchmarks measures multiple implementations separately after each other:\ndirect rust, native rust, TS agent, TS agent through rib mapping\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 1000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 1000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 1000,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 1000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-invocation": {
+                  "avg": 9.955064,
+                  "min": 8.492,
+                  "max": 11.192,
+                  "median": 9.94,
+                  "p90": 10.2275,
+                  "p95": 10.37155,
+                  "p99": 10.65058
+                },
+                "ts-agent-rib-invocation": {
+                  "avg": 3.929236,
+                  "min": 3.078,
+                  "max": 42.264,
+                  "median": 3.7445,
+                  "p90": 3.9121,
+                  "p95": 4.00465,
+                  "p99": 4.81703
+                },
+                "direct-rust-invocation": {
+                  "avg": 6.271492,
+                  "min": 5.371,
+                  "max": 9.7,
+                  "median": 6.194,
+                  "p90": 6.4972,
+                  "p95": 6.6265,
+                  "p99": 8.57597
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 1000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-rib-invocation": {
+                  "avg": 12.480596,
+                  "min": 5.776,
+                  "max": 93.697,
+                  "median": 12.1265,
+                  "p90": 12.9507,
+                  "p95": 13.3322,
+                  "p99": 15.50895
+                },
+                "direct-rust-invocation": {
+                  "avg": 14.494485,
+                  "min": 7.743,
+                  "max": 21.102,
+                  "median": 14.2255,
+                  "p90": 15.985,
+                  "p95": 16.6772,
+                  "p99": 18.54322
+                },
+                "ts-agent-invocation": {
+                  "avg": 3842.798635,
+                  "min": 11.121,
+                  "max": 953318.115,
+                  "median": 29.5545,
+                  "p90": 32.7287,
+                  "p95": 33.8707,
+                  "p99": 36.73191
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 1000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-invocation": {
+                  "avg": 295.491228,
+                  "min": 91.433,
+                  "max": 773.248,
+                  "median": 294.1485,
+                  "p90": 303.7731,
+                  "p95": 309.42225,
+                  "p99": 340.16302
+                },
+                "ts-agent-rib-invocation": {
+                  "avg": 3871.863565,
+                  "min": 37.286,
+                  "max": 938082.336,
+                  "median": 116.631,
+                  "p90": 128.538198,
+                  "p95": 134.138298,
+                  "p99": 249.02847
+                },
+                "direct-rust-invocation": {
+                  "avg": 177.084986,
+                  "min": 114.831,
+                  "max": 224.144,
+                  "median": 192.769,
+                  "p90": 199.2861,
+                  "p95": 201.89015,
+                  "p99": 213.35117
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "throughput-large-input",
+          "description": "Spawns `size` number of workers of various implementations, and calls the `large-input` endpoint\nwith an input based on `length` in a fixed number of times.\n`size` should be chosen in a way that all workers fit in the available executor's memory,\nand `size=1` can be used to test isolated throughput of a single worker.\nThe benchmarks measures multiple implementations separately after each other:\ndirect rust, native rust, TS agent, TS agent through rib mapping\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 100,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 10000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 100000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 100,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 10000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 100000,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-invocation": {
+                  "avg": 10.34227,
+                  "min": 9.327,
+                  "max": 11.943999999999999,
+                  "median": 10.218,
+                  "p90": 10.782,
+                  "p95": 11.687899999999999,
+                  "p99": 11.94103
+                },
+                "direct-rust-invocation": {
+                  "avg": 6.46256,
+                  "min": 6.024,
+                  "max": 9.38,
+                  "median": 6.383,
+                  "p90": 6.6809,
+                  "p95": 6.76195,
+                  "p99": 8.59691
+                },
+                "ts-agent-rib-invocation": {
+                  "avg": 4.68773,
+                  "min": 3.254,
+                  "max": 44.385,
+                  "median": 4.051,
+                  "p90": 5.2671,
+                  "p95": 5.32515,
+                  "p99": 6.68283
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "direct-rust-invocation": {
+                  "avg": 13.88739,
+                  "min": 13.496,
+                  "max": 16.521999,
+                  "median": 13.8215,
+                  "p90": 14.0271,
+                  "p95": 14.28625,
+                  "p99": 15.12907
+                },
+                "ts-agent-rib-invocation": {
+                  "avg": 42.11977,
+                  "min": 40.532,
+                  "max": 124.794,
+                  "median": 41.289,
+                  "p90": 41.7008,
+                  "p95": 41.8956,
+                  "p99": 43.0299
+                },
+                "ts-agent-invocation": {
+                  "avg": 50.06344,
+                  "min": 45.108,
+                  "max": 52.625,
+                  "median": 50.2515,
+                  "p90": 51.1163,
+                  "p95": 51.2603,
+                  "p99": 51.8132
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 100000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-rib-invocation": {
+                  "avg": 345.07542,
+                  "min": 336.121,
+                  "max": 779.333,
+                  "median": 340.638,
+                  "p90": 342.113,
+                  "p95": 342.9999,
+                  "p99": 351.63716
+                },
+                "ts-agent-invocation": {
+                  "avg": 355.54904,
+                  "min": 339.445,
+                  "max": 1128.499,
+                  "median": 345.7975,
+                  "p90": 354.3468,
+                  "p95": 357.23875,
+                  "p99": 382.19542
+                },
+                "direct-rust-invocation": {
+                  "avg": 60.63609,
+                  "min": 54.654,
+                  "max": 63.736,
+                  "median": 60.7255,
+                  "p90": 62.033,
+                  "p95": 62.2376,
+                  "p99": 63.40237
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-rib-invocation": {
+                  "avg": 13.252091,
+                  "min": 6.967,
+                  "max": 114.133,
+                  "median": 12.184,
+                  "p90": 13.7061,
+                  "p95": 14.5495,
+                  "p99": 20.10102
+                },
+                "direct-rust-invocation": {
+                  "avg": 14.840875,
+                  "min": 7.576,
+                  "max": 22.711,
+                  "median": 14.53,
+                  "p90": 16.5122,
+                  "p95": 17.3323,
+                  "p99": 19.51137
+                },
+                "ts-agent-invocation": {
+                  "avg": 29.499507,
+                  "min": 16.741,
+                  "max": 40.148,
+                  "median": 29.4745,
+                  "p90": 34.3799,
+                  "p95": 35.7075,
+                  "p99": 37.41633
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "direct-rust-invocation": {
+                  "avg": 42.558269,
+                  "min": 15.243,
+                  "max": 63.319,
+                  "median": 42.8665,
+                  "p90": 53.5007,
+                  "p95": 56.14945,
+                  "p99": 60.66008
+                },
+                "ts-agent-invocation": {
+                  "avg": 82.297682,
+                  "min": 57.768,
+                  "max": 107.809,
+                  "median": 82.614,
+                  "p90": 91.9625,
+                  "p95": 94.30865,
+                  "p99": 100.57111
+                },
+                "ts-agent-rib-invocation": {
+                  "avg": 82.740851,
+                  "min": 55.485,
+                  "max": 566.172,
+                  "median": 78.2925,
+                  "p90": 86.0614,
+                  "p95": 88.44735,
+                  "p99": 102.0483
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 100000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "direct-rust-invocation": {
+                  "avg": 233.380145,
+                  "min": 69.18,
+                  "max": 333.935,
+                  "median": 243.023,
+                  "p90": 280.7864,
+                  "p95": 289.36275,
+                  "p99": 311.58732
+                },
+                "ts-agent-invocation": {
+                  "avg": 622.493254,
+                  "min": 376.692,
+                  "max": 1080.31,
+                  "median": 624.3685,
+                  "p90": 683.0302,
+                  "p95": 703.0921,
+                  "p99": 760.61281
+                },
+                "ts-agent-rib-invocation": {
+                  "avg": 652.550341,
+                  "min": 425.469,
+                  "max": 3242.89,
+                  "median": 629.791,
+                  "p90": 651.9388,
+                  "p95": 662.65515,
+                  "p99": 763.57165
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "throughput-cpu-intensive",
+          "description": "Spawns `size` number of workers of various implementations, and calls the `cpu-intensive` endpoint\nwith the CPU intensive task's length based on `length` in a fixed number of times.\n`size` should be chosen in a way that all workers fit in the available executor's memory,\nand `size=1` can be used to test isolated throughput of a single worker.\nThe benchmarks measures multiple implementations separately after each other:\ndirect rust, native rust, TS agent, TS agent through rib mapping\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 100,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 100,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "direct-rust-invocation": {
+                  "avg": 10.321,
+                  "min": 7.912,
+                  "max": 19.953,
+                  "median": 9.683,
+                  "p90": 11.3949,
+                  "p95": 15.67395,
+                  "p99": 19.09719
+                },
+                "ts-agent-rib-invocation": {
+                  "avg": 473.005,
+                  "min": 466.958,
+                  "max": 511.286,
+                  "median": 468.6895,
+                  "p90": 474.3239,
+                  "p95": 492.80495,
+                  "p99": 507.58979
+                },
+                "ts-agent-invocation": {
+                  "avg": 473.8105,
+                  "min": 467.02,
+                  "max": 476.285,
+                  "median": 474.196,
+                  "p90": 475.3562,
+                  "p95": 475.8206,
+                  "p99": 476.19212
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-rib-invocation": {
+                  "avg": 547.58291,
+                  "min": 527.902,
+                  "max": 618.261,
+                  "median": 540.513,
+                  "p90": 567.9358,
+                  "p95": 608.40875,
+                  "p99": 611.38842
+                },
+                "ts-agent-invocation": {
+                  "avg": 549.14991,
+                  "min": 538.698998,
+                  "max": 557.594,
+                  "median": 549.044998,
+                  "p90": 553.8333,
+                  "p95": 554.9063,
+                  "p99": 556.29314
+                },
+                "direct-rust-invocation": {
+                  "avg": 17.21122,
+                  "min": 13.947,
+                  "max": 29.361,
+                  "median": 15.899000000000001,
+                  "p90": 20.291,
+                  "p95": 28.93175,
+                  "p99": 29.32833
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "suite": "quick-all",
+      "environment": "CPU #0: vendor=Apple brand=Apple M4 Max\nCPU #1: vendor=Apple brand=Apple M4 Max\nCPU #2: vendor=Apple brand=Apple M4 Max\nCPU #3: vendor=Apple brand=Apple M4 Max\nCPU #4: vendor=Apple brand=Apple M4 Max\nCPU #5: vendor=Apple brand=Apple M4 Max\nCPU #6: vendor=Apple brand=Apple M4 Max\nCPU #7: vendor=Apple brand=Apple M4 Max\nCPU #8: vendor=Apple brand=Apple M4 Max\nCPU #9: vendor=Apple brand=Apple M4 Max\nCPU #10: vendor=Apple brand=Apple M4 Max\nCPU #11: vendor=Apple brand=Apple M4 Max\nCPU #12: vendor=Apple brand=Apple M4 Max\nCPU #13: vendor=Apple brand=Apple M4 Max\nCPU #14: vendor=Apple brand=Apple M4 Max\nCPU #15: vendor=Apple brand=Apple M4 Max\nTotal memory: 64 Gb\nSystem name=Darwin, os=macOS 26.0.1, kernel=25.0.0, hostname=vigooM4.local\n",
+      "version": "1.3.2-dev.3",
+      "timestamp": "2025-10-29T09:41:07.810038Z",
+      "results": [
+        {
+          "name": "cold-start-unknown-small-no-cache",
+          "description": "Benchmarks the first-time invocation of a component that have never been instantiated before.\nThis variant uses a relatively small Rust component. 'size' is the number of unique components,\nand 'length' is the time in seconds _per component_ to wait for pre-compilation.\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 2,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 2,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 2,
+              "disableCompilationCache": true
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 2,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 62.5,
+                  "min": 62.5,
+                  "max": 62.5,
+                  "median": 62.5,
+                  "p90": 62.5,
+                  "p95": 62.5,
+                  "p99": 62.5
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 2,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 58.4918,
+                  "min": 55.008,
+                  "max": 59.392,
+                  "median": 59.36,
+                  "p90": 59.3812,
+                  "p95": 59.3866,
+                  "p99": 59.39092
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 2,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 70.3207,
+                  "min": 68.281,
+                  "max": 81.126,
+                  "median": 68.8,
+                  "p90": 71.4249,
+                  "p95": 76.27545,
+                  "p99": 80.15589
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "cold-start-unknown-medium-no-cache",
+          "description": "    Benchmarks the first-time invocation of a component that have never been instantiated before.\n    This variant uses a basic TypeScript component. 'size' is the number of unique components,\nand 'length' is the time in seconds _per component_ to wait for pre-compilation.\n    ",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 5,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 5,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 5,
+              "disableCompilationCache": true
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 5,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 586.824,
+                  "min": 586.824,
+                  "max": 586.824,
+                  "median": 586.824,
+                  "p90": 586.824,
+                  "p95": 586.824,
+                  "p99": 586.824
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 5,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 1602.483,
+                  "min": 1541.012,
+                  "max": 1628.394,
+                  "median": 1619.683,
+                  "p90": 1626.0176,
+                  "p95": 1627.2058,
+                  "p99": 1628.15636
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 5,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 2704.0947,
+                  "min": 2649.525,
+                  "max": 2745.028,
+                  "median": 2710.9825,
+                  "p90": 2744.4763,
+                  "p95": 2744.75215,
+                  "p99": 2744.97283
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "cold-start-unknown-large-no-cache",
+          "description": "Benchmarks the first-time invocation of a component that have never been instantiated before.\nThis variant uses a TypeScript component with a lot of linked AI libraries. 'size' is the number of unique components,\nand 'length' is the time in seconds _per component_ to wait for pre-compilation.\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 10,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 10,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 10,
+              "disableCompilationCache": true
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 10,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 1862.437,
+                  "min": 1862.437,
+                  "max": 1862.437,
+                  "median": 1862.437,
+                  "p90": 1862.437,
+                  "p95": 1862.437,
+                  "p99": 1862.437
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 10,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 5304.9668,
+                  "min": 5162.427,
+                  "max": 5399.476,
+                  "median": 5342.818,
+                  "p90": 5389.8464,
+                  "p95": 5394.6612,
+                  "p99": 5398.51304
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 10,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 8959.6407,
+                  "min": 8540.516,
+                  "max": 9172.199,
+                  "median": 9142.076,
+                  "p90": 9170.5106,
+                  "p95": 9171.3548,
+                  "p99": 9172.03016
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "cold-start-unknown-small",
+          "description": "Benchmarks the first-time invocation of a component that have never been instantiated before.\nThis variant uses a relatively small Rust component. 'size' is the number of unique components,\nand 'length' is the time in seconds _per component_ to wait for pre-compilation.\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 2,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 2,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 2,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 58.259,
+                  "min": 58.259,
+                  "max": 58.259,
+                  "median": 58.259,
+                  "p90": 58.259,
+                  "p95": 58.259,
+                  "p99": 58.259
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 54.6396,
+                  "min": 48.204,
+                  "max": 58.697,
+                  "median": 56.386,
+                  "p90": 58.2914,
+                  "p95": 58.4942,
+                  "p99": 58.65644
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 63.3644,
+                  "min": 61.797,
+                  "max": 64.465999,
+                  "median": 63.771,
+                  "p90": 64.2932,
+                  "p95": 64.3796,
+                  "p99": 64.448719
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "cold-start-unknown-medium",
+          "description": "    Benchmarks the first-time invocation of a component that have never been instantiated before.\n    This variant uses a basic TypeScript component. 'size' is the number of unique components,\nand 'length' is the time in seconds _per component_ to wait for pre-compilation.\n    ",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 5,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 5,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 5,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 130.05,
+                  "min": 130.05,
+                  "max": 130.05,
+                  "median": 130.05,
+                  "p90": 130.05,
+                  "p95": 130.05,
+                  "p99": 130.05
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 136.878999,
+                  "min": 121.676,
+                  "max": 157.017,
+                  "median": 130.769,
+                  "p90": 154.683,
+                  "p95": 155.85,
+                  "p99": 156.7836
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 122.1036,
+                  "min": 116.393,
+                  "max": 127.651,
+                  "median": 121.503,
+                  "p90": 125.9167,
+                  "p95": 126.78385,
+                  "p99": 127.47757
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "cold-start-unknown-large",
+          "description": "Benchmarks the first-time invocation of a component that have never been instantiated before.\nThis variant uses a TypeScript component with a lot of linked AI libraries. 'size' is the number of unique components,\nand 'length' is the time in seconds _per component_ to wait for pre-compilation.\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 10,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 10,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 10,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 10,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 130.702,
+                  "min": 130.702,
+                  "max": 130.702,
+                  "median": 130.702,
+                  "p90": 130.702,
+                  "p95": 130.702,
+                  "p99": 130.702
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 10,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 230.519,
+                  "min": 134.452,
+                  "max": 311.848,
+                  "median": 258.23,
+                  "p90": 310.9664,
+                  "p95": 311.4072,
+                  "p99": 311.75984
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 10,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 696.6328,
+                  "min": 123.332,
+                  "max": 786.945,
+                  "median": 780.1805,
+                  "p90": 786.9135,
+                  "p95": 786.92925,
+                  "p99": 786.94185
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "latency-small",
+          "description": "Benchmarks both the cold and hot latency of a invoking a component that can potentially\nbe swapped out of the executor's memory.\nThis variant uses a small rust component.\nThe `size` parameter is the number of workers to create. The `length` parameter is the number\nof hot invocations to be done per worker (the first one is separately recorded as cold).\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 2,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 500,
+              "length": 2,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 1000,
+              "length": 2,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "cold-invocation": {
+                  "avg": 243.26803,
+                  "min": 211.914,
+                  "max": 271.772,
+                  "median": 246.343,
+                  "p90": 265.494199,
+                  "p95": 266.9152,
+                  "p99": 269.88506
+                },
+                "hot-invocation": {
+                  "avg": 135.719425,
+                  "min": 114.56,
+                  "max": 151.961,
+                  "median": 137.7515,
+                  "p90": 144.6093,
+                  "p95": 146.11665,
+                  "p99": 147.81582
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 500,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "cold-invocation": {
+                  "avg": 967.099356,
+                  "min": 660.044,
+                  "max": 1183.471,
+                  "median": 948.1705,
+                  "p90": 1152.9201,
+                  "p95": 1164.81295,
+                  "p99": 1176.0368
+                },
+                "hot-invocation": {
+                  "avg": 658.200418,
+                  "min": 450.047,
+                  "max": 829.713,
+                  "median": 666.0825,
+                  "p90": 817.3558,
+                  "p95": 821.38175,
+                  "p99": 828.10762
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1000,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "hot-invocation": {
+                  "avg": 1334.315159,
+                  "min": 944.655,
+                  "max": 1711.783,
+                  "median": 1368.6165,
+                  "p90": 1641.5571,
+                  "p95": 1685.26435,
+                  "p99": 1706.43822
+                },
+                "cold-invocation": {
+                  "avg": 1872.171183,
+                  "min": 1422.506,
+                  "max": 2345.101,
+                  "median": 1795.395,
+                  "p90": 2286.7297,
+                  "p95": 2309.79645,
+                  "p99": 2330.91373
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "latency-medium",
+          "description": "Benchmarks both the cold and hot latency of a invoking a component that can potentially\nbe swapped out of the executor's memory.\nThis variant uses a simple TypeScript agent.\nThe `size` parameter is the number of workers to create. The `length` parameter is the number\nof hot invocations to be done per worker (the first one is separately recorded as cold).\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 5,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 500,
+              "length": 5,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 1000,
+              "length": 5,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "cold-invocation": {
+                  "avg": 627.94406,
+                  "min": 353.234,
+                  "max": 781.823,
+                  "median": 701.474,
+                  "p90": 764.8882,
+                  "p95": 771.80575,
+                  "p99": 777.61253
+                },
+                "hot-invocation": {
+                  "avg": 135.92727,
+                  "min": 48.579,
+                  "max": 195.223,
+                  "median": 137.1505,
+                  "p90": 184.4385,
+                  "p95": 188.0875,
+                  "p99": 192.6316
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 500,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "cold-invocation": {
+                  "avg": 1973.351362,
+                  "min": 878.662,
+                  "max": 3076.894,
+                  "median": 1917.3205,
+                  "p90": 3024.4993,
+                  "p95": 3040.70035,
+                  "p99": 3055.3475
+                },
+                "hot-invocation": {
+                  "avg": 920.666565,
+                  "min": 211.32,
+                  "max": 1695.34,
+                  "median": 938.8635,
+                  "p90": 1161.0479,
+                  "p95": 1342.69455,
+                  "p99": 1641.91497
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1000,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "cold-invocation": {
+                  "avg": 3928.823711,
+                  "min": 1727.119,
+                  "max": 6034.281,
+                  "median": 3759.9035,
+                  "p90": 5994.3083,
+                  "p95": 6005.33735,
+                  "p99": 6022.27119
+                },
+                "hot-invocation": {
+                  "avg": 1789.401115,
+                  "min": 457.373,
+                  "max": 2706.888,
+                  "median": 1902.9715,
+                  "p90": 2149.0399,
+                  "p95": 2273.52655,
+                  "p99": 2568.38635
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "latency-large",
+          "description": "Benchmarks both the cold and hot latency of a invoking a component that can potentially\nbe swapped out of the executor's memory.\nThis variant uses a TypeScript agent with many AI dependencies.\nThe `size` parameter is the number of workers to create. The `length` parameter is the number\nof hot invocations to be done per worker (the first one is separately recorded as cold).\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 10,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 500,
+              "length": 10,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 1000,
+              "length": 10,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 10,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "cold-invocation": {
+                  "avg": 480.01538,
+                  "min": 344.098,
+                  "max": 611.768,
+                  "median": 483.906,
+                  "p90": 596.1247,
+                  "p95": 603.26595,
+                  "p99": 610.50971
+                },
+                "hot-invocation": {
+                  "avg": 186.868064,
+                  "min": 97.884,
+                  "max": 336.198,
+                  "median": 181.3595,
+                  "p90": 189.7101,
+                  "p95": 265.753049,
+                  "p99": 327.33075
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 500,
+                "length": 10,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "cold-invocation": {
+                  "avg": 1765.552344,
+                  "min": 813.019,
+                  "max": 2645.441,
+                  "median": 1809.785,
+                  "p90": 2494.2548,
+                  "p95": 2583.54585,
+                  "p99": 2633.55444
+                },
+                "hot-invocation": {
+                  "avg": 952.12616,
+                  "min": 544.280999,
+                  "max": 2059.295,
+                  "median": 910.318,
+                  "p90": 921.0706,
+                  "p95": 1544.41215,
+                  "p99": 1949.00772
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1000,
+                "length": 10,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "hot-invocation": {
+                  "avg": 3707.455666,
+                  "min": 15.526,
+                  "max": 6845.478,
+                  "median": 3679.4395,
+                  "p90": 4255.6281,
+                  "p95": 4520.4631,
+                  "p99": 5008.63301
+                },
+                "cold-invocation": {
+                  "avg": 3550.931791,
+                  "min": 1647.44,
+                  "max": 6160.362,
+                  "median": 3573.1675,
+                  "p90": 5017.6596,
+                  "p95": 5280.6052,
+                  "p99": 5473.30405
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "sleep",
+          "description": "Launch 'size' workers and invoke a function on each in parallel that sleeps for 'length' milliseconds.\nThe result is the measured invocation time, which is affected by the amount of workers fitting in memory\nand also the scheduler that wakes them up.\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 10000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 10000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 500,
+              "length": 10000,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 10019.8144,
+                  "min": 10019.707,
+                  "max": 10020.031,
+                  "median": 10019.801,
+                  "p90": 10019.8834,
+                  "p95": 10019.9572,
+                  "p99": 10020.01624
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 10137.01843,
+                  "min": 10127.827,
+                  "max": 10144.815,
+                  "median": 10136.4965,
+                  "p90": 10144.598,
+                  "p95": 10144.66465,
+                  "p99": 10144.7754
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 500,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 10644.600672,
+                  "min": 10569.078,
+                  "max": 10695.166,
+                  "median": 10648.1945,
+                  "p90": 10691.2963,
+                  "p95": 10692.30925,
+                  "p99": 10695.06914
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "durability-overhead",
+          "description": "Invokes oplog-heavy functions in parallel on `size` number of workers,\nusing ephemeral components, and durable components with persistence on and off.\nThe invoked function gets the 'length' parameter to control the length of its inner loop.\nThe benchmark can be used to compare the overhead caused by of persistence (using a low\n`size`) and also the effect of heavy persistence load caused by parallel running workers\n(using high `size`).\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 5000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 5000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 1000,
+              "length": 5000,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 5000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ephemeral-invocation": {
+                  "avg": 60.226,
+                  "min": 59.095,
+                  "max": 61.078,
+                  "median": 60.3405,
+                  "p90": 60.7603,
+                  "p95": 60.91915,
+                  "p99": 61.04623
+                },
+                "durable-persistent-invocation": {
+                  "avg": 468.1854,
+                  "min": 458.683,
+                  "max": 476.277,
+                  "median": 470.0875,
+                  "p90": 475.0629,
+                  "p95": 475.66995,
+                  "p99": 476.15559
+                },
+                "durable-non-persistent-invocation": {
+                  "avg": 475.7141,
+                  "min": 461.422,
+                  "max": 487.96,
+                  "median": 476.984,
+                  "p90": 485.0674,
+                  "p95": 486.5137,
+                  "p99": 487.67074
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 5000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ephemeral-invocation": {
+                  "avg": 498.75854,
+                  "min": 232.771,
+                  "max": 609.252,
+                  "median": 575.555,
+                  "p90": 606.6927,
+                  "p95": 607.51375,
+                  "p99": 608.84016
+                },
+                "durable-non-persistent-invocation": {
+                  "avg": 2185.422509,
+                  "min": 2083.897,
+                  "max": 2267.524,
+                  "median": 2188.186,
+                  "p90": 2252.0406,
+                  "p95": 2259.1256,
+                  "p99": 2263.30957
+                },
+                "durable-persistent-invocation": {
+                  "avg": 2173.40401,
+                  "min": 2055.784,
+                  "max": 2257.876,
+                  "median": 2181.0425,
+                  "p90": 2242.1294,
+                  "p95": 2246.8099,
+                  "p99": 2256.51178
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1000,
+                "length": 5000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ephemeral-invocation": {
+                  "avg": 9182.320753,
+                  "min": 1522.856,
+                  "max": 12355.945,
+                  "median": 11069.33,
+                  "p90": 12276.5014,
+                  "p95": 12327.125,
+                  "p99": 12350.56456
+                },
+                "durable-persistent-invocation": {
+                  "avg": 18174.26398,
+                  "min": 16288.484,
+                  "max": 19168.335,
+                  "median": 18247.814,
+                  "p90": 18997.0641,
+                  "p95": 19090.71625,
+                  "p99": 19151.34717
+                },
+                "durable-non-persistent-invocation": {
+                  "avg": 18221.31691,
+                  "min": 16513.641,
+                  "max": 19093.065,
+                  "median": 18279.516,
+                  "p90": 19000.527,
+                  "p95": 19050.77255,
+                  "p99": 19088.22793
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "throughput-echo",
+          "description": "Spawns `size` number of workers of various implementations, and calls the `echo` endpoint\na fixed number of times. The 'length' parameter is not used.\n`size` should be chosen in a way that all workers fit in the available executor's memory,\nand `size=1` can be used to test isolated throughput of a single worker.\nThe benchmarks measures multiple implementations separately after each other:\ndirect rust, native rust, TS agent, TS agent through rib mapping\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 1000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 1000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 1000,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 1000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-rib-invocation": {
+                  "avg": 3.940764,
+                  "min": 3.531,
+                  "max": 46.788,
+                  "median": 3.748,
+                  "p90": 3.8983,
+                  "p95": 3.9942,
+                  "p99": 4.18642
+                },
+                "direct-rust-invocation": {
+                  "avg": 6.561372,
+                  "min": 5.632,
+                  "max": 9.97,
+                  "median": 6.4805,
+                  "p90": 6.8564,
+                  "p95": 7.13075,
+                  "p99": 8.26689
+                },
+                "ts-agent-invocation": {
+                  "avg": 10.17044,
+                  "min": 8.506,
+                  "max": 11.513,
+                  "median": 10.146,
+                  "p90": 10.4844,
+                  "p95": 10.5976,
+                  "p99": 10.9042
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 1000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-rib-invocation": {
+                  "avg": 8.33702,
+                  "min": 4.84,
+                  "max": 75.678,
+                  "median": 8.0205,
+                  "p90": 8.675,
+                  "p95": 9.05735,
+                  "p99": 10.42103
+                },
+                "ts-agent-invocation": {
+                  "avg": 21.462236,
+                  "min": 11.583,
+                  "max": 29.454,
+                  "median": 21.451,
+                  "p90": 23.9312,
+                  "p95": 24.725,
+                  "p99": 26.2551
+                },
+                "direct-rust-invocation": {
+                  "avg": 14.514279,
+                  "min": 7.736,
+                  "max": 21.463,
+                  "median": 14.261,
+                  "p90": 15.9103,
+                  "p95": 16.742049,
+                  "p99": 18.20925
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 1000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-invocation": {
+                  "avg": 189.949038,
+                  "min": 62.728,
+                  "max": 263.611,
+                  "median": 189.733,
+                  "p90": 194.0051,
+                  "p95": 195.615,
+                  "p99": 199.02501
+                },
+                "ts-agent-rib-invocation": {
+                  "avg": 81.265878,
+                  "min": 20.797,
+                  "max": 469.842,
+                  "median": 80.283,
+                  "p90": 82.369,
+                  "p95": 83.301,
+                  "p99": 88.18414
+                },
+                "direct-rust-invocation": {
+                  "avg": 139.621229,
+                  "min": 115.868,
+                  "max": 163.941,
+                  "median": 139.335,
+                  "p90": 141.612,
+                  "p95": 142.84905,
+                  "p99": 147.35006
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "throughput-large-input",
+          "description": "Spawns `size` number of workers of various implementations, and calls the `large-input` endpoint\nwith an input based on `length` in a fixed number of times.\n`size` should be chosen in a way that all workers fit in the available executor's memory,\nand `size=1` can be used to test isolated throughput of a single worker.\nThe benchmarks measures multiple implementations separately after each other:\ndirect rust, native rust, TS agent, TS agent through rib mapping\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 100,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 10000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 100000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 100,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 10000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 100000,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-invocation": {
+                  "avg": 10.54926,
+                  "min": 10.25,
+                  "max": 11.143,
+                  "median": 10.545,
+                  "p90": 10.7575,
+                  "p95": 10.8174,
+                  "p99": 10.9054
+                },
+                "ts-agent-rib-invocation": {
+                  "avg": 4.80308,
+                  "min": 3.5300000000000002,
+                  "max": 44.932,
+                  "median": 4.333,
+                  "p90": 4.8864,
+                  "p95": 5.36365,
+                  "p99": 6.17944
+                },
+                "direct-rust-invocation": {
+                  "avg": 6.71999,
+                  "min": 6.33,
+                  "max": 10.733,
+                  "median": 6.5485,
+                  "p90": 6.9664,
+                  "p95": 7.4608,
+                  "p99": 9.88952
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-rib-invocation": {
+                  "avg": 45.57732,
+                  "min": 40.551,
+                  "max": 132.508999,
+                  "median": 45.009,
+                  "p90": 46.1504,
+                  "p95": 46.6405,
+                  "p99": 48.32831
+                },
+                "ts-agent-invocation": {
+                  "avg": 53.21923,
+                  "min": 48.163,
+                  "max": 57.706,
+                  "median": 53.5165,
+                  "p90": 54.6139,
+                  "p95": 55.0712,
+                  "p99": 57.35752
+                },
+                "direct-rust-invocation": {
+                  "avg": 14.38516,
+                  "min": 13.855,
+                  "max": 17.372,
+                  "median": 14.342,
+                  "p90": 14.5893,
+                  "p95": 14.66745,
+                  "p99": 16.19291
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 100000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-invocation": {
+                  "avg": 354.54908,
+                  "min": 344.826,
+                  "max": 367.752,
+                  "median": 353.957,
+                  "p90": 359.5088,
+                  "p95": 363.29815,
+                  "p99": 366.41847
+                },
+                "direct-rust-invocation": {
+                  "avg": 64.45092,
+                  "min": 62.209,
+                  "max": 68.534,
+                  "median": 64.379,
+                  "p90": 65.531899,
+                  "p95": 66.3468,
+                  "p99": 68.04197
+                },
+                "ts-agent-rib-invocation": {
+                  "avg": 350.41666,
+                  "min": 337.424,
+                  "max": 798.326,
+                  "median": 345.8945,
+                  "p90": 348.8753,
+                  "p95": 352.36705,
+                  "p99": 362.63591
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-invocation": {
+                  "avg": 21.61233,
+                  "min": 13.549,
+                  "max": 28.026,
+                  "median": 21.5255,
+                  "p90": 24.2131,
+                  "p95": 25.13205,
+                  "p99": 27.10175
+                },
+                "ts-agent-rib-invocation": {
+                  "avg": 9.2616,
+                  "min": 4.857,
+                  "max": 76.131,
+                  "median": 8.493499,
+                  "p90": 9.5975,
+                  "p95": 10.17325,
+                  "p99": 15.5628
+                },
+                "direct-rust-invocation": {
+                  "avg": 14.649126,
+                  "min": 8.352,
+                  "max": 21.82,
+                  "median": 14.392,
+                  "p90": 16.0528,
+                  "p95": 16.86035,
+                  "p99": 18.56815
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-rib-invocation": {
+                  "avg": 54.341937,
+                  "min": 43.119,
+                  "max": 391.698,
+                  "median": 50.3025,
+                  "p90": 56.5267,
+                  "p95": 58.84445,
+                  "p99": 89.77693
+                },
+                "direct-rust-invocation": {
+                  "avg": 36.634465,
+                  "min": 12.756,
+                  "max": 54.078,
+                  "median": 37.502,
+                  "p90": 44.3561,
+                  "p95": 46.38675,
+                  "p99": 49.4733
+                },
+                "ts-agent-invocation": {
+                  "avg": 57.532144,
+                  "min": 49.289,
+                  "max": 86.073,
+                  "median": 56.8345,
+                  "p90": 62.286,
+                  "p95": 64.61875,
+                  "p99": 76.0511
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 100000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-invocation": {
+                  "avg": 439.605338,
+                  "min": 388.232,
+                  "max": 576.7,
+                  "median": 431.242,
+                  "p90": 493.189,
+                  "p95": 506.9706,
+                  "p99": 540.14494
+                },
+                "direct-rust-invocation": {
+                  "avg": 203.241528,
+                  "min": 64.397,
+                  "max": 310.26,
+                  "median": 211.5315,
+                  "p90": 245.6041,
+                  "p95": 253.75405,
+                  "p99": 271.45503
+                },
+                "ts-agent-rib-invocation": {
+                  "avg": 490.084179,
+                  "min": 382.925,
+                  "max": 3233.989,
+                  "median": 460.6195,
+                  "p90": 522.7863,
+                  "p95": 539.9109,
+                  "p99": 605.16847
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "throughput-cpu-intensive",
+          "description": "Spawns `size` number of workers of various implementations, and calls the `cpu-intensive` endpoint\nwith the CPU intensive task's length based on `length` in a fixed number of times.\n`size` should be chosen in a way that all workers fit in the available executor's memory,\nand `size=1` can be used to test isolated throughput of a single worker.\nThe benchmarks measures multiple implementations separately after each other:\ndirect rust, native rust, TS agent, TS agent through rib mapping\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 100,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 100,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-invocation": {
+                  "avg": 511.9256,
+                  "min": 502.016,
+                  "max": 526.763,
+                  "median": 510.7,
+                  "p90": 518.393,
+                  "p95": 522.578,
+                  "p99": 525.926
+                },
+                "ts-agent-rib-invocation": {
+                  "avg": 530.2088,
+                  "min": 505.597,
+                  "max": 551.024,
+                  "median": 533.813,
+                  "p90": 537.7544,
+                  "p95": 544.389199,
+                  "p99": 549.69704
+                },
+                "direct-rust-invocation": {
+                  "avg": 10.5305,
+                  "min": 8.083,
+                  "max": 17.468,
+                  "median": 10.0905,
+                  "p90": 11.6693,
+                  "p95": 14.56865,
+                  "p99": 16.88813
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-rib-invocation": {
+                  "avg": 545.80282,
+                  "min": 529.124,
+                  "max": 606.505,
+                  "median": 540.453,
+                  "p90": 552.4216,
+                  "p95": 599.47585,
+                  "p99": 603.48748
+                },
+                "direct-rust-invocation": {
+                  "avg": 16.482859,
+                  "min": 11.825,
+                  "max": 27.678,
+                  "median": 15.123,
+                  "p90": 18.8948,
+                  "p95": 26.5715,
+                  "p99": 27.22062
+                },
+                "ts-agent-invocation": {
+                  "avg": 550.34849,
+                  "min": 538.869,
+                  "max": 559.862,
+                  "median": 551.0165,
+                  "p90": 555.4451,
+                  "p95": 557.02765,
+                  "p99": 559.46699
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "suite": "quick-all",
+      "environment": "CPU #0: vendor=Apple brand=Apple M4 Max\nCPU #1: vendor=Apple brand=Apple M4 Max\nCPU #2: vendor=Apple brand=Apple M4 Max\nCPU #3: vendor=Apple brand=Apple M4 Max\nCPU #4: vendor=Apple brand=Apple M4 Max\nCPU #5: vendor=Apple brand=Apple M4 Max\nCPU #6: vendor=Apple brand=Apple M4 Max\nCPU #7: vendor=Apple brand=Apple M4 Max\nCPU #8: vendor=Apple brand=Apple M4 Max\nCPU #9: vendor=Apple brand=Apple M4 Max\nCPU #10: vendor=Apple brand=Apple M4 Max\nCPU #11: vendor=Apple brand=Apple M4 Max\nCPU #12: vendor=Apple brand=Apple M4 Max\nCPU #13: vendor=Apple brand=Apple M4 Max\nCPU #14: vendor=Apple brand=Apple M4 Max\nCPU #15: vendor=Apple brand=Apple M4 Max\nTotal memory: 64 Gb\nSystem name=Darwin, os=macOS 26.0.1, kernel=25.0.0, hostname=vigooM4.local\n",
+      "version": "1.3.2-dev.3",
+      "timestamp": "2025-10-29T15:12:00.309861Z",
+      "results": [
+        {
+          "name": "cold-start-unknown-small-no-cache",
+          "description": "Benchmarks the first-time invocation of a component that have never been instantiated before.\nThis variant uses a relatively small Rust component. 'size' is the number of unique components,\nand 'length' is the time in seconds _per component_ to wait for pre-compilation.\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 2,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 2,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 2,
+              "disableCompilationCache": true
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 2,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 51.516,
+                  "min": 51.516,
+                  "max": 51.516,
+                  "median": 51.516,
+                  "p90": 51.516,
+                  "p95": 51.516,
+                  "p99": 51.516
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 2,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 67.971,
+                  "min": 56.417,
+                  "max": 79.553,
+                  "median": 69.756,
+                  "p90": 78.8034,
+                  "p95": 79.1782,
+                  "p99": 79.47804
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 2,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 97.525,
+                  "min": 97.038,
+                  "max": 97.888,
+                  "median": 97.567,
+                  "p90": 97.8088,
+                  "p95": 97.8484,
+                  "p99": 97.88008
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "cold-start-unknown-medium-no-cache",
+          "description": "    Benchmarks the first-time invocation of a component that have never been instantiated before.\n    This variant uses a basic TypeScript component. 'size' is the number of unique components,\nand 'length' is the time in seconds _per component_ to wait for pre-compilation.\n    ",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 5,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 5,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 5,
+              "disableCompilationCache": true
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 5,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 635.786,
+                  "min": 635.786,
+                  "max": 635.786,
+                  "median": 635.786,
+                  "p90": 635.786,
+                  "p95": 635.786,
+                  "p99": 635.786
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 5,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 1900.672,
+                  "min": 1832.784,
+                  "max": 1933.111,
+                  "median": 1924.654,
+                  "p90": 1932.9562,
+                  "p95": 1933.0336,
+                  "p99": 1933.09552
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 5,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 3449.8685,
+                  "min": 3315.985,
+                  "max": 3520.682,
+                  "median": 3501.191,
+                  "p90": 3514.9094,
+                  "p95": 3517.7957,
+                  "p99": 3520.10474
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "cold-start-unknown-large-no-cache",
+          "description": "Benchmarks the first-time invocation of a component that have never been instantiated before.\nThis variant uses a TypeScript component with a lot of linked AI libraries. 'size' is the number of unique components,\nand 'length' is the time in seconds _per component_ to wait for pre-compilation.\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 10,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 10,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 10,
+              "disableCompilationCache": true
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 10,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 2293.801,
+                  "min": 2293.801,
+                  "max": 2293.801,
+                  "median": 2293.801,
+                  "p90": 2293.801,
+                  "p95": 2293.801,
+                  "p99": 2293.801
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 10,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 6789.415,
+                  "min": 6641.014,
+                  "max": 6891.165,
+                  "median": 6879.291,
+                  "p90": 6890.759,
+                  "p95": 6890.962,
+                  "p99": 6891.1244
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 10,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 15000.661,
+                  "min": 14999.347,
+                  "max": 15004.993,
+                  "median": 14999.8285,
+                  "p90": 15002.5423,
+                  "p95": 15003.76765,
+                  "p99": 15004.74793
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "cold-start-unknown-small",
+          "description": "Benchmarks the first-time invocation of a component that have never been instantiated before.\nThis variant uses a relatively small Rust component. 'size' is the number of unique components,\nand 'length' is the time in seconds _per component_ to wait for pre-compilation.\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 2,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 2,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 2,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 72.637,
+                  "min": 72.637,
+                  "max": 72.637,
+                  "median": 72.637,
+                  "p90": 72.637,
+                  "p95": 72.637,
+                  "p99": 72.637
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 61.6742,
+                  "min": 59.452,
+                  "max": 63.419,
+                  "median": 61.901,
+                  "p90": 63.079,
+                  "p95": 63.249,
+                  "p99": 63.385
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 54.7038,
+                  "min": 53.264,
+                  "max": 57.124,
+                  "median": 53.7565,
+                  "p90": 57.0745,
+                  "p95": 57.09925,
+                  "p99": 57.11905
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "cold-start-unknown-medium",
+          "description": "    Benchmarks the first-time invocation of a component that have never been instantiated before.\n    This variant uses a basic TypeScript component. 'size' is the number of unique components,\nand 'length' is the time in seconds _per component_ to wait for pre-compilation.\n    ",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 5,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 5,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 5,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 114.593,
+                  "min": 114.593,
+                  "max": 114.593,
+                  "median": 114.593,
+                  "p90": 114.593,
+                  "p95": 114.593,
+                  "p99": 114.593
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 131.4546,
+                  "min": 122.967,
+                  "max": 140.936,
+                  "median": 134.148,
+                  "p90": 138.8276,
+                  "p95": 139.8818,
+                  "p99": 140.72516
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 155.5014,
+                  "min": 127.073,
+                  "max": 204.411,
+                  "median": 138.3305,
+                  "p90": 203.0268,
+                  "p95": 203.7189,
+                  "p99": 204.27258
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "cold-start-unknown-large",
+          "description": "Benchmarks the first-time invocation of a component that have never been instantiated before.\nThis variant uses a TypeScript component with a lot of linked AI libraries. 'size' is the number of unique components,\nand 'length' is the time in seconds _per component_ to wait for pre-compilation.\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 10,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 10,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 10,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 10,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 123.576,
+                  "min": 123.576,
+                  "max": 123.576,
+                  "median": 123.576,
+                  "p90": 123.576,
+                  "p95": 123.576,
+                  "p99": 123.576
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 10,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 217.578,
+                  "min": 129.02,
+                  "max": 299.53,
+                  "median": 221.285,
+                  "p90": 299.1748,
+                  "p95": 299.3524,
+                  "p99": 299.49448
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 10,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 445.3723,
+                  "min": 146.163,
+                  "max": 649.324,
+                  "median": 541.597,
+                  "p90": 649.2925,
+                  "p95": 649.30825,
+                  "p99": 649.32085
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "latency-small",
+          "description": "Benchmarks both the cold and hot latency of a invoking a component that can potentially\nbe swapped out of the executor's memory.\nThis variant uses a small rust component.\nThe `size` parameter is the number of workers to create. The `length` parameter is the number\nof hot invocations to be done per worker (the first one is separately recorded as cold).\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 2,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 500,
+              "length": 2,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 1000,
+              "length": 2,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "hot-invocation": {
+                  "avg": 180.028785,
+                  "min": 148.308,
+                  "max": 206.363,
+                  "median": 179.46,
+                  "p90": 200.0148,
+                  "p95": 201.65285,
+                  "p99": 205.00213
+                },
+                "cold-invocation": {
+                  "avg": 278.24284,
+                  "min": 236.358,
+                  "max": 317.37,
+                  "median": 281.2085,
+                  "p90": 309.6168,
+                  "p95": 311.86365,
+                  "p99": 315.45732
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 500,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "hot-invocation": {
+                  "avg": 1133.326274,
+                  "min": 744.229,
+                  "max": 1434.602,
+                  "median": 1196.1345,
+                  "p90": 1398.0542,
+                  "p95": 1415.19705,
+                  "p99": 1430.29143
+                },
+                "cold-invocation": {
+                  "avg": 1296.619036,
+                  "min": 777.611,
+                  "max": 1699.155,
+                  "median": 1280.822,
+                  "p90": 1646.6382,
+                  "p95": 1676.7237,
+                  "p99": 1693.92718
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1000,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "hot-invocation": {
+                  "avg": 1947.746426,
+                  "min": 1658.199,
+                  "max": 2304.214,
+                  "median": 1909.251,
+                  "p90": 2185.96,
+                  "p95": 2242.954,
+                  "p99": 2296.87238
+                },
+                "cold-invocation": {
+                  "avg": 2954.906168,
+                  "min": 1878.387,
+                  "max": 3701.109,
+                  "median": 2979.0805,
+                  "p90": 3627.1567,
+                  "p95": 3665.33735,
+                  "p99": 3689.31753
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "latency-medium",
+          "description": "Benchmarks both the cold and hot latency of a invoking a component that can potentially\nbe swapped out of the executor's memory.\nThis variant uses a simple TypeScript agent.\nThe `size` parameter is the number of workers to create. The `length` parameter is the number\nof hot invocations to be done per worker (the first one is separately recorded as cold).\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 5,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 500,
+              "length": 5,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 1000,
+              "length": 5,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "cold-invocation": {
+                  "avg": 633.0793,
+                  "min": 416.303,
+                  "max": 892.655,
+                  "median": 638.267,
+                  "p90": 837.5351,
+                  "p95": 848.15875,
+                  "p99": 865.85669
+                },
+                "hot-invocation": {
+                  "avg": 347.070164,
+                  "min": 262.841,
+                  "max": 636.252,
+                  "median": 312.1195,
+                  "p90": 502.4894,
+                  "p95": 584.2793,
+                  "p99": 616.44294
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 500,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "hot-invocation": {
+                  "avg": 1590.718804,
+                  "min": 589.099,
+                  "max": 3572.251,
+                  "median": 1530.001,
+                  "p90": 2173.921,
+                  "p95": 2961.1653,
+                  "p99": 3494.24346
+                },
+                "cold-invocation": {
+                  "avg": 3193.750066,
+                  "min": 1348.246,
+                  "max": 4770.36,
+                  "median": 3385.12,
+                  "p90": 4647.0349,
+                  "p95": 4722.4717,
+                  "p99": 4764.91674
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1000,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "cold-invocation": {
+                  "avg": 5663.382165,
+                  "min": 2851.184,
+                  "max": 8473.115,
+                  "median": 5747.57,
+                  "p90": 8008.5645,
+                  "p95": 8347.62985,
+                  "p99": 8461.77521
+                },
+                "hot-invocation": {
+                  "avg": 3400.922259,
+                  "min": 1692.454,
+                  "max": 6482.811,
+                  "median": 3166.316,
+                  "p90": 5603.9626,
+                  "p95": 5775.42605,
+                  "p99": 6228.87032
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "latency-large",
+          "description": "Benchmarks both the cold and hot latency of a invoking a component that can potentially\nbe swapped out of the executor's memory.\nThis variant uses a TypeScript agent with many AI dependencies.\nThe `size` parameter is the number of workers to create. The `length` parameter is the number\nof hot invocations to be done per worker (the first one is separately recorded as cold).\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 10,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 500,
+              "length": 10,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 1000,
+              "length": 10,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 10,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "hot-invocation": {
+                  "avg": 242.429154,
+                  "min": 148.217,
+                  "max": 433.048,
+                  "median": 234.1925,
+                  "p90": 250.005,
+                  "p95": 367.9669,
+                  "p99": 422.30993
+                },
+                "cold-invocation": {
+                  "avg": 564.21638,
+                  "min": 402.267,
+                  "max": 732.221,
+                  "median": 567.708,
+                  "p90": 714.7009,
+                  "p95": 722.73095,
+                  "p99": 731.76956
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 500,
+                "length": 10,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "cold-invocation": {
+                  "avg": 2594.474352,
+                  "min": 1011.07,
+                  "max": 4488.361,
+                  "median": 2276.8705,
+                  "p90": 4468.9651,
+                  "p95": 4477.0717,
+                  "p99": 4485.4494
+                },
+                "hot-invocation": {
+                  "avg": 1526.081086,
+                  "min": 292.816,
+                  "max": 3403.616,
+                  "median": 1463.885,
+                  "p90": 1946.9463,
+                  "p95": 2334.0518,
+                  "p99": 3149.78534
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1000,
+                "length": 10,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "cold-invocation": {
+                  "avg": 4545.996482,
+                  "min": 2029.951,
+                  "max": 7023.297,
+                  "median": 4697.0475,
+                  "p90": 6559.7383,
+                  "p95": 6761.5603,
+                  "p99": 6979.11729
+                },
+                "hot-invocation": {
+                  "avg": 6529.978838,
+                  "min": 3665.251,
+                  "max": 9052.098,
+                  "median": 6500.0345,
+                  "p90": 7194.9461,
+                  "p95": 7441.6474,
+                  "p99": 7798.66165
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "sleep",
+          "description": "Launch 'size' workers and invoke a function on each in parallel that sleeps for 'length' milliseconds.\nThe result is the measured invocation time, which is affected by the amount of workers fitting in memory\nand also the scheduler that wakes them up.\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 10000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 10000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 500,
+              "length": 10000,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 10026.7414,
+                  "min": 10025.557,
+                  "max": 10031.28,
+                  "median": 10026.2405,
+                  "p90": 10027.3965,
+                  "p95": 10029.33825,
+                  "p99": 10030.89165
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 10214.77469,
+                  "min": 10192.709,
+                  "max": 10234.988,
+                  "median": 10215.1575,
+                  "p90": 10231.9385,
+                  "p95": 10232.7686,
+                  "p99": 10234.80584
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 500,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 11147.71099,
+                  "min": 11020.645,
+                  "max": 11229.041,
+                  "median": 11154.9845,
+                  "p90": 11221.0286,
+                  "p95": 11226.3729,
+                  "p99": 11228.91702
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "durability-overhead",
+          "description": "Invokes oplog-heavy functions in parallel on `size` number of workers,\nusing ephemeral components, and durable components with persistence on and off.\nThe invoked function gets the 'length' parameter to control the length of its inner loop.\nThe benchmark can be used to compare the overhead caused by of persistence (using a low\n`size`) and also the effect of heavy persistence load caused by parallel running workers\n(using high `size`).\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 5000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 5000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 1000,
+              "length": 5000,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 5000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ephemeral-invocation": {
+                  "avg": 105.8874,
+                  "min": 103.071,
+                  "max": 108.445,
+                  "median": 105.686,
+                  "p90": 107.9923,
+                  "p95": 108.21865,
+                  "p99": 108.39973
+                },
+                "durable-persistent-invocation": {
+                  "avg": 619.4024,
+                  "min": 604.378,
+                  "max": 632.69,
+                  "median": 620.551,
+                  "p90": 629.18,
+                  "p95": 630.935,
+                  "p99": 632.339
+                },
+                "durable-non-persistent-invocation": {
+                  "avg": 691.9515,
+                  "min": 676.229,
+                  "max": 701.447,
+                  "median": 692.3195,
+                  "p90": 700.1105,
+                  "p95": 700.77875,
+                  "p99": 701.31335
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 5000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "durable-persistent-invocation": {
+                  "avg": 2422.15357,
+                  "min": 2219.062,
+                  "max": 2571.25,
+                  "median": 2425.2585,
+                  "p90": 2554.4124,
+                  "p95": 2562.2685,
+                  "p99": 2571.23218
+                },
+                "durable-non-persistent-invocation": {
+                  "avg": 2636.62097,
+                  "min": 2483.257,
+                  "max": 2745.586,
+                  "median": 2647.6465,
+                  "p90": 2728.6448,
+                  "p95": 2738.69045,
+                  "p99": 2742.19228
+                },
+                "ephemeral-invocation": {
+                  "avg": 454.07176,
+                  "min": 252.56,
+                  "max": 583.504,
+                  "median": 487.5455,
+                  "p90": 578.0076,
+                  "p95": 580.87185,
+                  "p99": 583.02385
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1000,
+                "length": 5000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "durable-persistent-invocation": {
+                  "avg": 22168.28251,
+                  "min": 10994.005,
+                  "max": 24319.857,
+                  "median": 22607.476,
+                  "p90": 23867.4136,
+                  "p95": 24094.74965,
+                  "p99": 24290.03101
+                },
+                "ephemeral-invocation": {
+                  "avg": 5461.41244,
+                  "min": 2431.483,
+                  "max": 7397.965,
+                  "median": 5355.0515,
+                  "p90": 7341.6261,
+                  "p95": 7373.80845,
+                  "p99": 7392.41372
+                },
+                "durable-non-persistent-invocation": {
+                  "avg": 22267.702437,
+                  "min": 19046.117,
+                  "max": 23521.598,
+                  "median": 22574.013,
+                  "p90": 23389.3524,
+                  "p95": 23466.94255,
+                  "p99": 23508.38416
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "throughput-echo",
+          "description": "Spawns `size` number of workers of various implementations, and calls the `echo` endpoint\na fixed number of times. The 'length' parameter is not used.\n`size` should be chosen in a way that all workers fit in the available executor's memory,\nand `size=1` can be used to test isolated throughput of a single worker.\nThe benchmarks measures multiple implementations separately after each other:\ndirect rust, native rust, TS agent, TS agent through rib mapping\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 1000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 1000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 1000,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 1000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-rib-invocation": {
+                  "avg": 7.864364,
+                  "min": 4.971,
+                  "max": 61.488,
+                  "median": 6.99,
+                  "p90": 10.6304,
+                  "p95": 12.46515,
+                  "p99": 17.05727
+                },
+                "direct-rust-invocation": {
+                  "avg": 11.68528,
+                  "min": 8.269,
+                  "max": 33.568,
+                  "median": 10.4165,
+                  "p90": 15.0793,
+                  "p95": 19.3981,
+                  "p99": 28.31573
+                },
+                "ts-agent-invocation": {
+                  "avg": 16.422896,
+                  "min": 12.249,
+                  "max": 48.817,
+                  "median": 14.7345,
+                  "p90": 20.63,
+                  "p95": 22.9578,
+                  "p99": 30.91327
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 1000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "direct-rust-invocation": {
+                  "avg": 25.390676,
+                  "min": 14.925,
+                  "max": 69.038,
+                  "median": 24.171,
+                  "p90": 33.5413,
+                  "p95": 36.97485,
+                  "p99": 48.67403
+                },
+                "ts-agent-invocation": {
+                  "avg": 32.992096,
+                  "min": 18.578,
+                  "max": 82.221,
+                  "median": 30.1605,
+                  "p90": 44.3797,
+                  "p95": 49.39115,
+                  "p99": 61.99794
+                },
+                "ts-agent-rib-invocation": {
+                  "avg": 16.039782,
+                  "min": 7.183,
+                  "max": 103.05,
+                  "median": 15.0665,
+                  "p90": 21.2524,
+                  "p95": 23.4061,
+                  "p99": 29.73916
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 1000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-rib-invocation": {
+                  "avg": 140.564309,
+                  "min": 66.541,
+                  "max": 708.23,
+                  "median": 130.6255,
+                  "p90": 190.6342,
+                  "p95": 207.331,
+                  "p99": 235.16862
+                },
+                "direct-rust-invocation": {
+                  "avg": 238.4789,
+                  "min": 146.173,
+                  "max": 452.874,
+                  "median": 237.4775,
+                  "p90": 316.2559,
+                  "p95": 335.2337,
+                  "p99": 367.28535
+                },
+                "ts-agent-invocation": {
+                  "avg": 312.849325,
+                  "min": 61.04,
+                  "max": 865.109,
+                  "median": 315.7725,
+                  "p90": 396.7993,
+                  "p95": 418.17215,
+                  "p99": 500.94289
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "throughput-large-input",
+          "description": "Spawns `size` number of workers of various implementations, and calls the `large-input` endpoint\nwith an input based on `length` in a fixed number of times.\n`size` should be chosen in a way that all workers fit in the available executor's memory,\nand `size=1` can be used to test isolated throughput of a single worker.\nThe benchmarks measures multiple implementations separately after each other:\ndirect rust, native rust, TS agent, TS agent through rib mapping\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 100,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 10000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 100000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 100,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 10000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 100000,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-rib-invocation": {
+                  "avg": 10.06842,
+                  "min": 4.547,
+                  "max": 59.101,
+                  "median": 9.005,
+                  "p90": 13.3453,
+                  "p95": 14.23195,
+                  "p99": 19.60495
+                },
+                "direct-rust-invocation": {
+                  "avg": 16.37987,
+                  "min": 8.26,
+                  "max": 52.454,
+                  "median": 14.4745,
+                  "p90": 26.1856,
+                  "p95": 29.95165,
+                  "p99": 47.01098
+                },
+                "ts-agent-invocation": {
+                  "avg": 17.32385,
+                  "min": 12.871,
+                  "max": 42.227,
+                  "median": 15.2415,
+                  "p90": 23.7539,
+                  "p95": 28.2449,
+                  "p99": 37.3265
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-invocation": {
+                  "avg": 59.37285,
+                  "min": 52.927,
+                  "max": 91.922,
+                  "median": 56.7505,
+                  "p90": 68.0844,
+                  "p95": 76.96735,
+                  "p99": 88.52432
+                },
+                "direct-rust-invocation": {
+                  "avg": 22.37858,
+                  "min": 14.87,
+                  "max": 69.091,
+                  "median": 21.5725,
+                  "p90": 24.2859,
+                  "p95": 27.6694,
+                  "p99": 57.66046
+                },
+                "ts-agent-rib-invocation": {
+                  "avg": 48.50885,
+                  "min": 43.305,
+                  "max": 159.14,
+                  "median": 46.382,
+                  "p90": 50.7205,
+                  "p95": 56.0485,
+                  "p99": 62.61698
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 100000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-rib-invocation": {
+                  "avg": 379.70977,
+                  "min": 346.582,
+                  "max": 930.84,
+                  "median": 376.233,
+                  "p90": 397.0655,
+                  "p95": 404.1428,
+                  "p99": 508.54362
+                },
+                "ts-agent-invocation": {
+                  "avg": 378.618,
+                  "min": 360.542,
+                  "max": 484.099,
+                  "median": 372.666,
+                  "p90": 397.9073,
+                  "p95": 417.9348,
+                  "p99": 454.77916
+                },
+                "direct-rust-invocation": {
+                  "avg": 71.97986,
+                  "min": 67.207,
+                  "max": 99.106,
+                  "median": 69.8035,
+                  "p90": 77.7382,
+                  "p95": 82.7495,
+                  "p99": 97.58536
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "direct-rust-invocation": {
+                  "avg": 21.237807,
+                  "min": 13.237,
+                  "max": 34.94,
+                  "median": 20.391,
+                  "p90": 24.5216,
+                  "p95": 29.04295,
+                  "p99": 33.61801
+                },
+                "ts-agent-invocation": {
+                  "avg": 38.618868,
+                  "min": 18.021,
+                  "max": 113.279,
+                  "median": 36.223,
+                  "p90": 49.732,
+                  "p95": 62.6482,
+                  "p99": 84.48652
+                },
+                "ts-agent-rib-invocation": {
+                  "avg": 12.817106,
+                  "min": 7.5440000000000005,
+                  "max": 92.92,
+                  "median": 11.5465,
+                  "p90": 14.199,
+                  "p95": 15.09955,
+                  "p99": 41.91661
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-invocation": {
+                  "avg": 86.463203,
+                  "min": 56.751,
+                  "max": 153.434,
+                  "median": 86.1005,
+                  "p90": 106.1362,
+                  "p95": 111.8614,
+                  "p99": 135.05921
+                },
+                "direct-rust-invocation": {
+                  "avg": 53.58171,
+                  "min": 22.372,
+                  "max": 137.246,
+                  "median": 51.8455,
+                  "p90": 74.6587,
+                  "p95": 90.30825,
+                  "p99": 116.77511
+                },
+                "ts-agent-rib-invocation": {
+                  "avg": 84.585274,
+                  "min": 45.643,
+                  "max": 461.728,
+                  "median": 75.7855,
+                  "p90": 113.3134,
+                  "p95": 130.55525,
+                  "p99": 259.33529
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 100000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-rib-invocation": {
+                  "avg": 564.298591,
+                  "min": 388.483,
+                  "max": 3679.537,
+                  "median": 525.0205,
+                  "p90": 633.0841,
+                  "p95": 687.827,
+                  "p99": 868.16551
+                },
+                "direct-rust-invocation": {
+                  "avg": 238.821347,
+                  "min": 76.784,
+                  "max": 354.555,
+                  "median": 247.032,
+                  "p90": 287.2836,
+                  "p95": 297.37025,
+                  "p99": 330.65589
+                },
+                "ts-agent-invocation": {
+                  "avg": 580.358461,
+                  "min": 396.119,
+                  "max": 1530.784,
+                  "median": 563.5805,
+                  "p90": 672.0302,
+                  "p95": 734.2253,
+                  "p99": 970.30659
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "throughput-cpu-intensive",
+          "description": "Spawns `size` number of workers of various implementations, and calls the `cpu-intensive` endpoint\nwith the CPU intensive task's length based on `length` in a fixed number of times.\n`size` should be chosen in a way that all workers fit in the available executor's memory,\nand `size=1` can be used to test isolated throughput of a single worker.\nThe benchmarks measures multiple implementations separately after each other:\ndirect rust, native rust, TS agent, TS agent through rib mapping\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 100,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 100,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-rib-invocation": {
+                  "avg": 475.8075,
+                  "min": 465.57,
+                  "max": 516.143,
+                  "median": 471.816,
+                  "p90": 480.6479,
+                  "p95": 498.39545,
+                  "p99": 512.59349
+                },
+                "direct-rust-invocation": {
+                  "avg": 13.25,
+                  "min": 10.423,
+                  "max": 17.254,
+                  "median": 12.814,
+                  "p90": 17.1145,
+                  "p95": 17.18425,
+                  "p99": 17.24005
+                },
+                "ts-agent-invocation": {
+                  "avg": 519.6698,
+                  "min": 477.843,
+                  "max": 550.911,
+                  "median": 537.3035,
+                  "p90": 549.5844,
+                  "p95": 550.2477,
+                  "p99": 550.77834
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-rib-invocation": {
+                  "avg": 551.6259,
+                  "min": 532.828,
+                  "max": 608.863,
+                  "median": 545.477,
+                  "p90": 575.053,
+                  "p95": 604.77185,
+                  "p99": 607.93537
+                },
+                "direct-rust-invocation": {
+                  "avg": 22.57888,
+                  "min": 17.826999999999998,
+                  "max": 28.357,
+                  "median": 21.624,
+                  "p90": 26.5337,
+                  "p95": 27.10005,
+                  "p99": 28.08079
+                },
+                "ts-agent-invocation": {
+                  "avg": 608.68391,
+                  "min": 550.29,
+                  "max": 760.032,
+                  "median": 586.8055,
+                  "p90": 694.2313,
+                  "p95": 709.6928,
+                  "p99": 737.19468
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
