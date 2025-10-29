@@ -179,7 +179,10 @@ function setupTableInteractivity() {
         responsive: true,
         scales: {
           x: { type: 'linear', title: { display: true, text: 'Size' } },
-          y: { title: { display: true, text: 'Duration (ms)' } },
+          y: {
+            beginAtZero: true,
+            title: { display: true, text: 'Duration (ms)' }
+          },
         },
       },
     });
