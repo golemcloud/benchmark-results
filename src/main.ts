@@ -112,42 +112,35 @@ function getHistoricalChartData(benchmarkName: string) {
 
   // Find the duration key with the lowest median for this config
   const keys = Object.keys(largestConfig.duration_results);
-  const selectedKey = keys.reduce(
-    (minKey, key) =>
-      largestConfig.duration_results[key].median < largestConfig.duration_results[minKey].median
-        ? key
-        : minKey,
-    keys[0]
-  );
+  // Collect data for all duration keys in the largest config
+  const datasets = keys.map((key, index) => {
+    const data = typedData.runs
+      .map((run) => {
+        const bench = run.results.find((b) => b.name === benchmarkName);
+        if (!bench) return null;
+        const result = bench.results.find(
+          (r) =>
+            r.run_config.clusterSize === largestConfig.run_config.clusterSize &&
+            r.run_config.size === largestConfig.run_config.size &&
+            r.run_config.length === largestConfig.run_config.length &&
+            r.run_config.disableCompilationCache ===
+              largestConfig.run_config.disableCompilationCache
+        );
+        if (!result || !result.duration_results[key]) return null;
+        return {
+          x: new Date(run.timestamp).getTime(),
+          y: result.duration_results[key].median,
+        };
+      })
+      .filter((p) => p !== null);
 
-  // Collect data across all runs
-  const data = typedData.runs
-    .map((run) => {
-      const bench = run.results.find((b) => b.name === benchmarkName);
-      if (!bench) return null;
-      const result = bench.results.find(
-        (r) =>
-          r.run_config.clusterSize === largestConfig.run_config.clusterSize &&
-          r.run_config.size === largestConfig.run_config.size &&
-          r.run_config.length === largestConfig.run_config.length &&
-          r.run_config.disableCompilationCache === largestConfig.run_config.disableCompilationCache
-      );
-      if (!result || !result.duration_results[selectedKey]) return null;
-      return {
-        x: new Date(run.timestamp).getTime(),
-        y: result.duration_results[selectedKey].median,
-      };
-    })
-    .filter((p) => p !== null);
-
-  const datasets = [
-    {
-      label: `${selectedKey} (Size: ${largestConfig.run_config.size}, Length: ${largestConfig.run_config.length})`,
+    return {
+      label: `${key} (Size: ${largestConfig.run_config.size}, Length: ${largestConfig.run_config.length})`,
       data,
-      borderColor: CHART_COLORS[0],
+      borderColor: CHART_COLORS[index % CHART_COLORS.length],
       fill: false,
-    },
-  ];
+    };
+  });
 
   return { datasets };
 }
