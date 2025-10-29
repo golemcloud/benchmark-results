@@ -4,11 +4,12 @@ import './style.css';
 import {marked} from 'marked';
 import {Chart} from 'chart.js/auto';
 import data from '../results/results.json';
-import type {BenchmarkSuiteResult, BenchmarkSuiteResultCollection} from './types';
+import type {BenchmarkSuiteResultCollection} from './types';
 
 const typedData = data as BenchmarkSuiteResultCollection;
 const lastRun = data.runs[typedData.runs.length - 1];
 const charts: Record<string, Chart> = {};
+const CHART_COLORS = ['blue', 'red', 'green', 'orange', 'purple', 'brown', 'pink', 'gray', 'olive', 'cyan'];
 
 function renderResults() {
     const app = document.querySelector<HTMLDivElement>('#app')!;
@@ -83,15 +84,36 @@ function init() {
 
 function getChartData(benchmarkName: string, key: string, metric: string) {
     const benchmark = lastRun.results.find(b => b.name === benchmarkName);
-    if (!benchmark) return {labels: [], data: []};
-    const points = benchmark.results
+    if (!benchmark) return {datasets: []};
+
+    // Group by clusterSize and length
+    const groups: Record<string, {
+        clusterSize: number;
+        length: number;
+        points: { size: number; value: number }[]
+    }> = {};
+    benchmark.results
         .filter(r => r.duration_results[key])
-        .map(r => ({size: r.run_config.size, value: r.duration_results[key][metric]}))
-        .sort((a, b) => a.size - b.size);
-    return {
-        labels: points.map(p => p.size.toString()),
-        data: points.map(p => p.value)
-    };
+        .forEach(r => {
+            const groupKey = `${r.run_config.clusterSize}-${r.run_config.length}`;
+            if (!groups[groupKey]) {
+                groups[groupKey] = {clusterSize: r.run_config.clusterSize, length: r.run_config.length, points: []};
+            }
+            groups[groupKey].points.push({size: r.run_config.size, value: r.duration_results[key][metric]});
+        });
+
+    // Create datasets
+    const datasets = Object.values(groups).map((group, index) => {
+        const sortedPoints = group.points.sort((a, b) => a.size - b.size);
+        return {
+            label: `Cluster: ${group.clusterSize}, Length: ${group.length} (${metric.toUpperCase()})`,
+            data: sortedPoints.map(p => ({x: p.size, y: p.value})),
+            borderColor: CHART_COLORS[index % CHART_COLORS.length],
+            fill: false
+        };
+    });
+
+    return {datasets};
 }
 
 function setupTableInteractivity() {
@@ -100,22 +122,19 @@ function setupTableInteractivity() {
         const benchmarkName = canvas.getAttribute('data-benchmark')!;
         const key = canvas.getAttribute('data-key')!;
         const tableId = `table-${benchmarkName.replace(/\s+/g, '-')}-${key}`;
-        const {labels, data} = getChartData(benchmarkName, key, 'median');
+        const {datasets} = getChartData(benchmarkName, key, 'median');
         charts[tableId] = new Chart(canvas as HTMLCanvasElement, {
             type: 'line',
             data: {
-                labels,
-                datasets: [{
-                    label: 'Median Duration (ms)',
-                    data,
-                    borderColor: 'blue',
-                    fill: false
-                }]
+                datasets
             },
             options: {
+                animation: {
+                    duration: 100
+                },
                 responsive: true,
                 scales: {
-                    x: {title: {display: true, text: 'Size'}},
+                    x: {type: 'linear', title: {display: true, text: 'Size'}},
                     y: {title: {display: true, text: 'Duration (ms)'}}
                 }
             }
@@ -141,9 +160,8 @@ function setupTableInteractivity() {
                 // Update chart
                 const chart = charts[tableId];
                 if (chart && metric) {
-                    const {data} = getChartData(benchmarkName, key, metric);
-                    chart.data.datasets[0].data = data;
-                    chart.data.datasets[0].label = `${metric.toUpperCase()} Duration (ms)`;
+                    const {datasets} = getChartData(benchmarkName, key, metric);
+                    chart.data.datasets = datasets;
                     chart.update();
                 }
             });
