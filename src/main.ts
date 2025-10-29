@@ -37,10 +37,10 @@ function renderResults() {
 
   lastRun.results.forEach((benchmark) => {
     html += `
-      <section class="benchmark">
-        <h3>${benchmark.name}</h3>
-        <div class="description">${marked.parse(benchmark.description)}</div>
-    `;
+  <section class="benchmark">
+  <h3>${benchmark.name}</h3>
+  <div class="description">${marked.parse(benchmark.description)}</div>
+  `;
 
     // Collect all unique duration keys
     const allKeys = new Set<string>();
@@ -80,8 +80,11 @@ function renderResults() {
       });
 
       html += '</tbody></table>';
-      html += `<div class="chart-container"><canvas class="chart" data-benchmark="${benchmark.name}" data-key="${key}"></canvas></div>`;
     });
+
+    // Add single chart for the benchmark
+    const chartId = `chart-${benchmark.name.replace(/\s+/g, '-')}`;
+    html += `<div class="chart-container"><canvas id="${chartId}" class="chart" data-benchmark="${benchmark.name}"></canvas></div>`;
 
     html += '</section>';
   });
@@ -94,45 +97,65 @@ function init() {
   setupTableInteractivity();
 }
 
-function getChartData(benchmarkName: string, key: string, metric: string) {
+function getChartData(benchmarkName: string, metric: string) {
   const benchmark = lastRun.results.find((b) => b.name === benchmarkName);
   if (!benchmark) return { datasets: [] };
 
-  // Group by clusterSize and length
-  const groups: Record<
-    string,
-    {
-      clusterSize: number;
-      length: number;
-      points: { size: number; value: number }[];
-    }
-  > = {};
-  benchmark.results
-    .filter((r) => r.duration_results[key])
-    .forEach((r) => {
-      const groupKey = `${r.run_config.clusterSize}-${r.run_config.length}`;
-      if (!groups[groupKey]) {
-        groups[groupKey] = {
-          clusterSize: r.run_config.clusterSize,
-          length: r.run_config.length,
-          points: [],
-        };
-      }
-      groups[groupKey].points.push({
-        size: r.run_config.size,
-        value: r.duration_results[key][metric],
-      });
-    });
+  // Collect all unique keys
+  const allKeys = new Set<string>();
+  benchmark.results.forEach((runResult) => {
+    Object.keys(runResult.duration_results).forEach((key) => allKeys.add(key));
+  });
 
-  // Create datasets
-  const datasets = Object.values(groups).map((group, index) => {
-    const sortedPoints = group.points.sort((a, b) => a.size - b.size);
-    return {
-      label: `Cluster: ${group.clusterSize}, Length: ${group.length} (${metric.toUpperCase()})`,
-      data: sortedPoints.map((p) => ({ x: p.size, y: p.value })),
-      borderColor: CHART_COLORS[index % CHART_COLORS.length],
-      fill: false,
-    };
+  const datasets: Array<{
+    label: string;
+    data: Array<{ x: number; y: number }>;
+    borderColor: string;
+    fill: boolean;
+  }> = [];
+  let colorIndex = 0;
+
+  allKeys.forEach((key) => {
+    const hasData = benchmark.results.some((r) => r.duration_results[key]);
+    if (!hasData) return;
+
+    // Group by clusterSize and length for this key
+    const groups: Record<
+      string,
+      {
+        clusterSize: number;
+        length: number;
+        points: { size: number; value: number }[];
+      }
+    > = {};
+    benchmark.results
+      .filter((r) => r.duration_results[key])
+      .forEach((r) => {
+        const groupKey = `${r.run_config.clusterSize}-${r.run_config.length}`;
+        if (!groups[groupKey]) {
+          groups[groupKey] = {
+            clusterSize: r.run_config.clusterSize,
+            length: r.run_config.length,
+            points: [],
+          };
+        }
+        groups[groupKey].points.push({
+          size: r.run_config.size,
+          value: r.duration_results[key][metric],
+        });
+      });
+
+    // Create datasets for this key
+    Object.values(groups).forEach((group) => {
+      const sortedPoints = group.points.sort((a, b) => a.size - b.size);
+      datasets.push({
+        label: `${key} - Cluster: ${group.clusterSize}, Length: ${group.length} (${metric.toUpperCase()})`,
+        data: sortedPoints.map((p) => ({ x: p.size, y: p.value })),
+        borderColor: CHART_COLORS[colorIndex % CHART_COLORS.length],
+        fill: false,
+      });
+      colorIndex++;
+    });
   });
 
   return { datasets };
@@ -142,10 +165,9 @@ function setupTableInteractivity() {
   const canvases = document.querySelectorAll('.chart');
   canvases.forEach((canvas) => {
     const benchmarkName = canvas.getAttribute('data-benchmark')!;
-    const key = canvas.getAttribute('data-key')!;
-    const tableId = `table-${benchmarkName.replace(/\s+/g, '-')}-${key}`;
-    const { datasets } = getChartData(benchmarkName, key, 'median');
-    charts[tableId] = new Chart(canvas as HTMLCanvasElement, {
+    const chartId = canvas.id;
+    const { datasets } = getChartData(benchmarkName, 'median');
+    charts[chartId] = new Chart(canvas as HTMLCanvasElement, {
       type: 'line',
       data: {
         datasets,
@@ -169,28 +191,38 @@ function setupTableInteractivity() {
     ths.forEach((th) => {
       th.addEventListener('click', () => {
         const metric = th.getAttribute('data-metric');
-        const tableId = table.id;
         const benchmarkName = table.getAttribute('data-benchmark')!;
-        const key = table.getAttribute('data-key')!;
-        // Remove previous highlights from this table
-        table.classList.remove(
-          'selected-metric-avg',
-          'selected-metric-min',
-          'selected-metric-max',
-          'selected-metric-median',
-          'selected-metric-p90',
-          'selected-metric-p95',
-          'selected-metric-p99'
+
+        // Get all tables in the same benchmark
+        const benchmarkTables = document.querySelectorAll(
+          `.benchmark-table[data-benchmark="${benchmarkName}"]`
         );
-        // Add highlight
+
+        // Remove previous highlights from all tables in this benchmark
+        benchmarkTables.forEach((t) => {
+          t.classList.remove(
+            'selected-metric-avg',
+            'selected-metric-min',
+            'selected-metric-max',
+            'selected-metric-median',
+            'selected-metric-p90',
+            'selected-metric-p95',
+            'selected-metric-p99'
+          );
+        });
+
+        // Add highlight to all tables in this benchmark
         if (metric) {
-          table.classList.add(`selected-metric-${metric}`);
+          benchmarkTables.forEach((t) => {
+            t.classList.add(`selected-metric-${metric}`);
+          });
         }
 
-        // Update chart
-        const chart = charts[tableId];
+        // Update chart for the benchmark
+        const chartId = `chart-${benchmarkName.replace(/\s+/g, '-')}`;
+        const chart = charts[chartId];
         if (chart && metric) {
-          const { datasets } = getChartData(benchmarkName, key, metric);
+          const { datasets } = getChartData(benchmarkName, metric);
           chart.data.datasets = datasets;
           chart.update();
         }
