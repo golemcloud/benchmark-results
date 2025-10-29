@@ -3,8 +3,10 @@
 import './style.css';
 import { marked } from 'marked';
 import { Chart } from 'chart.js/auto';
+import 'chartjs-adapter-date-fns';
 import data from '../results/results.json';
 import type { BenchmarkSuiteResultCollection } from './types';
+import { findLargestConfig } from './utils';
 
 const typedData = data as BenchmarkSuiteResultCollection;
 const lastRun = data.runs[typedData.runs.length - 1];
@@ -86,6 +88,10 @@ function renderResults() {
     const chartId = `chart-${benchmark.name.replace(/\s+/g, '-')}`;
     html += `<div class="chart-container"><canvas id="${chartId}" class="chart" data-benchmark="${benchmark.name}"></canvas></div>`;
 
+    // Add historical chart for the benchmark
+    const historicalChartId = `historical-chart-${benchmark.name.replace(/\s+/g, '-')}`;
+    html += `<div class="chart-container"><h4>Historical Trend</h4><canvas id="${historicalChartId}" class="historical-chart" data-benchmark="${benchmark.name}"></canvas></div>`;
+
     html += '</section>';
   });
 
@@ -95,6 +101,55 @@ function renderResults() {
 function init() {
   renderResults();
   setupTableInteractivity();
+}
+
+function getHistoricalChartData(benchmarkName: string) {
+  const benchmark = lastRun.results.find((b) => b.name === benchmarkName);
+  if (!benchmark) return { datasets: [] };
+
+  // Find the config with largest parameters
+  const largestConfig = findLargestConfig(benchmark.results);
+
+  // Find the duration key with the lowest median for this config
+  const keys = Object.keys(largestConfig.duration_results);
+  const selectedKey = keys.reduce(
+    (minKey, key) =>
+      largestConfig.duration_results[key].median < largestConfig.duration_results[minKey].median
+        ? key
+        : minKey,
+    keys[0]
+  );
+
+  // Collect data across all runs
+  const data = typedData.runs
+    .map((run) => {
+      const bench = run.results.find((b) => b.name === benchmarkName);
+      if (!bench) return null;
+      const result = bench.results.find(
+        (r) =>
+          r.run_config.clusterSize === largestConfig.run_config.clusterSize &&
+          r.run_config.size === largestConfig.run_config.size &&
+          r.run_config.length === largestConfig.run_config.length &&
+          r.run_config.disableCompilationCache === largestConfig.run_config.disableCompilationCache
+      );
+      if (!result || !result.duration_results[selectedKey]) return null;
+      return {
+        x: new Date(run.timestamp).getTime(),
+        y: result.duration_results[selectedKey].median,
+      };
+    })
+    .filter((p) => p !== null);
+
+  const datasets = [
+    {
+      label: `${selectedKey} (Size: ${largestConfig.run_config.size}, Length: ${largestConfig.run_config.length})`,
+      data,
+      borderColor: CHART_COLORS[0],
+      fill: false,
+    },
+  ];
+
+  return { datasets };
 }
 
 function getChartData(benchmarkName: string, metric: string) {
@@ -181,7 +236,7 @@ function setupTableInteractivity() {
           x: { type: 'linear', title: { display: true, text: 'Size' } },
           y: {
             beginAtZero: true,
-            title: { display: true, text: 'Duration (ms)' }
+            title: { display: true, text: 'Duration (ms)' },
           },
         },
       },
@@ -236,6 +291,42 @@ function setupTableInteractivity() {
   // Select Median by default for each table
   tables.forEach((table) => {
     table.classList.add('selected-metric-median');
+  });
+
+  // Setup historical charts
+  const historicalCanvases = document.querySelectorAll('.historical-chart');
+  historicalCanvases.forEach((canvas) => {
+    const benchmarkName = canvas.getAttribute('data-benchmark')!;
+    const historicalChartId = canvas.id;
+    const { datasets } = getHistoricalChartData(benchmarkName);
+    charts[historicalChartId] = new Chart(canvas as HTMLCanvasElement, {
+      type: 'line',
+      data: {
+        datasets,
+      },
+      options: {
+        animation: {
+          duration: 100,
+        },
+        responsive: true,
+        scales: {
+          x: {
+            type: 'time',
+            title: { display: true, text: 'Run Timestamp' },
+            time: {
+              unit: 'day',
+              displayFormats: {
+                day: 'MMM dd',
+              },
+            },
+          },
+          y: {
+            beginAtZero: true,
+            title: { display: true, text: 'Duration (ms)' },
+          },
+        },
+      },
+    });
   });
 }
 
