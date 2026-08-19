@@ -13,11 +13,22 @@ import {
     BenchmarkRunResult,
     type Metric,
 } from './types';
-import { findLargestConfig, isMetric } from './utils';
+import {
+    findLargestConfig,
+    getCommitUrl,
+    getLatestRun,
+    getRunnerId,
+    getRunnerLabel,
+    getRunnerOptions,
+    getRunsForRunnerAndSuite,
+    isMetric,
+} from './utils';
 
 const typedData = data as BenchmarkSuiteResultCollection;
-const lastRun: BenchmarkSuiteResult = data.runs[typedData.runs.length - 1];
 const charts: Record<string, Chart> = {};
+const initialRun = typedData.runs[typedData.runs.length - 1];
+let selectedRunnerId = getRunnerId(initialRun);
+let lastRun: BenchmarkSuiteResult = initialRun;
 const CHART_COLORS = [
     'blue',
     'red',
@@ -162,6 +173,34 @@ function renderResults() {
     h1.textContent = 'Benchmark Results';
     app.appendChild(h1);
 
+    const runnerControls = document.createElement('div');
+    runnerControls.className = 'runner-controls';
+    const runnerLabel = document.createElement('label');
+    runnerLabel.htmlFor = 'runner-select';
+    runnerLabel.textContent = 'Runner: ';
+    const runnerSelect = document.createElement('select');
+    runnerSelect.id = 'runner-select';
+    getRunnerOptions(typedData.runs).forEach((runner) => {
+        const option = document.createElement('option');
+        option.value = runner.id;
+        option.textContent = runner.label;
+        option.selected = runner.id === selectedRunnerId;
+        runnerSelect.appendChild(option);
+    });
+    runnerSelect.addEventListener('change', () => {
+        selectedRunnerId = runnerSelect.value;
+        const latestRun = getLatestRun(typedData.runs, selectedRunnerId);
+        if (!latestRun) return;
+        lastRun = latestRun;
+        Object.values(charts).forEach((chart) => chart.destroy());
+        Object.keys(charts).forEach((key) => delete charts[key]);
+        renderResults();
+        setupTableInteractivity();
+    });
+    runnerLabel.appendChild(runnerSelect);
+    runnerControls.appendChild(runnerLabel);
+    app.appendChild(runnerControls);
+
     const header = document.createElement('div');
     header.className = 'header';
 
@@ -182,6 +221,37 @@ function renderResults() {
     pTimestamp.appendChild(strongTimestamp);
     pTimestamp.appendChild(document.createTextNode(new Date(lastRun.timestamp).toLocaleString()));
     header.appendChild(pTimestamp);
+
+    const pRunner = document.createElement('p');
+    const strongRunner = document.createElement('strong');
+    strongRunner.textContent = 'Runner: ';
+    pRunner.appendChild(strongRunner);
+    pRunner.appendChild(document.createTextNode(getRunnerLabel(lastRun)));
+    header.appendChild(pRunner);
+
+    if (lastRun.source) {
+        const pSource = document.createElement('p');
+        const strongSource = document.createElement('strong');
+        strongSource.textContent = 'Source: ';
+        pSource.appendChild(strongSource);
+
+        const sourceLabel = lastRun.source.commitSha
+            ? `${lastRun.source.repository ?? 'repository'}@${lastRun.source.commitSha.slice(0, 12)}`
+            : (lastRun.source.repository ?? lastRun.source.ref ?? 'Unknown');
+        const commitUrl = getCommitUrl(lastRun);
+        if (commitUrl) {
+            const link = document.createElement('a');
+            link.href = commitUrl;
+            link.textContent = sourceLabel;
+            pSource.appendChild(link);
+        } else {
+            pSource.appendChild(document.createTextNode(sourceLabel));
+        }
+        if (lastRun.source.ref) {
+            pSource.appendChild(document.createTextNode(` (${lastRun.source.ref})`));
+        }
+        header.appendChild(pSource);
+    }
 
     const pre = document.createElement('pre');
     pre.textContent = lastRun.environment;
@@ -209,9 +279,14 @@ function getHistoricalChartData(benchmarkName: string, metric: Metric = 'median'
 
     // Find the duration key with the lowest median for this config
     const keys = Object.keys(largestConfig.duration_results);
+    const comparableRuns = getRunsForRunnerAndSuite(
+        typedData.runs,
+        selectedRunnerId,
+        lastRun.suite
+    );
     // Collect data for all duration keys in the largest config
     const datasets = keys.map((key, index) => {
-        const data = typedData.runs
+        const data = comparableRuns
             .map((run) => {
                 const bench = run.results.find((b) => b.name === benchmarkName);
                 if (!bench) return null;

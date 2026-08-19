@@ -8,6 +8,19 @@ export interface BenchmarkSuiteResult {
     version: string;
     timestamp: string;
     results: BenchmarkResult[];
+    runner?: BenchmarkRunner;
+    source?: BenchmarkSource;
+}
+
+export interface BenchmarkRunner {
+    id: string;
+    label?: string;
+}
+
+export interface BenchmarkSource {
+    repository?: string;
+    commitSha?: string;
+    ref?: string;
 }
 
 export interface BenchmarkResult {
