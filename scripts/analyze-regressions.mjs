@@ -5,8 +5,6 @@ import { fileURLToPath } from 'node:url';
 const DEFAULT_RUNNER = 'amp-orb-a1.xxlarge';
 const DEFAULT_SUITE = 'CI';
 const DEFAULT_THRESHOLD = 0.2;
-const DEFAULT_BASELINE_RUNS = 7;
-const MINIMUM_BASELINE_RUNS = 3;
 
 function median(values) {
     const sorted = [...values].sort((left, right) => left - right);
@@ -58,8 +56,6 @@ export function analyzeRegressions(
         runner = DEFAULT_RUNNER,
         suite = DEFAULT_SUITE,
         threshold = DEFAULT_THRESHOLD,
-        baselineRuns = DEFAULT_BASELINE_RUNS,
-        minimumBaselineRuns = MINIMUM_BASELINE_RUNS,
         timestamp,
     } = {}
 ) {
@@ -70,8 +66,7 @@ export function analyzeRegressions(
         ? runs.findIndex((run) => run.timestamp === timestamp)
         : runs.length - 1;
     const latest = runs[targetIndex];
-    const precedingRuns = targetIndex < 0 ? [] : runs.slice(0, targetIndex);
-    const baseline = precedingRuns.slice(-baselineRuns);
+    const previous = targetIndex > 0 ? runs[targetIndex - 1] : undefined;
 
     if (!latest) {
         return {
@@ -79,40 +74,36 @@ export function analyzeRegressions(
             runner,
             suite,
             timestamp,
-            baselineRuns: 0,
             candidates: [],
         };
     }
-    if (baseline.length < minimumBaselineRuns) {
+    if (!previous) {
         return {
-            status: 'insufficient-baseline',
+            status: 'no-previous-run',
             runner,
             suite,
             latest: source(latest),
-            previous: precedingRuns.length > 0 ? source(precedingRuns.at(-1)) : undefined,
-            baselineRuns: baseline.length,
-            requiredBaselineRuns: minimumBaselineRuns,
             candidates: [],
         };
     }
 
-    const baselineMeasurements = baseline.map(collectMeasurements);
+    const previousMeasurements = collectMeasurements(previous);
     const latestMeasurements = collectMeasurements(latest);
     const comparisons = [];
     for (const [key, current] of latestMeasurements) {
-        const previousValues = baselineMeasurements
-            .map((measurements) => measurements.get(key)?.value)
-            .filter((value) => Number.isFinite(value) && value > 0);
-        if (previousValues.length < minimumBaselineRuns || !Number.isFinite(current.value))
+        const previousValue = previousMeasurements.get(key)?.value;
+        if (
+            !Number.isFinite(previousValue) ||
+            previousValue <= 0 ||
+            !Number.isFinite(current.value)
+        )
             continue;
 
-        const baselineMedian = median(previousValues);
         comparisons.push({
             ...current,
-            baselineMedian,
+            previousMedian: previousValue,
             currentMedian: current.value,
-            changeRatio: current.value / baselineMedian - 1,
-            baselineSamples: previousValues.length,
+            changeRatio: current.value / previousValue - 1,
         });
     }
 
@@ -149,8 +140,7 @@ export function analyzeRegressions(
         suite,
         threshold,
         latest: source(latest),
-        previous: source(precedingRuns.at(-1)),
-        baselineRuns: baseline.length,
+        previous: source(previous),
         candidates,
     };
 }

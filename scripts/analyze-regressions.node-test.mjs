@@ -32,34 +32,27 @@ function run(day, values, runner = 'amp-orb-a1.xxlarge') {
     };
 }
 
-test('requires three same-runner baseline runs', () => {
-    const analysis = analyzeRegressions({ runs: [run(1, [10]), run(2, [20])] });
+test('requires one previous same-runner run', () => {
+    const analysis = analyzeRegressions({ runs: [run(1, [10])] });
 
-    assert.equal(analysis.status, 'insufficient-baseline');
-    assert.equal(analysis.baselineRuns, 1);
-    assert.equal(analysis.requiredBaselineRuns, 3);
+    assert.equal(analysis.status, 'no-previous-run');
 });
 
 test('finds a coherent benchmark-level regression', () => {
     const analysis = analyzeRegressions({
-        runs: [run(1, [10, 20]), run(2, [11, 19]), run(3, [9, 21]), run(4, [15, 30])],
+        runs: [run(1, [10, 20]), run(2, [15, 30])],
     });
 
     assert.equal(analysis.status, 'candidates-found');
     assert.equal(analysis.candidates.length, 1);
     assert.equal(analysis.candidates[0].benchmark, 'latency');
     assert.equal(analysis.candidates[0].regressedMeasurements, 2);
-    assert.equal(analysis.previous.commitSha, '3'.repeat(40));
+    assert.equal(analysis.previous.commitSha, '1'.repeat(40));
 });
 
 test('does not flag an isolated noisy measurement', () => {
     const analysis = analyzeRegressions({
-        runs: [
-            run(1, [10, 10, 10]),
-            run(2, [10, 10, 10]),
-            run(3, [10, 10, 10]),
-            run(4, [30, 10, 10]),
-        ],
+        runs: [run(1, [10, 10, 10]), run(2, [30, 10, 10])],
     });
 
     assert.equal(analysis.status, 'no-candidates');
@@ -67,29 +60,22 @@ test('does not flag an isolated noisy measurement', () => {
 
 test('isolates runners and sorts runs by timestamp', () => {
     const analysis = analyzeRegressions({
-        runs: [
-            run(4, [15]),
-            run(3, [10]),
-            run(2, [10]),
-            run(1, [10]),
-            run(5, [100], 'another-runner'),
-        ],
+        runs: [run(2, [15]), run(1, [10]), run(5, [100], 'another-runner')],
     });
 
     assert.equal(analysis.status, 'candidates-found');
-    assert.equal(analysis.latest.commitSha, '4'.repeat(40));
-    assert.equal(analysis.baselineRuns, 3);
+    assert.equal(analysis.latest.commitSha, '2'.repeat(40));
 });
 
 test('analyzes the requested run even when a newer run exists', () => {
     const analysis = analyzeRegressions(
         {
-            runs: [run(1, [10]), run(2, [10]), run(3, [10]), run(4, [15]), run(5, [5])],
+            runs: [run(1, [10]), run(2, [15]), run(3, [5])],
         },
-        { timestamp: '2026-08-04T00:00:00Z' }
+        { timestamp: '2026-08-02T00:00:00Z' }
     );
 
     assert.equal(analysis.status, 'candidates-found');
-    assert.equal(analysis.latest.commitSha, '4'.repeat(40));
-    assert.equal(analysis.previous.commitSha, '3'.repeat(40));
+    assert.equal(analysis.latest.commitSha, '2'.repeat(40));
+    assert.equal(analysis.previous.commitSha, '1'.repeat(40));
 });
