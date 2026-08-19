@@ -15,3 +15,14 @@ The app is automatically built and deployed to GitHub Pages on pushes to the `ma
 ## Data
 
 Benchmark results are embedded in the app as JSON data. Update the data in `src/main.ts` or import from JSON files in the `results/` directory.
+
+Completed runs are appended with the validated, idempotent publisher:
+
+```shell
+npm run append-results -- /path/to/run.json
+```
+
+The input must contain exactly one completed suite run with runner and source metadata. Replaying
+the identical runner, suite, and timestamp is a no-op; conflicting data for that identity is
+rejected. The command atomically updates `results/results.json` while preserving its append-only
+layout.
