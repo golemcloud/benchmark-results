@@ -26,3 +26,15 @@ The input must contain exactly one completed suite run with runner and source me
 the identical runner, suite, and timestamp is a no-op; conflicting data for that identity is
 rejected. The command atomically updates `results/results.json` while preserving its append-only
 layout.
+
+To identify benchmark-level regression candidates for the latest Amp orb run:
+
+```shell
+npm run analyze-regressions -- results/results.json --runner amp-orb-a1.xxlarge
+```
+
+The analyzer compares duration medians with the immediately preceding run from the same runner and
+suite. It reports a candidate when any comparable duration series is at least 20% slower. A series
+identifies one benchmark, run configuration, and language/invocation-path measurement. Candidates
+require investigation; the command does not classify causes or send alerts. Pass
+`--timestamp <UTC timestamp>` to analyze a specific published run instead of the latest one.
