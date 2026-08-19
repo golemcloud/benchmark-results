@@ -6,6 +6,7 @@ import {
     getRunnerId,
     getRunnerOptions,
     getRunsForRunnerAndSuite,
+    getSourceDisplay,
     LEGACY_RUNNER_ID,
     LEGACY_RUNNER_LABEL,
 } from './utils';
@@ -30,7 +31,7 @@ describe('runner selection', () => {
         const legacyRun = result('2026-01-01T00:00:00Z');
 
         expect(getRunnerId(legacyRun)).toBe(LEGACY_RUNNER_ID);
-        expect(getRunnerOptions([legacyRun])).toEqual([
+        expect(getRunnerOptions([legacyRun], 'CI')).toEqual([
             { id: LEGACY_RUNNER_ID, label: LEGACY_RUNNER_LABEL },
         ]);
     });
@@ -42,7 +43,22 @@ describe('runner selection', () => {
             result('2026-01-03T00:00:00Z', 'CI', { id: 'amp-orb-a1.xxlarge' }),
         ];
 
-        expect(getLatestRun(runs, 'amp-orb-a1.xxlarge')?.timestamp).toBe('2026-01-03T00:00:00Z');
+        expect(getLatestRun(runs, 'amp-orb-a1.xxlarge', 'CI')?.timestamp).toBe(
+            '2026-01-03T00:00:00Z'
+        );
+    });
+
+    it('does not select a newer run from another suite', () => {
+        const expected = result('2026-01-01T00:00:00Z', 'CI', { id: 'amp-orb-a1.xxlarge' });
+        const runs = [
+            expected,
+            result('2026-01-02T00:00:00Z', 'Other', { id: 'amp-orb-a1.xxlarge' }),
+        ];
+
+        expect(getLatestRun(runs, 'amp-orb-a1.xxlarge', 'CI')).toBe(expected);
+        expect(getRunnerOptions(runs, 'CI')).toEqual([
+            { id: 'amp-orb-a1.xxlarge', label: 'amp-orb-a1.xxlarge' },
+        ]);
     });
 
     it('isolates historical runs by runner and suite', () => {
@@ -70,5 +86,17 @@ describe('runner selection', () => {
         );
         run.source.repository = '../unsafe';
         expect(getCommitUrl(run)).toBeUndefined();
+    });
+
+    it('formats partial source metadata without duplicating the ref', () => {
+        const run = result('2026-01-01T00:00:00Z');
+        run.source = { ref: 'refs/heads/main' };
+        expect(getSourceDisplay(run)).toEqual({ label: 'refs/heads/main', ref: undefined });
+
+        run.source = { commitSha: '0123456789abcdef', ref: 'refs/heads/main' };
+        expect(getSourceDisplay(run)).toEqual({
+            label: '0123456789ab',
+            ref: 'refs/heads/main',
+        });
     });
 });

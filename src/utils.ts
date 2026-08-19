@@ -8,6 +8,11 @@ export interface RunnerOption {
     label: string;
 }
 
+export interface SourceDisplay {
+    label: string;
+    ref?: string;
+}
+
 export function getRunnerId(run: BenchmarkSuiteResult): string {
     return run.runner?.id ?? LEGACY_RUNNER_ID;
 }
@@ -19,9 +24,9 @@ export function getRunnerLabel(run: BenchmarkSuiteResult): string {
     );
 }
 
-export function getRunnerOptions(runs: BenchmarkSuiteResult[]): RunnerOption[] {
+export function getRunnerOptions(runs: BenchmarkSuiteResult[], suite: string): RunnerOption[] {
     const runners = new Map<string, string>();
-    runs.forEach((run) => {
+    runs.filter((run) => run.suite === suite).forEach((run) => {
         const runnerId = getRunnerId(run);
         if (!runners.has(runnerId) || run.runner?.label) {
             runners.set(runnerId, getRunnerLabel(run));
@@ -40,10 +45,13 @@ export function getRunsForRunnerAndSuite(
 
 export function getLatestRun(
     runs: BenchmarkSuiteResult[],
-    runnerId: string
+    runnerId: string,
+    suite: string
 ): BenchmarkSuiteResult | undefined {
     for (let index = runs.length - 1; index >= 0; index--) {
-        if (getRunnerId(runs[index]) === runnerId) return runs[index];
+        if (getRunnerId(runs[index]) === runnerId && runs[index].suite === suite) {
+            return runs[index];
+        }
     }
     return undefined;
 }
@@ -63,6 +71,20 @@ export function getCommitUrl(run: BenchmarkSuiteResult): string | undefined {
     }
     if (!/^[0-9a-f]{7,40}$/i.test(commitSha)) return undefined;
     return `https://github.com/${repository}/commit/${commitSha}`;
+}
+
+export function getSourceDisplay(run: BenchmarkSuiteResult): SourceDisplay | undefined {
+    const source = run.source;
+    if (!source) return undefined;
+
+    let label = source.repository ?? source.ref ?? 'Unknown';
+    if (source.commitSha) {
+        const shortCommitSha = source.commitSha.slice(0, 12);
+        label = source.repository ? `${source.repository}@${shortCommitSha}` : shortCommitSha;
+    }
+
+    const ref = source.ref && (source.repository || source.commitSha) ? source.ref : undefined;
+    return { label, ref };
 }
 
 export function compareConfigs(a: RunConfig, b: RunConfig): number {

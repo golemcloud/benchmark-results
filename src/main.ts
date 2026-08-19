@@ -21,12 +21,14 @@ import {
     getRunnerLabel,
     getRunnerOptions,
     getRunsForRunnerAndSuite,
+    getSourceDisplay,
     isMetric,
 } from './utils';
 
 const typedData = data as BenchmarkSuiteResultCollection;
 const charts: Record<string, Chart> = {};
 const initialRun = typedData.runs[typedData.runs.length - 1];
+const selectedSuite = initialRun.suite;
 let selectedRunnerId = getRunnerId(initialRun);
 let lastRun: BenchmarkSuiteResult = initialRun;
 const CHART_COLORS = [
@@ -180,7 +182,7 @@ function renderResults() {
     runnerLabel.textContent = 'Runner: ';
     const runnerSelect = document.createElement('select');
     runnerSelect.id = 'runner-select';
-    getRunnerOptions(typedData.runs).forEach((runner) => {
+    getRunnerOptions(typedData.runs, selectedSuite).forEach((runner) => {
         const option = document.createElement('option');
         option.value = runner.id;
         option.textContent = runner.label;
@@ -189,7 +191,7 @@ function renderResults() {
     });
     runnerSelect.addEventListener('change', () => {
         selectedRunnerId = runnerSelect.value;
-        const latestRun = getLatestRun(typedData.runs, selectedRunnerId);
+        const latestRun = getLatestRun(typedData.runs, selectedRunnerId, selectedSuite);
         if (!latestRun) return;
         lastRun = latestRun;
         Object.values(charts).forEach((chart) => chart.destroy());
@@ -235,20 +237,18 @@ function renderResults() {
         strongSource.textContent = 'Source: ';
         pSource.appendChild(strongSource);
 
-        const sourceLabel = lastRun.source.commitSha
-            ? `${lastRun.source.repository ?? 'repository'}@${lastRun.source.commitSha.slice(0, 12)}`
-            : (lastRun.source.repository ?? lastRun.source.ref ?? 'Unknown');
+        const sourceDisplay = getSourceDisplay(lastRun)!;
         const commitUrl = getCommitUrl(lastRun);
         if (commitUrl) {
             const link = document.createElement('a');
             link.href = commitUrl;
-            link.textContent = sourceLabel;
+            link.textContent = sourceDisplay.label;
             pSource.appendChild(link);
         } else {
-            pSource.appendChild(document.createTextNode(sourceLabel));
+            pSource.appendChild(document.createTextNode(sourceDisplay.label));
         }
-        if (lastRun.source.ref) {
-            pSource.appendChild(document.createTextNode(` (${lastRun.source.ref})`));
+        if (sourceDisplay.ref) {
+            pSource.appendChild(document.createTextNode(` (${sourceDisplay.ref})`));
         }
         header.appendChild(pSource);
     }
