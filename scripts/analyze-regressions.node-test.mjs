@@ -80,3 +80,16 @@ test('isolates runners and sorts runs by timestamp', () => {
     assert.equal(analysis.latest.commitSha, '4'.repeat(40));
     assert.equal(analysis.baselineRuns, 3);
 });
+
+test('analyzes the requested run even when a newer run exists', () => {
+    const analysis = analyzeRegressions(
+        {
+            runs: [run(1, [10]), run(2, [10]), run(3, [10]), run(4, [15]), run(5, [5])],
+        },
+        { timestamp: '2026-08-04T00:00:00Z' }
+    );
+
+    assert.equal(analysis.status, 'candidates-found');
+    assert.equal(analysis.latest.commitSha, '4'.repeat(40));
+    assert.equal(analysis.previous.commitSha, '3'.repeat(40));
+});

@@ -60,16 +60,28 @@ export function analyzeRegressions(
         threshold = DEFAULT_THRESHOLD,
         baselineRuns = DEFAULT_BASELINE_RUNS,
         minimumBaselineRuns = MINIMUM_BASELINE_RUNS,
+        timestamp,
     } = {}
 ) {
     const runs = collection.runs
         .filter((run) => run.runner?.id === runner && run.suite === suite)
         .sort((left, right) => left.timestamp.localeCompare(right.timestamp));
-    const latest = runs.at(-1);
-    const baseline = runs.slice(-baselineRuns - 1, -1);
+    const targetIndex = timestamp
+        ? runs.findIndex((run) => run.timestamp === timestamp)
+        : runs.length - 1;
+    const latest = runs[targetIndex];
+    const precedingRuns = targetIndex < 0 ? [] : runs.slice(0, targetIndex);
+    const baseline = precedingRuns.slice(-baselineRuns);
 
     if (!latest) {
-        return { status: 'no-runs', runner, suite, baselineRuns: 0, candidates: [] };
+        return {
+            status: timestamp ? 'run-not-found' : 'no-runs',
+            runner,
+            suite,
+            timestamp,
+            baselineRuns: 0,
+            candidates: [],
+        };
     }
     if (baseline.length < minimumBaselineRuns) {
         return {
@@ -77,7 +89,7 @@ export function analyzeRegressions(
             runner,
             suite,
             latest: source(latest),
-            previous: runs.length > 1 ? source(runs.at(-2)) : undefined,
+            previous: precedingRuns.length > 0 ? source(precedingRuns.at(-1)) : undefined,
             baselineRuns: baseline.length,
             requiredBaselineRuns: minimumBaselineRuns,
             candidates: [],
@@ -137,7 +149,7 @@ export function analyzeRegressions(
         suite,
         threshold,
         latest: source(latest),
-        previous: source(runs.at(-2)),
+        previous: source(precedingRuns.at(-1)),
         baselineRuns: baseline.length,
         candidates,
     };
@@ -149,6 +161,7 @@ function parseArguments(argv) {
         const argument = argv[index];
         if (argument === '--runner') options.runner = argv[++index];
         else if (argument === '--suite') options.suite = argv[++index];
+        else if (argument === '--timestamp') options.timestamp = argv[++index];
         else if (argument === '--output') options.output = argv[++index];
         else if (argument === '--threshold') options.threshold = Number(argv[++index]);
         else if (argument.startsWith('--')) throw new Error(`unknown option: ${argument}`);
