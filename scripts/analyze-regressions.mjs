@@ -6,12 +6,6 @@ const DEFAULT_RUNNER = 'amp-orb-a1.xxlarge';
 const DEFAULT_SUITE = 'CI';
 const DEFAULT_THRESHOLD = 0.2;
 
-function median(values) {
-    const sorted = [...values].sort((left, right) => left - right);
-    const middle = Math.floor(sorted.length / 2);
-    return sorted.length % 2 === 0 ? (sorted[middle - 1] + sorted[middle]) / 2 : sorted[middle];
-}
-
 function configKey(config) {
     return JSON.stringify(
         Object.fromEntries(
@@ -116,20 +110,16 @@ export function analyzeRegressions(
 
     const candidates = [];
     for (const [benchmark, entries] of byBenchmark) {
-        const changeRatio = median(entries.map((entry) => entry.changeRatio));
         const regressed = entries.filter((entry) => entry.changeRatio >= threshold);
-        const regressedFraction = regressed.length / entries.length;
-        if (changeRatio < threshold || regressedFraction < 0.5) continue;
+        if (regressed.length === 0) continue;
+        regressed.sort((left, right) => right.changeRatio - left.changeRatio);
 
         candidates.push({
             benchmark,
-            changeRatio,
+            changeRatio: regressed[0].changeRatio,
             comparableMeasurements: entries.length,
             regressedMeasurements: regressed.length,
-            regressedFraction,
-            worstMeasurements: [...entries]
-                .sort((left, right) => right.changeRatio - left.changeRatio)
-                .slice(0, 5),
+            worstMeasurements: regressed.slice(0, 5),
         });
     }
     candidates.sort((left, right) => right.changeRatio - left.changeRatio);

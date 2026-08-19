@@ -34,7 +34,7 @@ npm run analyze-regressions -- results/results.json --runner amp-orb-a1.xxlarge
 ```
 
 The analyzer compares duration medians with the immediately preceding run from the same runner and
-suite. It reports a candidate when the benchmark's median change is at least 20% and at least half
-of its comparable measurements crossed the same threshold. Candidates require investigation; the
-command does not classify causes or send alerts. Pass `--timestamp <UTC timestamp>` to analyze a
-specific published run instead of the latest one.
+suite. It reports a candidate when any comparable duration series is at least 20% slower. A series
+identifies one benchmark, run configuration, and language/invocation-path measurement. Candidates
+require investigation; the command does not classify causes or send alerts. Pass
+`--timestamp <UTC timestamp>` to analyze a specific published run instead of the latest one.

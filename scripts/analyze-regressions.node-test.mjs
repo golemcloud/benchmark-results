@@ -50,12 +50,14 @@ test('finds a coherent benchmark-level regression', () => {
     assert.equal(analysis.previous.commitSha, '1'.repeat(40));
 });
 
-test('does not flag an isolated noisy measurement', () => {
+test('flags a regression isolated to one invocation path', () => {
     const analysis = analyzeRegressions({
         runs: [run(1, [10, 10, 10]), run(2, [30, 10, 10])],
     });
 
-    assert.equal(analysis.status, 'no-candidates');
+    assert.equal(analysis.status, 'candidates-found');
+    assert.equal(analysis.candidates[0].regressedMeasurements, 1);
+    assert.equal(analysis.candidates[0].comparableMeasurements, 3);
 });
 
 test('isolates runners and sorts runs by timestamp', () => {
