@@ -136,11 +136,10 @@ tr:nth-child(even) {
 .chart-container {
     position: relative;
     height: 400px;
-    margin: 0 auto;
+    width: 100%;
+    margin: 20px auto 0;
 }
 
-.chart {
-    margin-top: 20px;
-    width: 100%;
-    height: 400px;
+.chart-container canvas {
+    display: block;
 }

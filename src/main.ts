@@ -156,7 +156,7 @@ function renderBenchmark(benchmark: BenchmarkResult): HTMLElement {
     historicalContainer.className = 'chart-container';
     const historicalH4 = document.createElement('h4');
     historicalH4.textContent = 'Historical Trend';
-    historicalContainer.appendChild(historicalH4);
+    section.appendChild(historicalH4);
     const historicalCanvas = document.createElement('canvas');
     historicalCanvas.id = `historical-chart-${benchmark.name.replace(/\s+/g, '-')}`;
     historicalCanvas.className = 'historical-chart';
@@ -400,6 +400,7 @@ function setupTableInteractivity() {
                     duration: 100,
                 },
                 responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     x: { type: 'linear', title: { display: true, text: 'Size' } },
                     y: {
@@ -486,6 +487,7 @@ function setupTableInteractivity() {
                     duration: 100,
                 },
                 responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     x: {
                         type: 'time',
