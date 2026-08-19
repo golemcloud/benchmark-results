@@ -9,6 +9,19 @@ h1 {
     color: #333;
 }
 
+.runner-controls {
+    margin-bottom: 20px;
+}
+
+.runner-controls label {
+    font-weight: bold;
+}
+
+.runner-controls select {
+    margin-left: 8px;
+    padding: 6px 8px;
+}
+
 .header {
     background: white;
     padding: 20px;
