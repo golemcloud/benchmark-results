@@ -48,6 +48,10 @@ test('uses 3-5 historical medians and a MAD-derived threshold', () => {
     assert.equal(candidate.baselineMedian, 10);
     assert.equal(candidate.baselineHistoryCount, 5);
     assert.deepEqual(candidate.baselineObservations, [10, 11, 9, 10, 12]);
+    assert.deepEqual(
+        candidate.baselineSources.map((source) => source.commitSha),
+        [1, 2, 3, 4, 5].map((day) => String(day).repeat(40).slice(0, 40))
+    );
     assert.ok(Math.abs(candidate.appliedThreshold - 0.44478) < 1e-9);
 });
 

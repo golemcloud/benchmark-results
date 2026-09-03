@@ -52,5 +52,5 @@ absolute terms from the previous run. Those three runs seed the new history. JSO
 the state (`new-regression`, `regression-update`, `active-regression`, `candidates-only`,
 `no-candidates`, `insufficient-history`, `recovered`, or `rebased`), while `shouldAlert` is the
 authoritative notification signal. `candidates` always contains every candidate and its baseline
-details; `topCandidates` is limited to five. Pass `--timestamp <exact UTC timestamp>` to replay only
-through a particular published run.
+details, including the source commit of each baseline observation; `topCandidates` is limited to
+five. Pass `--timestamp <exact UTC timestamp>` to replay only through a particular published run.

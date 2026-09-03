@@ -56,16 +56,21 @@ function makeBaseline(history) {
     const baseline = new Map();
     const keys = new Set(history.flatMap((entry) => [...entry.measurements.keys()]));
     for (const key of keys) {
-        const values = history
-            .map((entry) => entry.measurements.get(key)?.value)
-            .filter((value) => Number.isFinite(value) && value > 0)
+        const observations = history
+            .map((entry) => ({
+                value: entry.measurements.get(key)?.value,
+                source: source(entry.run),
+            }))
+            .filter((observation) => Number.isFinite(observation.value) && observation.value > 0)
             .slice(-HISTORY_LIMIT);
+        const values = observations.map((observation) => observation.value);
         if (values.length < 3) continue;
         const baselineMedian = median(values);
         const mad = median(values.map((value) => Math.abs(value - baselineMedian)));
         baseline.set(key, {
             baselineMedian,
             baselineObservations: values,
+            baselineSources: observations.map((observation) => observation.source),
             historyCount: values.length,
             threshold:
                 values.length < HISTORY_LIMIT
@@ -88,6 +93,7 @@ function compare(measurements, baseline) {
             changeRatio: current.value / prior.baselineMedian - 1,
             appliedThreshold: prior.threshold,
             baselineObservations: prior.baselineObservations,
+            baselineSources: prior.baselineSources,
             baselineHistoryCount: prior.historyCount,
         });
     }
