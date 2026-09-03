@@ -27,14 +27,30 @@ the identical runner, suite, and timestamp is a no-op; conflicting data for that
 rejected. The command atomically updates `results/results.json` while preserving its append-only
 layout.
 
-To identify benchmark-level regression candidates for the latest Amp orb run:
+To analyze regressions for the latest Amp orb run:
 
 ```shell
 npm run analyze-regressions -- results/results.json --runner amp-orb-a1.xxlarge
 ```
 
-The analyzer compares duration medians with the immediately preceding run from the same runner and
-suite. It reports a candidate when any comparable duration series is at least 20% slower. A series
-identifies one benchmark, run configuration, and language/invocation-path measurement. Candidates
-require investigation; the command does not classify causes or send alerts. Pass
-`--timestamp <UTC timestamp>` to analyze a specific published run instead of the latest one.
+The analyzer deterministically replays runs from the same runner and suite. A series is a benchmark,
+its complete key-sorted run configuration, and a measurement. Its baseline is the median of the
+last 3–5 observations since the latest automatic rebase. The regression threshold is 25% with 3–4
+observations; with 5 it is the larger of 25% and three scaled median absolute deviations
+(`3 * 1.4826 * MAD / median`).
+
+An alert is immediate when candidates comprise at least 20% of comparable series and span at least
+two benchmark names. Otherwise, consecutive runs must contain the same candidate series against a
+frozen pre-event baseline; confirmation requires two configurations from one benchmark/measurement
+family, or one series at least 50% above baseline. Active episodes do not alert repeatedly. An
+update alerts only for a confirmed new benchmark or when the worst ratio grows by at least 25%
+relative to the previously alerted worst ratio. Two candidate-free runs recover an episode.
+
+An episode automatically rebases after three stable runs including onset (two transitions). A
+transition is stable when at least 90% of comparable exact series change by less than 25% in
+absolute terms from the previous run. Those three runs seed the new history. JSON `status` describes
+the state (`new-regression`, `regression-update`, `active-regression`, `candidates-only`,
+`no-candidates`, `insufficient-history`, `recovered`, or `rebased`), while `shouldAlert` is the
+authoritative notification signal. `candidates` always contains every candidate and its baseline
+details; `topCandidates` is limited to five. Pass `--timestamp <exact UTC timestamp>` to replay only
+through a particular published run.
