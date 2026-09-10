@@ -592522,6 +592522,2474 @@
           ]
         }
       ]
+    },
+    {
+      "suite": "CI",
+      "environment": "CPU #0: vendor=GenuineIntel brand=Intel(R) Xeon(R) Processor @ 2.60GHz\nCPU #1: vendor=GenuineIntel brand=Intel(R) Xeon(R) Processor @ 2.60GHz\nCPU #2: vendor=GenuineIntel brand=Intel(R) Xeon(R) Processor @ 2.60GHz\nCPU #3: vendor=GenuineIntel brand=Intel(R) Xeon(R) Processor @ 2.60GHz\nCPU #4: vendor=GenuineIntel brand=Intel(R) Xeon(R) Processor @ 2.60GHz\nCPU #5: vendor=GenuineIntel brand=Intel(R) Xeon(R) Processor @ 2.60GHz\nCPU #6: vendor=GenuineIntel brand=Intel(R) Xeon(R) Processor @ 2.60GHz\nCPU #7: vendor=GenuineIntel brand=Intel(R) Xeon(R) Processor @ 2.60GHz\nCPU #8: vendor=GenuineIntel brand=Intel(R) Xeon(R) Processor @ 2.60GHz\nCPU #9: vendor=GenuineIntel brand=Intel(R) Xeon(R) Processor @ 2.60GHz\nCPU #10: vendor=GenuineIntel brand=Intel(R) Xeon(R) Processor @ 2.60GHz\nCPU #11: vendor=GenuineIntel brand=Intel(R) Xeon(R) Processor @ 2.60GHz\nCPU #12: vendor=GenuineIntel brand=Intel(R) Xeon(R) Processor @ 2.60GHz\nCPU #13: vendor=GenuineIntel brand=Intel(R) Xeon(R) Processor @ 2.60GHz\nCPU #14: vendor=GenuineIntel brand=Intel(R) Xeon(R) Processor @ 2.60GHz\nCPU #15: vendor=GenuineIntel brand=Intel(R) Xeon(R) Processor @ 2.60GHz\nTotal memory: 31 Gb\nSystem name=Debian GNU/Linux, os=Linux (Debian GNU/Linux 12), kernel=6.1.158+, hostname=e2b.local\n",
+      "version": "1.5.3-228-g652c52f7e",
+      "timestamp": "2026-09-10T11:21:08.061551819Z",
+      "runner": {
+        "id": "amp-orb-a1.xxlarge",
+        "label": "Amp orb (a1.xxlarge)"
+      },
+      "source": {
+        "repository": "golemcloud/golem",
+        "commitSha": "652c52f7e5b59d22e5c71bb79656859abb309186",
+        "ref": "refs/heads/main"
+      },
+      "results": [
+        {
+          "name": "cold-start-unknown-small-no-cache",
+          "description": "Benchmarks the first-time invocation of a component that have never been instantiated before.\nThis variant uses a relatively small Rust agent component. The `size` parameter is the number of\nunique components, and `length` is the time in seconds _per component_ to wait for pre-compilation.\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 2,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 2,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 2,
+              "disableCompilationCache": true
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 2,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 1426.001337,
+                  "min": 1426.001337,
+                  "max": 1426.001337,
+                  "median": 1426.001337,
+                  "p90": 1426.001337,
+                  "p95": 1426.001337,
+                  "p99": 1426.001337
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 2,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 2251.272336,
+                  "min": 2226.373756,
+                  "max": 2280.094607,
+                  "median": 2235.008311,
+                  "p90": 2280.067998,
+                  "p95": 2280.081303,
+                  "p99": 2280.091946
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 2,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 4060.245384,
+                  "min": 4006.613546,
+                  "max": 4108.120824,
+                  "median": 4054.23121,
+                  "p90": 4107.951832,
+                  "p95": 4108.036328,
+                  "p99": 4108.103925
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "cold-start-unknown-medium-no-cache",
+          "description": "Benchmarks the first-time invocation of a component that have never been instantiated before.\nThis variant uses a basic TypeScript agent component. The `size` parameter is the number of unique\ncomponents, and `length` is the time in seconds _per component_ to wait for pre-compilation.\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 5,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 5,
+              "disableCompilationCache": true
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 5,
+              "disableCompilationCache": true
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 5,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 2732.65642,
+                  "min": 2732.65642,
+                  "max": 2732.65642,
+                  "median": 2732.65642,
+                  "p90": 2732.65642,
+                  "p95": 2732.65642,
+                  "p99": 2732.65642
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 5,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 6020.129162,
+                  "min": 5988.956743,
+                  "max": 6069.744675,
+                  "median": 6019.734843,
+                  "p90": 6051.469725,
+                  "p95": 6060.6072,
+                  "p99": 6067.91718
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 5,
+                "disableCompilationCache": true
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 11109.489672,
+                  "min": 11019.403799,
+                  "max": 11204.174159,
+                  "median": 11093.006548,
+                  "p90": 11163.804205,
+                  "p95": 11183.989181,
+                  "p99": 11200.137164
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "cold-start-unknown-small",
+          "description": "Benchmarks the first-time invocation of a component that have never been instantiated before.\nThis variant uses a relatively small Rust agent component. The `size` parameter is the number of\nunique components, and `length` is the time in seconds _per component_ to wait for pre-compilation.\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 2,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 2,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 2,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 255.125152,
+                  "min": 255.125152,
+                  "max": 255.125152,
+                  "median": 255.125152,
+                  "p90": 255.125152,
+                  "p95": 255.125152,
+                  "p99": 255.125152
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 229.923551,
+                  "min": 204.303941,
+                  "max": 278.280222,
+                  "median": 221.527813,
+                  "p90": 259.498249,
+                  "p95": 268.889236,
+                  "p99": 276.402025
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 281.181324,
+                  "min": 267.244839,
+                  "max": 321.901448,
+                  "median": 271.734866,
+                  "p90": 301.03466,
+                  "p95": 311.468054,
+                  "p99": 319.81477
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "cold-start-unknown-medium",
+          "description": "Benchmarks the first-time invocation of a component that have never been instantiated before.\nThis variant uses a basic TypeScript agent component. The `size` parameter is the number of unique\ncomponents, and `length` is the time in seconds _per component_ to wait for pre-compilation.\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 5,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 5,
+              "length": 5,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 5,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 333.888572,
+                  "min": 333.888572,
+                  "max": 333.888572,
+                  "median": 333.888572,
+                  "p90": 333.888572,
+                  "p95": 333.888572,
+                  "p99": 333.888572
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 5,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 359.628026,
+                  "min": 305.984763,
+                  "max": 423.733199,
+                  "median": 352.988028,
+                  "p90": 399.348889,
+                  "p95": 411.541044,
+                  "p99": 421.294768
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 364.500867,
+                  "min": 335.576664,
+                  "max": 414.431185,
+                  "median": 357.361873,
+                  "p90": 413.752651,
+                  "p95": 414.091919,
+                  "p99": 414.363331
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "latency-small",
+          "description": "Benchmarks both the cold and hot latency of a invoking a component that can potentially\nbe swapped out of the executor's memory. This variant uses a small rust agent.\nThe `size` parameter is the number of workers to create. The `length` parameter is the number\nof hot invocations to be done per worker (the first one is separately recorded as cold).\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 2,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 250,
+              "length": 2,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 500,
+              "length": 2,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 1000,
+              "length": 2,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "cold-invocation": {
+                  "avg": 610.633413,
+                  "min": 590.265847,
+                  "max": 631.730748,
+                  "median": 610.053831,
+                  "p90": 627.301195,
+                  "p95": 629.052789,
+                  "p99": 631.452327
+                },
+                "hot-invocation": {
+                  "avg": 39.07383,
+                  "min": 26.682348,
+                  "max": 56.683889,
+                  "median": 38.299814,
+                  "p90": 49.270379,
+                  "p95": 50.672353,
+                  "p99": 55.006782
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 250,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "cold-invocation": {
+                  "avg": 646.677561,
+                  "min": 458.538672,
+                  "max": 870.986969,
+                  "median": 662.095226,
+                  "p90": 721.797595,
+                  "p95": 731.442398,
+                  "p99": 870.516337
+                },
+                "hot-invocation": {
+                  "avg": 85.907069,
+                  "min": 7.889236,
+                  "max": 155.524975,
+                  "median": 94.252829,
+                  "p90": 111.897808,
+                  "p95": 113.497961,
+                  "p99": 118.042745
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 500,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "hot-invocation": {
+                  "avg": 189.604357,
+                  "min": 74.047729,
+                  "max": 308.437281,
+                  "median": 176.584645,
+                  "p90": 280.209777,
+                  "p95": 295.869681,
+                  "p99": 305.626356
+                },
+                "cold-invocation": {
+                  "avg": 1216.595979,
+                  "min": 787.709534,
+                  "max": 1459.619796,
+                  "median": 1294.60113,
+                  "p90": 1436.894237,
+                  "p95": 1446.314778,
+                  "p99": 1456.978087
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1000,
+                "length": 2,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "cold-invocation": {
+                  "avg": 2584.282361,
+                  "min": 1175.335803,
+                  "max": 3436.92673,
+                  "median": 2752.902245,
+                  "p90": 3351.576348,
+                  "p95": 3384.788963,
+                  "p99": 3427.199147
+                },
+                "hot-invocation": {
+                  "avg": 537.609879,
+                  "min": 148.101835,
+                  "max": 895.64259,
+                  "median": 513.837631,
+                  "p90": 837.685411,
+                  "p95": 868.224183,
+                  "p99": 885.327426
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "latency-medium",
+          "description": "Benchmarks both the cold and hot latency of a invoking a component that can potentially\nbe swapped out of the executor's memory. This variant uses a simple TypeScript agent.\nThe `size` parameter is the number of workers to create. The `length` parameter is the number\nof hot invocations to be done per worker (the first one is separately recorded as cold).\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 5,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 250,
+              "length": 5,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 500,
+              "length": 5,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "cold-invocation": {
+                  "avg": 766.623185,
+                  "min": 744.678505,
+                  "max": 786.340541,
+                  "median": 767.599965,
+                  "p90": 776.815093,
+                  "p95": 781.603376,
+                  "p99": 785.941529
+                },
+                "hot-invocation": {
+                  "avg": 38.33236,
+                  "min": 20.243828,
+                  "max": 47.83771,
+                  "median": 38.532168,
+                  "p90": 42.953347,
+                  "p95": 44.412477,
+                  "p99": 45.900397
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 250,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "hot-invocation": {
+                  "avg": 110.840792,
+                  "min": 9.522376,
+                  "max": 143.84768,
+                  "median": 115.445877,
+                  "p90": 133.734911,
+                  "p95": 137.172569,
+                  "p99": 141.70942
+                },
+                "cold-invocation": {
+                  "avg": 947.761323,
+                  "min": 894.43807,
+                  "max": 1376.640446,
+                  "median": 932.184238,
+                  "p90": 959.83071,
+                  "p95": 962.954054,
+                  "p99": 1372.156063
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 500,
+                "length": 5,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "hot-invocation": {
+                  "avg": 281.183386,
+                  "min": 105.950468,
+                  "max": 648.361696,
+                  "median": 239.778735,
+                  "p90": 415.897903,
+                  "p95": 553.333904,
+                  "p99": 632.150623
+                },
+                "cold-invocation": {
+                  "avg": 1723.06035,
+                  "min": 1125.149341,
+                  "max": 2097.49676,
+                  "median": 1943.275457,
+                  "p90": 2051.562507,
+                  "p95": 2068.438599,
+                  "p99": 2082.574675
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "sleep",
+          "description": "Launch `size` workers and invoke a function on each in parallel that sleeps for `length` milliseconds.\nThe result is the measured invocation time, which is affected by the amount of workers fitting in memory\nand also the scheduler that wakes them up.\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 10000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 10000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 500,
+              "length": 10000,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 10022.905165,
+                  "min": 10022.698325,
+                  "max": 10023.138168,
+                  "median": 10022.892802,
+                  "p90": 10023.074527,
+                  "p95": 10023.106347,
+                  "p99": 10023.131804
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 10030.280727,
+                  "min": 10020.740883,
+                  "max": 10040.680875,
+                  "median": 10027.852254,
+                  "p90": 10039.44326,
+                  "p95": 10040.312413,
+                  "p99": 10040.610727
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 500,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "invocation": {
+                  "avg": 10155.266263,
+                  "min": 10019.464284,
+                  "max": 10218.481254,
+                  "median": 10176.853249,
+                  "p90": 10213.070958,
+                  "p95": 10215.735228,
+                  "p99": 10217.519713
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "durability-overhead",
+          "description": "Invokes oplog-heavy functions in parallel on `size` number of workers,\nusing ephemeral and durable components. There's also a durable variant where after\neach operation we force an oplog commit. The invoked function gets the `length`\nparameter to control the length of its inner loop.\nThe benchmark can be used to compare the overhead caused by persistence (using a low\n`size`) and also the effect of heavy persistence load caused by parallel running workers\n(using high `size`).\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 5000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 50,
+              "length": 5000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 5000,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 5000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "durable-persistent-commit-invocation": {
+                  "avg": 7153.974975,
+                  "min": 7089.175485,
+                  "max": 7238.712917,
+                  "median": 7153.153054,
+                  "p90": 7171.279975,
+                  "p95": 7204.996445,
+                  "p99": 7231.969622
+                },
+                "durable-persistent-invocation": {
+                  "avg": 503.626657,
+                  "min": 372.477275,
+                  "max": 545.404949,
+                  "median": 514.254259,
+                  "p90": 532.544905,
+                  "p95": 538.974927,
+                  "p99": 544.118945
+                },
+                "ephemeral-invocation": {
+                  "avg": 193.979702,
+                  "min": 183.337873,
+                  "max": 206.153762,
+                  "median": 192.693353,
+                  "p90": 203.169452,
+                  "p95": 204.661607,
+                  "p99": 205.855331
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 50,
+                "length": 5000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ephemeral-invocation": {
+                  "avg": 1339.141433,
+                  "min": 1252.838718,
+                  "max": 1395.182317,
+                  "median": 1345.819384,
+                  "p90": 1370.84854,
+                  "p95": 1376.720809,
+                  "p99": 1389.043424
+                },
+                "durable-persistent-invocation": {
+                  "avg": 1956.359464,
+                  "min": 1754.324896,
+                  "max": 2130.774154,
+                  "median": 1936.70615,
+                  "p90": 2063.998944,
+                  "p95": 2084.1777,
+                  "p99": 2116.744733
+                },
+                "durable-persistent-commit-invocation": {
+                  "avg": 24879.301467,
+                  "min": 24664.029706,
+                  "max": 25522.170252,
+                  "median": 24840.053917,
+                  "p90": 25123.407702,
+                  "p95": 25247.41916,
+                  "p99": 25408.586391
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 5000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "durable-persistent-commit-invocation": {
+                  "avg": 49115.486841,
+                  "min": 48765.519,
+                  "max": 50333.09981,
+                  "median": 49095.654098,
+                  "p90": 49408.010535,
+                  "p95": 49452.833943,
+                  "p99": 49939.663772
+                },
+                "ephemeral-invocation": {
+                  "avg": 3196.183955,
+                  "min": 3013.233543,
+                  "max": 3267.951777,
+                  "median": 3225.761834,
+                  "p90": 3253.789692,
+                  "p95": 3262.275961,
+                  "p99": 3267.770834
+                },
+                "durable-persistent-invocation": {
+                  "avg": 4388.214553,
+                  "min": 4109.865947,
+                  "max": 4603.753697,
+                  "median": 4404.745574,
+                  "p90": 4523.842786,
+                  "p95": 4534.551489,
+                  "p99": 4569.399798
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "throughput-echo",
+          "description": "Spawns `size` number of workers of various implementations, and calls the `echo` endpoint\na fixed number of times. The `length` parameter is not used.\nThe `size` should be chosen in a way that all workers fit in the available executor's memory,\nand `size=1` can be used to test isolated throughput of a single worker.\nThe benchmarks measures multiple implementations separately after each other:\nrust agent, TS agent, rust agent through HTTP mapping, TS agent through HTTP mapping, TS agent RPC and rust agent RPC\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 1000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 1000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 50,
+              "length": 1000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 100,
+              "length": 1000,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 1000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "rust-agent-http-invocation": {
+                  "avg": 8.521552,
+                  "min": 6.564322,
+                  "max": 15.566938,
+                  "median": 8.166402,
+                  "p90": 10.213595,
+                  "p95": 11.612227,
+                  "p99": 12.985217
+                },
+                "ts-agent-invocation": {
+                  "avg": 9.595369,
+                  "min": 7.923955,
+                  "max": 12.072505,
+                  "median": 9.555491,
+                  "p90": 10.673544,
+                  "p95": 11.014275,
+                  "p99": 11.729118
+                },
+                "ts-agent-rpc-local-invocation": {
+                  "avg": 23.272122,
+                  "min": 18.667184,
+                  "max": 40.00415,
+                  "median": 22.807647,
+                  "p90": 26.10686,
+                  "p95": 28.777763,
+                  "p99": 32.964673
+                },
+                "ts-agent-http-invocation": {
+                  "avg": 7.507166,
+                  "min": 5.955883,
+                  "max": 9.310492,
+                  "median": 7.571395,
+                  "p90": 8.290456,
+                  "p95": 8.492306,
+                  "p99": 9.080931
+                },
+                "rust-agent-invocation": {
+                  "avg": 9.280887,
+                  "min": 7.335992,
+                  "max": 38.00955,
+                  "median": 9.037194,
+                  "p90": 10.201338,
+                  "p95": 10.665489,
+                  "p99": 12.787146
+                },
+                "rust-agent-rpc-local-invocation": {
+                  "avg": 22.119944,
+                  "min": 16.586596,
+                  "max": 36.103997,
+                  "median": 21.50808,
+                  "p90": 25.717148,
+                  "p95": 26.738281,
+                  "p99": 33.185498
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 1000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "rust-agent-rpc-local-invocation": {
+                  "avg": 57.532394,
+                  "min": 19.337229,
+                  "max": 446.888955,
+                  "median": 24.733484,
+                  "p90": 177.818259,
+                  "p95": 229.826167,
+                  "p99": 337.519535
+                },
+                "rust-agent-invocation": {
+                  "avg": 9.76086,
+                  "min": 7.4108789999999996,
+                  "max": 36.063963,
+                  "median": 9.434661,
+                  "p90": 10.470619,
+                  "p95": 10.920633,
+                  "p99": 27.248918
+                },
+                "rust-agent-http-invocation": {
+                  "avg": 8.946663000000001,
+                  "min": 6.978362,
+                  "max": 27.23215,
+                  "median": 8.764086,
+                  "p90": 9.670162,
+                  "p95": 10.009199,
+                  "p99": 15.618701
+                },
+                "ts-agent-http-invocation": {
+                  "avg": 9.387515,
+                  "min": 7.034225,
+                  "max": 27.262175,
+                  "median": 9.179335,
+                  "p90": 10.668625,
+                  "p95": 11.329334,
+                  "p99": 13.054051
+                },
+                "ts-agent-rpc-local-invocation": {
+                  "avg": 25.368645,
+                  "min": 20.007974,
+                  "max": 178.60781,
+                  "median": 23.770925,
+                  "p90": 28.625839,
+                  "p95": 31.838524,
+                  "p99": 42.162084
+                },
+                "ts-agent-invocation": {
+                  "avg": 9.996749,
+                  "min": 7.743676,
+                  "max": 17.814259,
+                  "median": 9.858917,
+                  "p90": 11.183743,
+                  "p95": 11.748821,
+                  "p99": 13.074752
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 50,
+                "length": 1000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "rust-agent-invocation": {
+                  "avg": 28.960578,
+                  "min": 8.62914,
+                  "max": 76.313145,
+                  "median": 27.849235,
+                  "p90": 35.581597,
+                  "p95": 40.583257,
+                  "p99": 56.871956
+                },
+                "ts-agent-http-invocation": {
+                  "avg": 28.310623,
+                  "min": 9.427841,
+                  "max": 75.62067,
+                  "median": 27.30629,
+                  "p90": 33.714968,
+                  "p95": 37.202486,
+                  "p99": 61.177522
+                },
+                "ts-agent-rpc-local-invocation": {
+                  "avg": 89.201189,
+                  "min": 22.407776,
+                  "max": 225.072354,
+                  "median": 83.392516,
+                  "p90": 111.581539,
+                  "p95": 135.39878,
+                  "p99": 172.590715
+                },
+                "rust-agent-http-invocation": {
+                  "avg": 28.617695,
+                  "min": 7.463491,
+                  "max": 138.237618,
+                  "median": 27.113879,
+                  "p90": 34.277095,
+                  "p95": 37.856419,
+                  "p99": 69.433447
+                },
+                "rust-agent-rpc-local-invocation": {
+                  "avg": 84.865539,
+                  "min": 44.518109,
+                  "max": 204.150875,
+                  "median": 77.68765,
+                  "p90": 110.183858,
+                  "p95": 141.157039,
+                  "p99": 173.537811
+                },
+                "ts-agent-invocation": {
+                  "avg": 34.211192,
+                  "min": 8.021012,
+                  "max": 118.186371,
+                  "median": 32.876778,
+                  "p90": 42.314639,
+                  "p95": 47.873822,
+                  "p99": 67.301645
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 100,
+                "length": 1000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "rust-agent-http-invocation": {
+                  "avg": 47.312755,
+                  "min": 7.412773,
+                  "max": 130.01937,
+                  "median": 45.444118,
+                  "p90": 50.688533,
+                  "p95": 63.122697,
+                  "p99": 87.007102
+                },
+                "rust-agent-invocation": {
+                  "avg": 51.049089,
+                  "min": 16.086023,
+                  "max": 104.296572,
+                  "median": 49.201576,
+                  "p90": 57.897485,
+                  "p95": 71.261264,
+                  "p99": 86.521129
+                },
+                "ts-agent-invocation": {
+                  "avg": 53.102524,
+                  "min": 8.20673,
+                  "max": 105.169752,
+                  "median": 51.195182,
+                  "p90": 58.206712,
+                  "p95": 77.87474,
+                  "p99": 91.145518
+                },
+                "ts-agent-rpc-local-invocation": {
+                  "avg": 159.362233,
+                  "min": 42.129641,
+                  "max": 1617.191168,
+                  "median": 143.738941,
+                  "p90": 193.951506,
+                  "p95": 219.350391,
+                  "p99": 291.992258
+                },
+                "ts-agent-http-invocation": {
+                  "avg": 47.56256,
+                  "min": 7.319666,
+                  "max": 108.663923,
+                  "median": 45.84992,
+                  "p90": 51.878027,
+                  "p95": 59.153457,
+                  "p99": 88.339328
+                },
+                "rust-agent-rpc-local-invocation": {
+                  "avg": 142.179926,
+                  "min": 21.158073,
+                  "max": 329.976848,
+                  "median": 132.324242,
+                  "p90": 185.253396,
+                  "p95": 201.837603,
+                  "p99": 268.256773
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "throughput-large-input",
+          "description": "Spawns `size` number of workers of various implementations, and calls the `large-input` endpoint\nwith an input based on `length` in a fixed number of times.\n`size` should be chosen in a way that all workers fit in the available executor's memory,\nand `size=1` can be used to test isolated throughput of a single worker.\nThe benchmarks measures multiple implementations separately after each other:\nrust agent, TS agent, rust agent through HTTP mapping, TS agent through HTTP mapping, TS agent RPC and rust agent RPC\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 100,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 10000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 100,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 10000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 25,
+              "length": 100,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 25,
+              "length": 10000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 5,
+              "size": 1,
+              "length": 100,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 5,
+              "size": 1,
+              "length": 10000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 5,
+              "size": 10,
+              "length": 100,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 5,
+              "size": 10,
+              "length": 10000,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 5,
+              "size": 25,
+              "length": 100,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 5,
+              "size": 25,
+              "length": 10000,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "rust-agent-invocation": {
+                  "avg": 10.518954,
+                  "min": 8.363152,
+                  "max": 16.162895,
+                  "median": 10.379159,
+                  "p90": 11.81248,
+                  "p95": 12.536782,
+                  "p99": 14.553831
+                },
+                "rust-agent-rpc-local-invocation": {
+                  "avg": 25.593386,
+                  "min": 17.945848,
+                  "max": 70.01583,
+                  "median": 25.32842,
+                  "p90": 31.204405,
+                  "p95": 32.8047,
+                  "p99": 37.842067
+                },
+                "ts-agent-invocation": {
+                  "avg": 11.840192,
+                  "min": 9.02506,
+                  "max": 31.700165,
+                  "median": 11.324585,
+                  "p90": 13.814463,
+                  "p95": 15.949996,
+                  "p99": 18.731972
+                },
+                "ts-agent-http-invocation": {
+                  "avg": 10.144336,
+                  "min": 7.505624,
+                  "max": 22.737516,
+                  "median": 9.9364,
+                  "p90": 11.479146,
+                  "p95": 12.020817,
+                  "p99": 13.390388
+                },
+                "rust-agent-http-invocation": {
+                  "avg": 8.267422,
+                  "min": 6.750408,
+                  "max": 16.676813,
+                  "median": 8.035171,
+                  "p90": 9.250828,
+                  "p95": 9.681619,
+                  "p99": 14.309966
+                },
+                "ts-agent-rpc-local-invocation": {
+                  "avg": 26.957401,
+                  "min": 20.609302,
+                  "max": 43.238979,
+                  "median": 26.027468,
+                  "p90": 32.334686,
+                  "p95": 34.284001,
+                  "p99": 40.991906
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-rpc-local-invocation": {
+                  "avg": 361.779211,
+                  "min": 333.56095,
+                  "max": 454.254984,
+                  "median": 349.96156,
+                  "p90": 398.395985,
+                  "p95": 406.107942,
+                  "p99": 445.106369
+                },
+                "rust-agent-invocation": {
+                  "avg": 30.242802,
+                  "min": 21.381661,
+                  "max": 94.329958,
+                  "median": 28.553977,
+                  "p90": 37.871995,
+                  "p95": 39.729799,
+                  "p99": 46.711005
+                },
+                "rust-agent-rpc-local-invocation": {
+                  "avg": 46.120082,
+                  "min": 38.780623,
+                  "max": 63.797303,
+                  "median": 44.27977,
+                  "p90": 54.017943,
+                  "p95": 58.594197,
+                  "p99": 63.580187
+                },
+                "ts-agent-http-invocation": {
+                  "avg": 117.916983,
+                  "min": 106.496245,
+                  "max": 195.132319,
+                  "median": 111.475954,
+                  "p90": 140.168088,
+                  "p95": 150.556393,
+                  "p99": 167.986332
+                },
+                "ts-agent-invocation": {
+                  "avg": 131.956881,
+                  "min": 112.946005,
+                  "max": 219.66312,
+                  "median": 122.398058,
+                  "p90": 163.17004,
+                  "p95": 177.606344,
+                  "p99": 210.706817
+                },
+                "rust-agent-http-invocation": {
+                  "avg": 17.832391,
+                  "min": 15.478925,
+                  "max": 40.383877,
+                  "median": 17.40439,
+                  "p90": 19.819161,
+                  "p95": 20.49644,
+                  "p99": 28.183717
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "rust-agent-rpc-local-invocation": {
+                  "avg": 27.504253,
+                  "min": 21.793519,
+                  "max": 75.37638,
+                  "median": 25.731489,
+                  "p90": 29.882412,
+                  "p95": 41.248373,
+                  "p99": 65.064542
+                },
+                "ts-agent-http-invocation": {
+                  "avg": 10.665021,
+                  "min": 7.889686,
+                  "max": 19.204196,
+                  "median": 10.371019,
+                  "p90": 12.525645,
+                  "p95": 13.459267,
+                  "p99": 17.217445
+                },
+                "rust-agent-http-invocation": {
+                  "avg": 9.713587,
+                  "min": 7.14121,
+                  "max": 39.446926,
+                  "median": 9.131817999999999,
+                  "p90": 11.241772,
+                  "p95": 12.562856,
+                  "p99": 16.265906
+                },
+                "rust-agent-invocation": {
+                  "avg": 10.097778,
+                  "min": 7.8078009999999995,
+                  "max": 24.241289,
+                  "median": 9.861234,
+                  "p90": 11.002839,
+                  "p95": 11.439503,
+                  "p99": 20.100467
+                },
+                "ts-agent-invocation": {
+                  "avg": 11.304866,
+                  "min": 8.708964,
+                  "max": 30.975653,
+                  "median": 10.969199,
+                  "p90": 12.860403,
+                  "p95": 13.596547,
+                  "p99": 15.669101
+                },
+                "ts-agent-rpc-local-invocation": {
+                  "avg": 29.741815,
+                  "min": 23.214716,
+                  "max": 71.969358,
+                  "median": 28.113186,
+                  "p90": 34.926236,
+                  "p95": 40.638321,
+                  "p99": 56.396223
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "rust-agent-invocation": {
+                  "avg": 30.468663,
+                  "min": 21.930245,
+                  "max": 70.084273,
+                  "median": 29.552904,
+                  "p90": 34.946846,
+                  "p95": 36.919498,
+                  "p99": 57.984487
+                },
+                "rust-agent-rpc-local-invocation": {
+                  "avg": 49.037913,
+                  "min": 39.035022,
+                  "max": 83.03592,
+                  "median": 47.028256,
+                  "p90": 57.323595,
+                  "p95": 65.366754,
+                  "p99": 77.677281
+                },
+                "ts-agent-http-invocation": {
+                  "avg": 117.071156,
+                  "min": 104.064314,
+                  "max": 191.849657,
+                  "median": 111.928719,
+                  "p90": 135.647935,
+                  "p95": 146.197914,
+                  "p99": 174.772747
+                },
+                "ts-agent-rpc-local-invocation": {
+                  "avg": 371.536108,
+                  "min": 327.066548,
+                  "max": 534.450562,
+                  "median": 362.117947,
+                  "p90": 414.00475,
+                  "p95": 434.063957,
+                  "p99": 487.543044
+                },
+                "rust-agent-http-invocation": {
+                  "avg": 18.122126,
+                  "min": 14.333598,
+                  "max": 32.823437,
+                  "median": 17.809506,
+                  "p90": 20.380026,
+                  "p95": 21.32905,
+                  "p99": 27.357249
+                },
+                "ts-agent-invocation": {
+                  "avg": 124.286024,
+                  "min": 110.898943,
+                  "max": 217.535746,
+                  "median": 118.744571,
+                  "p90": 143.022341,
+                  "p95": 159.794566,
+                  "p99": 182.315548
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 25,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "rust-agent-invocation": {
+                  "avg": 14.542938,
+                  "min": 8.608706,
+                  "max": 47.928514,
+                  "median": 13.754601,
+                  "p90": 15.885817,
+                  "p95": 17.049028,
+                  "p99": 45.46984
+                },
+                "rust-agent-http-invocation": {
+                  "avg": 13.408544,
+                  "min": 8.000987,
+                  "max": 64.599521,
+                  "median": 12.352139,
+                  "p90": 14.476501,
+                  "p95": 16.220262,
+                  "p99": 38.960862
+                },
+                "ts-agent-rpc-local-invocation": {
+                  "avg": 45.848599,
+                  "min": 25.609857,
+                  "max": 96.427996,
+                  "median": 43.041868,
+                  "p90": 60.587358,
+                  "p95": 68.455822,
+                  "p99": 88.012088
+                },
+                "rust-agent-rpc-local-invocation": {
+                  "avg": 36.821657,
+                  "min": 24.314303,
+                  "max": 100.668158,
+                  "median": 33.628064,
+                  "p90": 43.902731,
+                  "p95": 59.362649,
+                  "p99": 96.936297
+                },
+                "ts-agent-invocation": {
+                  "avg": 18.077936,
+                  "min": 9.260280999999999,
+                  "max": 52.651118,
+                  "median": 16.970997,
+                  "p90": 21.696109,
+                  "p95": 26.693917,
+                  "p99": 45.705955
+                },
+                "ts-agent-http-invocation": {
+                  "avg": 15.501245,
+                  "min": 8.617263,
+                  "max": 41.831673,
+                  "median": 15.149422,
+                  "p90": 18.042108,
+                  "p95": 19.18955,
+                  "p99": 24.582433
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 25,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-http-invocation": {
+                  "avg": 190.039196,
+                  "min": 109.748622,
+                  "max": 307.90074,
+                  "median": 187.44644,
+                  "p90": 226.136498,
+                  "p95": 238.722126,
+                  "p99": 269.961162
+                },
+                "rust-agent-invocation": {
+                  "avg": 49.298978,
+                  "min": 27.830909,
+                  "max": 107.716417,
+                  "median": 46.604982,
+                  "p90": 62.943545,
+                  "p95": 69.830663,
+                  "p99": 86.008621
+                },
+                "ts-agent-invocation": {
+                  "avg": 202.227041,
+                  "min": 113.271286,
+                  "max": 355.002176,
+                  "median": 198.654113,
+                  "p90": 241.142377,
+                  "p95": 254.35898,
+                  "p99": 292.268173
+                },
+                "ts-agent-rpc-local-invocation": {
+                  "avg": 588.961461,
+                  "min": 338.890488,
+                  "max": 1021.978174,
+                  "median": 585.801396,
+                  "p90": 660.345022,
+                  "p95": 684.472337,
+                  "p99": 730.972926
+                },
+                "rust-agent-http-invocation": {
+                  "avg": 29.731465,
+                  "min": 17.24152,
+                  "max": 61.28067,
+                  "median": 28.942927,
+                  "p90": 35.183259,
+                  "p95": 38.422317,
+                  "p99": 47.533805
+                },
+                "rust-agent-rpc-local-invocation": {
+                  "avg": 80.222894,
+                  "min": 38.953047,
+                  "max": 212.084175,
+                  "median": 73.984767,
+                  "p90": 103.311039,
+                  "p95": 127.172628,
+                  "p99": 186.496032
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 5,
+                "size": 1,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "rust-agent-rpc-remote-invocation": {
+                  "avg": 77.941627,
+                  "min": 31.034937,
+                  "max": 112.437071,
+                  "median": 76.095741,
+                  "p90": 88.202208,
+                  "p95": 91.380785,
+                  "p99": 109.935678
+                },
+                "ts-agent-rpc-local-invocation": {
+                  "avg": 28.493787,
+                  "min": 24.601443,
+                  "max": 42.363238,
+                  "median": 27.790772,
+                  "p90": 31.708893,
+                  "p95": 34.998245,
+                  "p99": 42.342164
+                },
+                "rust-agent-invocation": {
+                  "avg": 10.527493,
+                  "min": 9.222277,
+                  "max": 33.501194,
+                  "median": 10.187287,
+                  "p90": 10.923974,
+                  "p95": 11.447115,
+                  "p99": 18.119989
+                },
+                "ts-agent-http-invocation": {
+                  "avg": 10.06915,
+                  "min": 8.243201,
+                  "max": 15.370269,
+                  "median": 9.917552,
+                  "p90": 11.599741,
+                  "p95": 11.927871,
+                  "p99": 12.909816
+                },
+                "ts-agent-invocation": {
+                  "avg": 11.164635,
+                  "min": 9.583057,
+                  "max": 15.646673,
+                  "median": 11.091551,
+                  "p90": 12.451678,
+                  "p95": 12.602326,
+                  "p99": 13.179554
+                },
+                "rust-agent-http-invocation": {
+                  "avg": 9.309661,
+                  "min": 7.634313,
+                  "max": 17.077295,
+                  "median": 9.07316,
+                  "p90": 10.311607,
+                  "p95": 10.948394,
+                  "p99": 12.690285
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 5,
+                "size": 1,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-http-invocation": {
+                  "avg": 118.452206,
+                  "min": 107.664049,
+                  "max": 178.86106,
+                  "median": 113.761969,
+                  "p90": 133.434994,
+                  "p95": 147.948889,
+                  "p99": 169.367711
+                },
+                "ts-agent-invocation": {
+                  "avg": 123.638952,
+                  "min": 113.163157,
+                  "max": 172.85024,
+                  "median": 118.959502,
+                  "p90": 139.610078,
+                  "p95": 155.439138,
+                  "p99": 172.618226
+                },
+                "rust-agent-invocation": {
+                  "avg": 25.301978,
+                  "min": 21.787551,
+                  "max": 55.110297,
+                  "median": 24.359294,
+                  "p90": 28.335353,
+                  "p95": 29.22692,
+                  "p99": 34.553709
+                },
+                "ts-agent-rpc-remote-invocation": {
+                  "avg": 373.550191,
+                  "min": 345.0369,
+                  "max": 504.375669,
+                  "median": 361.72864,
+                  "p90": 412.126673,
+                  "p95": 419.638074,
+                  "p99": 455.078559
+                },
+                "rust-agent-rpc-remote-invocation": {
+                  "avg": 57.668818,
+                  "min": 50.345812,
+                  "max": 75.475618,
+                  "median": 56.594019,
+                  "p90": 62.982332,
+                  "p95": 65.711431,
+                  "p99": 73.40836
+                },
+                "rust-agent-http-invocation": {
+                  "avg": 17.48725,
+                  "min": 15.114604,
+                  "max": 36.139954,
+                  "median": 16.886506,
+                  "p90": 19.062297,
+                  "p95": 20.238206,
+                  "p99": 28.151784
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 5,
+                "size": 10,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "rust-agent-http-invocation": {
+                  "avg": 9.002942000000001,
+                  "min": 7.486892,
+                  "max": 26.678635,
+                  "median": 8.752525,
+                  "p90": 9.415126,
+                  "p95": 9.776136,
+                  "p99": 16.516833
+                },
+                "ts-agent-http-invocation": {
+                  "avg": 10.366439,
+                  "min": 8.314511,
+                  "max": 15.476287,
+                  "median": 10.056832,
+                  "p90": 12.137978,
+                  "p95": 12.74151,
+                  "p99": 13.661489
+                },
+                "rust-agent-rpc-local-invocation": {
+                  "avg": 23.645614,
+                  "min": 20.266502,
+                  "max": 55.633606,
+                  "median": 22.809187,
+                  "p90": 25.837084,
+                  "p95": 28.379348,
+                  "p99": 47.065177
+                },
+                "ts-agent-invocation": {
+                  "avg": 11.478669,
+                  "min": 8.834854,
+                  "max": 52.449824,
+                  "median": 10.923299,
+                  "p90": 12.515481,
+                  "p95": 13.103113,
+                  "p99": 19.709864
+                },
+                "rust-agent-invocation": {
+                  "avg": 10.369183,
+                  "min": 8.231733,
+                  "max": 37.356063,
+                  "median": 9.85229,
+                  "p90": 11.306934,
+                  "p95": 12.022138,
+                  "p99": 20.620939
+                },
+                "ts-agent-rpc-remote-invocation": {
+                  "avg": 47.349421,
+                  "min": 30.257404,
+                  "max": 110.244009,
+                  "median": 44.770255,
+                  "p90": 61.699724,
+                  "p95": 66.72926,
+                  "p99": 80.760748
+                },
+                "rust-agent-rpc-remote-invocation": {
+                  "avg": 51.733053,
+                  "min": 27.042076,
+                  "max": 77.41912,
+                  "median": 54.398466,
+                  "p90": 62.549268,
+                  "p95": 65.325764,
+                  "p99": 74.731651
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 5,
+                "size": 10,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-rpc-remote-invocation": {
+                  "avg": 398.099036,
+                  "min": 345.946112,
+                  "max": 556.262308,
+                  "median": 395.703974,
+                  "p90": 424.255897,
+                  "p95": 440.174552,
+                  "p99": 481.749599
+                },
+                "rust-agent-rpc-local-invocation": {
+                  "avg": 46.524996,
+                  "min": 38.004477,
+                  "max": 92.351058,
+                  "median": 44.930791,
+                  "p90": 52.075846,
+                  "p95": 56.564624,
+                  "p99": 69.110322
+                },
+                "ts-agent-http-invocation": {
+                  "avg": 116.270113,
+                  "min": 105.498611,
+                  "max": 195.504237,
+                  "median": 112.562902,
+                  "p90": 129.045255,
+                  "p95": 139.56734,
+                  "p99": 163.910011
+                },
+                "rust-agent-rpc-remote-invocation": {
+                  "avg": 60.335025,
+                  "min": 53.552604,
+                  "max": 80.148745,
+                  "median": 58.864541,
+                  "p90": 68.562724,
+                  "p95": 72.923116,
+                  "p99": 78.181662
+                },
+                "ts-agent-invocation": {
+                  "avg": 124.018221,
+                  "min": 111.305273,
+                  "max": 204.793069,
+                  "median": 119.529969,
+                  "p90": 140.556926,
+                  "p95": 153.169833,
+                  "p99": 172.069414
+                },
+                "rust-agent-http-invocation": {
+                  "avg": 17.999001,
+                  "min": 14.995846,
+                  "max": 28.965953,
+                  "median": 17.695247,
+                  "p90": 19.873038,
+                  "p95": 20.555373,
+                  "p99": 25.223932
+                },
+                "rust-agent-invocation": {
+                  "avg": 29.205616,
+                  "min": 21.80418,
+                  "max": 77.861074,
+                  "median": 27.714749,
+                  "p90": 33.913871,
+                  "p95": 37.819421,
+                  "p99": 63.283357
+                },
+                "ts-agent-rpc-local-invocation": {
+                  "avg": 353.313203,
+                  "min": 331.706346,
+                  "max": 471.427919,
+                  "median": 347.455733,
+                  "p90": 376.926508,
+                  "p95": 389.692604,
+                  "p99": 404.230354
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 5,
+                "size": 25,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-rpc-local-invocation": {
+                  "avg": 51.203464,
+                  "min": 35.458241,
+                  "max": 80.173388,
+                  "median": 49.837868,
+                  "p90": 60.947505,
+                  "p95": 69.169165,
+                  "p99": 75.031495
+                },
+                "ts-agent-http-invocation": {
+                  "avg": 17.92019,
+                  "min": 8.678743,
+                  "max": 43.309491,
+                  "median": 17.315923,
+                  "p90": 21.65108,
+                  "p95": 23.463622,
+                  "p99": 36.854695
+                },
+                "rust-agent-invocation": {
+                  "avg": 15.111446,
+                  "min": 7.587299,
+                  "max": 64.655526,
+                  "median": 14.220351,
+                  "p90": 17.595678,
+                  "p95": 19.763106,
+                  "p99": 37.862102
+                },
+                "ts-agent-invocation": {
+                  "avg": 19.162302,
+                  "min": 9.619728,
+                  "max": 89.050103,
+                  "median": 18.263181,
+                  "p90": 22.392392,
+                  "p95": 23.544996,
+                  "p99": 30.896292
+                },
+                "rust-agent-rpc-remote-invocation": {
+                  "avg": 51.167413,
+                  "min": 26.639779,
+                  "max": 89.174685,
+                  "median": 49.214781,
+                  "p90": 63.115732,
+                  "p95": 69.892533,
+                  "p99": 79.201505
+                },
+                "ts-agent-rpc-remote-invocation": {
+                  "avg": 64.961204,
+                  "min": 33.753074,
+                  "max": 125.597465,
+                  "median": 63.022514,
+                  "p90": 77.802143,
+                  "p95": 85.888772,
+                  "p99": 105.563299
+                },
+                "rust-agent-http-invocation": {
+                  "avg": 13.711093,
+                  "min": 8.021455,
+                  "max": 46.641158,
+                  "median": 13.061579,
+                  "p90": 15.387041,
+                  "p95": 16.809681,
+                  "p99": 36.351201
+                },
+                "rust-agent-rpc-local-invocation": {
+                  "avg": 40.717253,
+                  "min": 28.935184,
+                  "max": 70.234836,
+                  "median": 39.218914,
+                  "p90": 49.81927,
+                  "p95": 55.894385,
+                  "p99": 64.444966
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 5,
+                "size": 25,
+                "length": 10000,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-invocation": {
+                  "avg": 207.419694,
+                  "min": 114.592643,
+                  "max": 369.889283,
+                  "median": 203.110647,
+                  "p90": 250.39036,
+                  "p95": 268.74377,
+                  "p99": 316.669391
+                },
+                "ts-agent-rpc-local-invocation": {
+                  "avg": 586.090915,
+                  "min": 419.023656,
+                  "max": 843.005877,
+                  "median": 581.225752,
+                  "p90": 653.788609,
+                  "p95": 675.609655,
+                  "p99": 764.634527
+                },
+                "rust-agent-http-invocation": {
+                  "avg": 41.030535,
+                  "min": 17.487075,
+                  "max": 71.973074,
+                  "median": 42.227291,
+                  "p90": 47.538951,
+                  "p95": 49.793988,
+                  "p99": 58.347492
+                },
+                "rust-agent-invocation": {
+                  "avg": 44.134483,
+                  "min": 20.142277,
+                  "max": 97.230852,
+                  "median": 43.372127,
+                  "p90": 52.627057,
+                  "p95": 56.722313,
+                  "p99": 74.566266
+                },
+                "rust-agent-rpc-remote-invocation": {
+                  "avg": 103.530826,
+                  "min": 55.727098,
+                  "max": 180.916764,
+                  "median": 104.30274,
+                  "p90": 132.814678,
+                  "p95": 141.861529,
+                  "p99": 157.754243
+                },
+                "ts-agent-rpc-remote-invocation": {
+                  "avg": 633.315924,
+                  "min": 349.496537,
+                  "max": 1029.022079,
+                  "median": 640.621645,
+                  "p90": 722.543569,
+                  "p95": 757.940664,
+                  "p99": 836.793122
+                },
+                "ts-agent-http-invocation": {
+                  "avg": 199.717134,
+                  "min": 108.662224,
+                  "max": 367.434115,
+                  "median": 194.710663,
+                  "p90": 243.1476,
+                  "p95": 258.099276,
+                  "p99": 299.723055
+                },
+                "rust-agent-rpc-local-invocation": {
+                  "avg": 84.285599,
+                  "min": 47.00419,
+                  "max": 170.181336,
+                  "median": 81.503241,
+                  "p90": 100.614286,
+                  "p95": 111.076927,
+                  "p99": 127.206006
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "throughput-cpu-intensive",
+          "description": "Spawns `size` number of workers of various implementations, and calls the `cpu-intensive` endpoint\nwith the CPU intensive task's length based on `length` in a fixed number of times.\n`size` should be chosen in a way that all workers fit in the available executor's memory,\nand `size=1` can be used to test isolated throughput of a single worker.\nThe benchmarks measures multiple implementations separately after each other:\nrust agent, TS agent, rust agent through HTTP mapping, TS agent through HTTP mapping, TS agent RPC and rust agent RPC\n",
+          "runs": [
+            {
+              "clusterSize": 1,
+              "size": 1,
+              "length": 100,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 10,
+              "length": 100,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 1,
+              "size": 25,
+              "length": 100,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 5,
+              "size": 1,
+              "length": 100,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 5,
+              "size": 10,
+              "length": 100,
+              "disableCompilationCache": false
+            },
+            {
+              "clusterSize": 5,
+              "size": 25,
+              "length": 100,
+              "disableCompilationCache": false
+            }
+          ],
+          "results": [
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 1,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "rust-agent-invocation": {
+                  "avg": 12.787974,
+                  "min": 11.966203,
+                  "max": 13.443512,
+                  "median": 12.747939,
+                  "p90": 13.432625,
+                  "p95": 13.438069,
+                  "p99": 13.442423
+                },
+                "rust-agent-http-invocation": {
+                  "avg": 13.885775,
+                  "min": 12.412195,
+                  "max": 21.772886,
+                  "median": 12.992426,
+                  "p90": 14.411251,
+                  "p95": 18.092068,
+                  "p99": 21.036722
+                },
+                "ts-agent-rpc-local-invocation": {
+                  "avg": 259.077278,
+                  "min": 254.241103,
+                  "max": 274.657706,
+                  "median": 257.042264,
+                  "p90": 266.705438,
+                  "p95": 270.681571,
+                  "p99": 273.862479
+                },
+                "ts-agent-http-invocation": {
+                  "avg": 258.358153,
+                  "min": 238.8812,
+                  "max": 347.297715,
+                  "median": 244.070636,
+                  "p90": 295.133962,
+                  "p95": 321.215839,
+                  "p99": 342.08134
+                },
+                "rust-agent-rpc-local-invocation": {
+                  "avg": 26.569313,
+                  "min": 24.956916,
+                  "max": 28.098325,
+                  "median": 26.815363,
+                  "p90": 27.529606,
+                  "p95": 27.813966,
+                  "p99": 28.041453
+                },
+                "ts-agent-invocation": {
+                  "avg": 252.276501,
+                  "min": 239.326766,
+                  "max": 274.301104,
+                  "median": 245.852049,
+                  "p90": 268.775399,
+                  "p95": 271.538251,
+                  "p99": 273.748534
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 10,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "rust-agent-http-invocation": {
+                  "avg": 14.312483,
+                  "min": 10.534693,
+                  "max": 27.959713,
+                  "median": 12.714556,
+                  "p90": 20.725518,
+                  "p95": 23.582098,
+                  "p99": 27.92241
+                },
+                "ts-agent-rpc-local-invocation": {
+                  "avg": 294.848781,
+                  "min": 254.07506,
+                  "max": 566.730726,
+                  "median": 274.214436,
+                  "p90": 356.811795,
+                  "p95": 369.134384,
+                  "p99": 485.309211
+                },
+                "rust-agent-rpc-local-invocation": {
+                  "avg": 27.720029,
+                  "min": 23.963784,
+                  "max": 33.170975,
+                  "median": 27.659283,
+                  "p90": 29.976479,
+                  "p95": 30.850067,
+                  "p99": 32.987834
+                },
+                "ts-agent-invocation": {
+                  "avg": 259.93436,
+                  "min": 237.674589,
+                  "max": 388.817744,
+                  "median": 249.157532,
+                  "p90": 291.329718,
+                  "p95": 319.9769,
+                  "p99": 385.503998
+                },
+                "rust-agent-invocation": {
+                  "avg": 14.290016,
+                  "min": 11.466830999999999,
+                  "max": 18.495193,
+                  "median": 13.82337,
+                  "p90": 16.726904,
+                  "p95": 17.638669,
+                  "p99": 18.304864
+                },
+                "ts-agent-http-invocation": {
+                  "avg": 254.39908,
+                  "min": 237.224075,
+                  "max": 364.245828,
+                  "median": 244.420716,
+                  "p90": 286.489559,
+                  "p95": 301.985679,
+                  "p99": 349.441563
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 1,
+                "size": 25,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "rust-agent-invocation": {
+                  "avg": 18.787201,
+                  "min": 14.72253,
+                  "max": 25.670421,
+                  "median": 18.319289,
+                  "p90": 21.507,
+                  "p95": 22.452543,
+                  "p99": 24.283863
+                },
+                "rust-agent-rpc-local-invocation": {
+                  "avg": 42.374099,
+                  "min": 30.297098,
+                  "max": 80.788795,
+                  "median": 40.314073,
+                  "p90": 53.32956,
+                  "p95": 68.846558,
+                  "p99": 74.220955
+                },
+                "rust-agent-http-invocation": {
+                  "avg": 20.613219,
+                  "min": 11.828267,
+                  "max": 61.05854,
+                  "median": 16.807246,
+                  "p90": 25.575356,
+                  "p95": 56.843111,
+                  "p99": 59.784088
+                },
+                "ts-agent-invocation": {
+                  "avg": 383.255276,
+                  "min": 248.085263,
+                  "max": 513.915597,
+                  "median": 384.746605,
+                  "p90": 447.310324,
+                  "p95": 464.872296,
+                  "p99": 506.13538
+                },
+                "ts-agent-http-invocation": {
+                  "avg": 398.50333,
+                  "min": 257.982481,
+                  "max": 585.063422,
+                  "median": 393.610393,
+                  "p90": 474.941525,
+                  "p95": 500.564713,
+                  "p99": 538.516149
+                },
+                "ts-agent-rpc-local-invocation": {
+                  "avg": 401.316648,
+                  "min": 256.973102,
+                  "max": 638.681549,
+                  "median": 397.525563,
+                  "p90": 467.728786,
+                  "p95": 487.023398,
+                  "p99": 534.642835
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 5,
+                "size": 1,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "rust-agent-rpc-remote-invocation": {
+                  "avg": 86.070179,
+                  "min": 51.754321,
+                  "max": 98.130636,
+                  "median": 93.751921,
+                  "p90": 96.402632,
+                  "p95": 97.266634,
+                  "p99": 97.957836
+                },
+                "ts-agent-rpc-remote-invocation": {
+                  "avg": 294.459755,
+                  "min": 275.662835,
+                  "max": 314.417579,
+                  "median": 293.403004,
+                  "p90": 304.157637,
+                  "p95": 309.287607,
+                  "p99": 313.391585
+                },
+                "rust-agent-invocation": {
+                  "avg": 12.321345,
+                  "min": 10.834663,
+                  "max": 13.580903,
+                  "median": 12.451934,
+                  "p90": 13.273654,
+                  "p95": 13.427279,
+                  "p99": 13.550178
+                },
+                "ts-agent-invocation": {
+                  "avg": 266.123276,
+                  "min": 245.338587,
+                  "max": 284.143214,
+                  "median": 269.606993,
+                  "p90": 275.208789,
+                  "p95": 279.676002,
+                  "p99": 283.249772
+                },
+                "ts-agent-http-invocation": {
+                  "avg": 282.989013,
+                  "min": 241.201382,
+                  "max": 361.246488,
+                  "median": 274.427317,
+                  "p90": 329.580336,
+                  "p95": 345.413411,
+                  "p99": 358.079873
+                },
+                "rust-agent-http-invocation": {
+                  "avg": 16.983702,
+                  "min": 12.545135,
+                  "max": 45.344023,
+                  "median": 13.030987,
+                  "p90": 20.407183,
+                  "p95": 32.875603,
+                  "p99": 42.850339
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 5,
+                "size": 10,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "ts-agent-rpc-local-invocation": {
+                  "avg": 271.13594,
+                  "min": 252.018768,
+                  "max": 374.296183,
+                  "median": 265.173722,
+                  "p90": 295.871993,
+                  "p95": 308.298947,
+                  "p99": 326.560341
+                },
+                "ts-agent-http-invocation": {
+                  "avg": 259.870807,
+                  "min": 238.511582,
+                  "max": 398.786358,
+                  "median": 253.820073,
+                  "p90": 279.206458,
+                  "p95": 296.871278,
+                  "p99": 375.845749
+                },
+                "ts-agent-invocation": {
+                  "avg": 262.743376,
+                  "min": 237.359839,
+                  "max": 313.042129,
+                  "median": 256.971071,
+                  "p90": 290.616854,
+                  "p95": 306.122229,
+                  "p99": 311.45962
+                },
+                "rust-agent-http-invocation": {
+                  "avg": 13.506982,
+                  "min": 10.914312,
+                  "max": 23.608795,
+                  "median": 12.314554,
+                  "p90": 16.692155,
+                  "p95": 22.455381,
+                  "p99": 23.146841
+                },
+                "rust-agent-rpc-remote-invocation": {
+                  "avg": 42.786559,
+                  "min": 31.09283,
+                  "max": 81.1917,
+                  "median": 37.829479,
+                  "p90": 59.650054,
+                  "p95": 68.219036,
+                  "p99": 79.909268
+                },
+                "rust-agent-invocation": {
+                  "avg": 13.221868,
+                  "min": 11.428823,
+                  "max": 21.518543,
+                  "median": 13.056908,
+                  "p90": 13.834385,
+                  "p95": 14.615544,
+                  "p99": 21.301304000000002
+                }
+              }
+            },
+            {
+              "run_config": {
+                "clusterSize": 5,
+                "size": 25,
+                "length": 100,
+                "disableCompilationCache": false
+              },
+              "duration_results": {
+                "rust-agent-http-invocation": {
+                  "avg": 22.938747,
+                  "min": 12.03654,
+                  "max": 66.428153,
+                  "median": 18.433163,
+                  "p90": 30.043286,
+                  "p95": 62.450722999999996,
+                  "p99": 65.653562
+                },
+                "rust-agent-rpc-remote-invocation": {
+                  "avg": 51.170122,
+                  "min": 33.382802,
+                  "max": 98.695082,
+                  "median": 47.029999,
+                  "p90": 72.882221,
+                  "p95": 95.287277,
+                  "p99": 97.957572
+                },
+                "ts-agent-http-invocation": {
+                  "avg": 392.437375,
+                  "min": 244.783445,
+                  "max": 599.201031,
+                  "median": 384.036251,
+                  "p90": 471.775521,
+                  "p95": 502.332623,
+                  "p99": 576.243948
+                },
+                "rust-agent-rpc-local-invocation": {
+                  "avg": 40.67853,
+                  "min": 33.511576,
+                  "max": 60.627111,
+                  "median": 38.655207,
+                  "p90": 50.449446,
+                  "p95": 57.316515,
+                  "p99": 58.93819
+                },
+                "ts-agent-rpc-remote-invocation": {
+                  "avg": 470.462453,
+                  "min": 277.477748,
+                  "max": 922.764596,
+                  "median": 444.61948,
+                  "p90": 594.312926,
+                  "p95": 657.606452,
+                  "p99": 850.278163
+                },
+                "rust-agent-invocation": {
+                  "avg": 18.782288,
+                  "min": 12.878101000000001,
+                  "max": 27.349124,
+                  "median": 18.614274,
+                  "p90": 21.391888,
+                  "p95": 22.38583,
+                  "p99": 24.60615
+                },
+                "ts-agent-rpc-local-invocation": {
+                  "avg": 437.865436,
+                  "min": 307.843149,
+                  "max": 597.841913,
+                  "median": 419.307252,
+                  "p90": 550.660748,
+                  "p95": 580.769138,
+                  "p99": 595.314005
+                },
+                "ts-agent-invocation": {
+                  "avg": 387.829678,
+                  "min": 240.868633,
+                  "max": 640.805162,
+                  "median": 378.188913,
+                  "p90": 491.421494,
+                  "p95": 539.20114,
+                  "p99": 590.395375
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }
