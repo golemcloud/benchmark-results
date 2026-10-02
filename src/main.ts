@@ -299,7 +299,7 @@ function getHistoricalChartData(benchmarkName: string, metric: Metric = 'median'
                         r.run_config.disableCompilationCache ===
                             largestConfig.run_config.disableCompilationCache
                 );
-                if (!result || !result.duration_results[key]) {
+                if (!result || !result.duration_results?.[key]) {
                     return null;
                 } else {
                     return {

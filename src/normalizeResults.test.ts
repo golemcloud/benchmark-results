@@ -51,7 +51,32 @@ function collection(results: BenchmarkResult[]): BenchmarkSuiteResultCollection 
 }
 
 describe('normalizeResults', () => {
-    it('splits legacy throughput batch metrics into a historical streaming benchmark', () => {
+    it('preserves failed throughput records while splitting measured batch metrics', () => {
+        const measured = benchmark('throughput-echo', [
+            'rust-agent-invocation',
+            'rust-agent-batch-duration',
+        ]);
+        measured.results.unshift({
+            run_config: {
+                clusterSize: 1,
+                size: 20,
+                length: 100,
+                disableCompilationCache: false,
+            },
+            failures: ['benchmark failed'],
+        } as unknown as BenchmarkResult['results'][number]);
+
+        const results = normalizeResults(collection([measured])).runs[0].results;
+
+        expect(results.map(({ name }) => name)).toEqual([
+            'throughput-echo',
+            'throughput-echo-aggregate',
+        ]);
+        expect(results[0].results).toHaveLength(2);
+        expect(results[1].results).toHaveLength(2);
+    });
+
+    it('splits throughput batch metrics into an aggregate benchmark', () => {
         const input = collection([
             benchmark(
                 'throughput-cpu-intensive',
@@ -65,7 +90,7 @@ describe('normalizeResults', () => {
         expect(result.runner).toEqual({ id: 'runner' });
         expect(result.results.map(({ name }) => name)).toEqual([
             'throughput-cpu-intensive',
-            'throughput-cpu-intensive-streaming',
+            'throughput-cpu-intensive-aggregate',
         ]);
         expect(Object.keys(result.results[0].results[0].duration_results)).toEqual([
             'rust-agent-invocation',
@@ -83,12 +108,12 @@ describe('normalizeResults', () => {
 
     it('preserves explicitly separated and unrelated benchmarks', () => {
         const regular = benchmark('throughput-echo', ['rust-agent-invocation']);
-        const streaming = benchmark('throughput-echo-streaming', ['rust-agent-batch-duration']);
+        const aggregate = benchmark('throughput-echo-aggregate', ['rust-agent-batch-duration']);
         const unrelated = benchmark('streaming-tool', ['tool-batch-duration']);
 
-        const results = normalizeResults(collection([regular, streaming, unrelated])).runs[0]
+        const results = normalizeResults(collection([regular, aggregate, unrelated])).runs[0]
             .results;
 
-        expect(results).toEqual([regular, streaming, unrelated]);
+        expect(results).toEqual([regular, aggregate, unrelated]);
     });
 });

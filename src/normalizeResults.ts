@@ -1,6 +1,6 @@
 import type { BenchmarkResult, BenchmarkRunResult, BenchmarkSuiteResultCollection } from './types';
 
-const STREAMING_SUFFIX = '-streaming';
+const AGGREGATE_SUFFIX = '-aggregate';
 
 function isBatchMetric(key: string): boolean {
     return key.endsWith('-batch-duration') || key.endsWith('-batch-completions');
@@ -20,7 +20,7 @@ function splitRunResult(result: BenchmarkRunResult) {
             duration_results: filterRecord(result.duration_results, false) ?? {},
             count_results: filterRecord(result.count_results, false),
         },
-        streaming: {
+        aggregate: {
             ...result,
             duration_results: filterRecord(result.duration_results, true) ?? {},
             count_results: filterRecord(result.count_results, true),
@@ -31,7 +31,7 @@ function splitRunResult(result: BenchmarkRunResult) {
 function hasBatchMetrics(benchmark: BenchmarkResult): boolean {
     return benchmark.results.some(
         (result) =>
-            Object.keys(result.duration_results).some(isBatchMetric) ||
+            Object.keys(result.duration_results ?? {}).some(isBatchMetric) ||
             Object.keys(result.count_results ?? {}).some(isBatchMetric)
     );
 }
@@ -45,9 +45,9 @@ function splitBenchmark(benchmark: BenchmarkResult): [BenchmarkResult, Benchmark
         },
         {
             ...benchmark,
-            name: `${benchmark.name}${STREAMING_SUFFIX}`,
+            name: `${benchmark.name}${AGGREGATE_SUFFIX}`,
             description: `${benchmark.description}\n\nReports aggregate batch durations and completion counts.`,
-            results: splitResults.map(({ streaming }) => streaming),
+            results: splitResults.map(({ aggregate }) => aggregate),
         },
     ];
 }
@@ -61,14 +61,14 @@ export function normalizeResults(
             const results = run.results.flatMap((benchmark) => {
                 if (
                     !benchmark.name.startsWith('throughput-') ||
-                    benchmark.name.endsWith(STREAMING_SUFFIX) ||
+                    benchmark.name.endsWith(AGGREGATE_SUFFIX) ||
                     !hasBatchMetrics(benchmark)
                 ) {
                     return [benchmark];
                 }
 
-                const [regular, streaming] = splitBenchmark(benchmark);
-                return existingNames.has(streaming.name) ? [regular] : [regular, streaming];
+                const [regular, aggregate] = splitBenchmark(benchmark);
+                return existingNames.has(aggregate.name) ? [regular] : [regular, aggregate];
             });
             return { ...run, results };
         }),
