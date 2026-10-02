@@ -23,6 +23,8 @@ import {
     getRunsForRunnerAndSuite,
     getSourceDisplay,
     isMetric,
+    fromLogarithmicTimelinePosition,
+    toLogarithmicTimelinePosition,
 } from './utils';
 
 const typedData = data as BenchmarkSuiteResultCollection;
@@ -33,6 +35,8 @@ let selectedRunnerId = getRunnerId(initialRun);
 let lastRun: BenchmarkSuiteResult = initialRun;
 type ViewMode = 'historical' | 'last-run';
 let viewMode: ViewMode = 'historical';
+type TimelineScale = 'logarithmic' | 'linear';
+let timelineScale: TimelineScale = 'logarithmic';
 const CHART_COLORS = [
     'blue',
     'red',
@@ -236,6 +240,41 @@ function renderResults() {
         viewSwitch.appendChild(button);
     });
     topHeader.appendChild(viewSwitch);
+
+    if (viewMode === 'historical') {
+        const timelineControls = document.createElement('div');
+        timelineControls.className = 'timeline-controls';
+        const timelineLabel = document.createElement('span');
+        timelineLabel.textContent = 'Timeline:';
+        timelineControls.appendChild(timelineLabel);
+
+        const timelineSwitch = document.createElement('div');
+        timelineSwitch.className = 'timeline-switch';
+        timelineSwitch.setAttribute('role', 'group');
+        timelineSwitch.setAttribute('aria-label', 'Historical timeline scale');
+        const timelineScales: Array<{ scale: TimelineScale; label: string }> = [
+            { scale: 'logarithmic', label: 'Log' },
+            { scale: 'linear', label: 'Linear' },
+        ];
+        timelineScales.forEach(({ scale, label }) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = label;
+            button.classList.toggle('active', timelineScale === scale);
+            button.setAttribute('aria-pressed', String(timelineScale === scale));
+            button.addEventListener('click', () => {
+                if (timelineScale === scale) return;
+                timelineScale = scale;
+                destroyCharts();
+                renderResults();
+                setupTableInteractivity();
+            });
+            timelineSwitch.appendChild(button);
+        });
+        timelineControls.appendChild(timelineSwitch);
+        topHeader.appendChild(timelineControls);
+    }
+
     app.appendChild(topHeader);
 
     if (viewMode === 'last-run') {
@@ -311,7 +350,7 @@ function init() {
 
 function getHistoricalChartData(benchmarkName: string, metric: Metric = 'median') {
     const benchmark = lastRun.results.find((b) => b.name === benchmarkName);
-    if (!benchmark) return { datasets: [] };
+    if (!benchmark) return { datasets: [], latestTimestamp: 0 };
 
     // Find the config with largest parameters
     const largestConfig = findLargestConfig(benchmark.results);
@@ -322,6 +361,9 @@ function getHistoricalChartData(benchmarkName: string, metric: Metric = 'median'
         typedData.runs,
         selectedRunnerId,
         lastRun.suite
+    );
+    const latestTimestamp = Math.max(
+        ...comparableRuns.map((run) => new Date(run.timestamp).getTime())
     );
     // Collect data for all duration keys in the largest config
     const datasets = keys.map((key, index) => {
@@ -340,8 +382,12 @@ function getHistoricalChartData(benchmarkName: string, metric: Metric = 'median'
                 if (!result || !result.duration_results?.[key]) {
                     return null;
                 } else {
+                    const timestamp = new Date(run.timestamp).getTime();
                     return {
-                        x: new Date(run.timestamp).getTime(),
+                        x:
+                            timelineScale === 'logarithmic'
+                                ? toLogarithmicTimelinePosition(timestamp, latestTimestamp)
+                                : timestamp,
                         y: result.duration_results[key][metric],
                     };
                 }
@@ -356,7 +402,7 @@ function getHistoricalChartData(benchmarkName: string, metric: Metric = 'median'
         };
     });
 
-    return { datasets };
+    return { datasets, latestTimestamp };
 }
 
 function getChartData(benchmarkName: string, metric: Metric) {
@@ -515,7 +561,7 @@ function setupTableInteractivity() {
     historicalCanvases.forEach((canvas) => {
         const benchmarkName = canvas.getAttribute('data-benchmark')!;
         const historicalChartId = canvas.id;
-        const { datasets } = getHistoricalChartData(benchmarkName);
+        const { datasets, latestTimestamp } = getHistoricalChartData(benchmarkName);
         charts[historicalChartId] = new Chart(canvas as HTMLCanvasElement, {
             type: 'line',
             data: {
@@ -527,17 +573,52 @@ function setupTableInteractivity() {
                 },
                 responsive: true,
                 maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        type: 'time',
-                        title: { display: true, text: 'Run Timestamp' },
-                        time: {
-                            unit: 'day',
-                            displayFormats: {
-                                day: 'MMM dd',
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: (items) => {
+                                const x = items[0]?.parsed.x;
+                                if (typeof x !== 'number') return '';
+                                const timestamp =
+                                    timelineScale === 'logarithmic'
+                                        ? fromLogarithmicTimelinePosition(x, latestTimestamp)
+                                        : x;
+                                return new Date(timestamp).toLocaleString();
                             },
                         },
                     },
+                },
+                scales: {
+                    x:
+                        timelineScale === 'logarithmic'
+                            ? {
+                                  type: 'logarithmic',
+                                  title: { display: true, text: 'Run Timestamp (log)' },
+                                  ticks: {
+                                      maxTicksLimit: 6,
+                                      callback: (value) => {
+                                          const timestamp = fromLogarithmicTimelinePosition(
+                                              Number(value),
+                                              latestTimestamp
+                                          );
+                                          return new Date(timestamp).toLocaleDateString(undefined, {
+                                              month: 'short',
+                                              day: 'numeric',
+                                              year: 'numeric',
+                                          });
+                                      },
+                                  },
+                              }
+                            : {
+                                  type: 'time',
+                                  title: { display: true, text: 'Run Timestamp' },
+                                  time: {
+                                      unit: 'day',
+                                      displayFormats: {
+                                          day: 'MMM dd',
+                                      },
+                                  },
+                              },
                     y: {
                         beginAtZero: true,
                         title: { display: true, text: 'Duration (ms)' },

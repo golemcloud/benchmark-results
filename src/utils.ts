@@ -2,6 +2,7 @@ import { BenchmarkRunResult, BenchmarkSuiteResult, Metric, MetricKeys, RunConfig
 
 export const LEGACY_RUNNER_ID = 'github-actions-blacksmith-32vcpu';
 export const LEGACY_RUNNER_LABEL = 'GitHub Actions (Blacksmith 32 vCPU)';
+const DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
 
 export interface RunnerOption {
     id: string;
@@ -101,4 +102,14 @@ export function findLargestConfig(results: BenchmarkRunResult[]): BenchmarkRunRe
 
 export function isMetric(metric: string): metric is Metric {
     return MetricKeys.includes(metric);
+}
+
+export function toLogarithmicTimelinePosition(timestamp: number, latestTimestamp: number): number {
+    const ageInDays = Math.max(0, latestTimestamp - timestamp) / DAY_IN_MILLISECONDS;
+    return 1 / (1 + ageInDays);
+}
+
+export function fromLogarithmicTimelinePosition(position: number, latestTimestamp: number): number {
+    const ageInDays = 1 / position - 1;
+    return latestTimestamp - ageInDays * DAY_IN_MILLISECONDS;
 }
