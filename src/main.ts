@@ -6,7 +6,6 @@ import sanitizeHtml from 'sanitize-html';
 import { Chart } from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
 import data from '../results/results.json';
-import { normalizeResults } from './normalizeResults';
 import {
     BenchmarkSuiteResult,
     BenchmarkSuiteResultCollection,
@@ -26,7 +25,7 @@ import {
     isMetric,
 } from './utils';
 
-const typedData = normalizeResults(data as BenchmarkSuiteResultCollection);
+const typedData = data as BenchmarkSuiteResultCollection;
 const charts: Record<string, Chart> = {};
 const initialRun = typedData.runs[typedData.runs.length - 1];
 const selectedSuite = initialRun.suite;
