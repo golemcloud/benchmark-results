@@ -31,6 +31,8 @@ const initialRun = typedData.runs[typedData.runs.length - 1];
 const selectedSuite = initialRun.suite;
 let selectedRunnerId = getRunnerId(initialRun);
 let lastRun: BenchmarkSuiteResult = initialRun;
+type ViewMode = 'historical' | 'last-run';
+let viewMode: ViewMode = 'historical';
 const CHART_COLORS = [
     'blue',
     'red',
@@ -118,6 +120,19 @@ function renderBenchmark(benchmark: BenchmarkResult): HTMLElement {
     h3.textContent = benchmark.name;
     section.appendChild(h3);
 
+    if (viewMode === 'historical') {
+        const historicalContainer = document.createElement('div');
+        historicalContainer.className = 'chart-container';
+        const historicalCanvas = document.createElement('canvas');
+        historicalCanvas.id = `historical-chart-${benchmark.name.replace(/\s+/g, '-')}`;
+        historicalCanvas.className = 'historical-chart';
+        historicalCanvas.setAttribute('data-benchmark', benchmark.name);
+        historicalContainer.appendChild(historicalCanvas);
+        section.appendChild(historicalContainer);
+
+        return section;
+    }
+
     const descDiv = document.createElement('div');
     descDiv.className = 'description';
     descDiv.innerHTML = sanitizeHtml(marked.parse(benchmark.description));
@@ -151,29 +166,24 @@ function renderBenchmark(benchmark: BenchmarkResult): HTMLElement {
     chartContainer.appendChild(chartCanvas);
     section.appendChild(chartContainer);
 
-    // Add historical chart
-    const historicalContainer = document.createElement('div');
-    historicalContainer.className = 'chart-container';
-    const historicalH4 = document.createElement('h4');
-    historicalH4.textContent = 'Historical Trend';
-    section.appendChild(historicalH4);
-    const historicalCanvas = document.createElement('canvas');
-    historicalCanvas.id = `historical-chart-${benchmark.name.replace(/\s+/g, '-')}`;
-    historicalCanvas.className = 'historical-chart';
-    historicalCanvas.setAttribute('data-benchmark', benchmark.name);
-    historicalContainer.appendChild(historicalCanvas);
-    section.appendChild(historicalContainer);
-
     return section;
+}
+
+function destroyCharts() {
+    Object.values(charts).forEach((chart) => chart.destroy());
+    Object.keys(charts).forEach((key) => delete charts[key]);
 }
 
 function renderResults() {
     const app = document.querySelector<HTMLDivElement>('#app')!;
     app.innerHTML = ''; // Clear app
 
+    const topHeader = document.createElement('header');
+    topHeader.className = 'top-header';
+
     const h1 = document.createElement('h1');
     h1.textContent = 'Benchmark Results';
-    app.appendChild(h1);
+    topHeader.appendChild(h1);
 
     const runnerControls = document.createElement('div');
     runnerControls.className = 'runner-controls';
@@ -194,70 +204,99 @@ function renderResults() {
         const latestRun = getLatestRun(typedData.runs, selectedRunnerId, selectedSuite);
         if (!latestRun) return;
         lastRun = latestRun;
-        Object.values(charts).forEach((chart) => chart.destroy());
-        Object.keys(charts).forEach((key) => delete charts[key]);
+        destroyCharts();
         renderResults();
         setupTableInteractivity();
     });
     runnerLabel.appendChild(runnerSelect);
     runnerControls.appendChild(runnerLabel);
-    app.appendChild(runnerControls);
+    topHeader.appendChild(runnerControls);
 
-    const header = document.createElement('div');
-    header.className = 'header';
+    const viewSwitch = document.createElement('nav');
+    viewSwitch.className = 'view-switch';
+    viewSwitch.setAttribute('aria-label', 'Benchmark view');
+    const views: Array<{ mode: ViewMode; label: string }> = [
+        { mode: 'historical', label: 'Historical' },
+        { mode: 'last-run', label: 'Last run' },
+    ];
+    views.forEach(({ mode, label }) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = label;
+        button.classList.toggle('active', viewMode === mode);
+        button.setAttribute('aria-pressed', String(viewMode === mode));
+        button.addEventListener('click', () => {
+            if (viewMode === mode) return;
+            viewMode = mode;
+            destroyCharts();
+            window.scrollTo({ top: 0 });
+            renderResults();
+            setupTableInteractivity();
+        });
+        viewSwitch.appendChild(button);
+    });
+    topHeader.appendChild(viewSwitch);
+    app.appendChild(topHeader);
 
-    const h2 = document.createElement('h2');
-    h2.textContent = lastRun.suite;
-    header.appendChild(h2);
+    if (viewMode === 'last-run') {
+        const header = document.createElement('div');
+        header.className = 'run-header';
 
-    const pVersion = document.createElement('p');
-    const strongVersion = document.createElement('strong');
-    strongVersion.textContent = 'Version: ';
-    pVersion.appendChild(strongVersion);
-    pVersion.appendChild(document.createTextNode(lastRun.version));
-    header.appendChild(pVersion);
+        const h2 = document.createElement('h2');
+        h2.textContent = lastRun.suite;
+        header.appendChild(h2);
 
-    const pTimestamp = document.createElement('p');
-    const strongTimestamp = document.createElement('strong');
-    strongTimestamp.textContent = 'Timestamp: ';
-    pTimestamp.appendChild(strongTimestamp);
-    pTimestamp.appendChild(document.createTextNode(new Date(lastRun.timestamp).toLocaleString()));
-    header.appendChild(pTimestamp);
+        const pVersion = document.createElement('p');
+        const strongVersion = document.createElement('strong');
+        strongVersion.textContent = 'Version: ';
+        pVersion.appendChild(strongVersion);
+        pVersion.appendChild(document.createTextNode(lastRun.version));
+        header.appendChild(pVersion);
 
-    const pRunner = document.createElement('p');
-    const strongRunner = document.createElement('strong');
-    strongRunner.textContent = 'Runner: ';
-    pRunner.appendChild(strongRunner);
-    pRunner.appendChild(document.createTextNode(getRunnerLabel(lastRun)));
-    header.appendChild(pRunner);
+        const pTimestamp = document.createElement('p');
+        const strongTimestamp = document.createElement('strong');
+        strongTimestamp.textContent = 'Timestamp: ';
+        pTimestamp.appendChild(strongTimestamp);
+        pTimestamp.appendChild(
+            document.createTextNode(new Date(lastRun.timestamp).toLocaleString())
+        );
+        header.appendChild(pTimestamp);
 
-    if (lastRun.source) {
-        const pSource = document.createElement('p');
-        const strongSource = document.createElement('strong');
-        strongSource.textContent = 'Source: ';
-        pSource.appendChild(strongSource);
+        const pRunner = document.createElement('p');
+        const strongRunner = document.createElement('strong');
+        strongRunner.textContent = 'Runner: ';
+        pRunner.appendChild(strongRunner);
+        pRunner.appendChild(document.createTextNode(getRunnerLabel(lastRun)));
+        header.appendChild(pRunner);
 
-        const sourceDisplay = getSourceDisplay(lastRun)!;
-        const commitUrl = getCommitUrl(lastRun);
-        if (commitUrl) {
-            const link = document.createElement('a');
-            link.href = commitUrl;
-            link.textContent = sourceDisplay.label;
-            pSource.appendChild(link);
-        } else {
-            pSource.appendChild(document.createTextNode(sourceDisplay.label));
+        if (lastRun.source) {
+            const pSource = document.createElement('p');
+            const strongSource = document.createElement('strong');
+            strongSource.textContent = 'Source: ';
+            pSource.appendChild(strongSource);
+
+            const sourceDisplay = getSourceDisplay(lastRun)!;
+            const commitUrl = getCommitUrl(lastRun);
+            if (commitUrl) {
+                const link = document.createElement('a');
+                link.href = commitUrl;
+                link.textContent = sourceDisplay.label;
+                pSource.appendChild(link);
+            } else {
+                pSource.appendChild(document.createTextNode(sourceDisplay.label));
+            }
+            if (sourceDisplay.ref) {
+                pSource.appendChild(document.createTextNode(` (${sourceDisplay.ref})`));
+            }
+            header.appendChild(pSource);
         }
-        if (sourceDisplay.ref) {
-            pSource.appendChild(document.createTextNode(` (${sourceDisplay.ref})`));
-        }
-        header.appendChild(pSource);
+
+        const pre = document.createElement('pre');
+        pre.textContent = lastRun.environment;
+        header.appendChild(pre);
+
+        app.appendChild(header);
     }
-
-    const pre = document.createElement('pre');
-    pre.textContent = lastRun.environment;
-    header.appendChild(pre);
-
-    app.appendChild(header);
 
     lastRun.results.forEach((benchmark) => {
         const benchmarkElement = renderBenchmark(benchmark);

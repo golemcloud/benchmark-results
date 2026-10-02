@@ -1,16 +1,17 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 20px;
     background-color: #f9f9f9;
 }
 
 h1 {
     color: #333;
+    font-size: 1.5rem;
+    margin: 0;
 }
 
 .runner-controls {
-    margin-bottom: 20px;
+    margin-left: auto;
 }
 
 .runner-controls label {
@@ -22,15 +23,64 @@ h1 {
     padding: 6px 8px;
 }
 
-.header {
+.top-header {
+    position: sticky;
+    z-index: 10;
+    top: 0;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 14px 20px;
+    border-bottom: 1px solid #ddd;
+    background: rgba(249, 249, 249, 0.96);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.view-switch {
+    display: flex;
+    overflow: hidden;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+}
+
+.view-switch button {
+    padding: 7px 14px;
+    border: 0;
+    background: white;
+    color: #444;
+    cursor: pointer;
+    font: inherit;
+}
+
+.view-switch button + button {
+    border-left: 1px solid #bbb;
+}
+
+.view-switch button:hover {
+    background: #f0f0f0;
+}
+
+.view-switch button.active {
+    background: #285ea8;
+    color: white;
+}
+
+.run-header,
+.benchmark {
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.run-header {
     background: white;
     padding: 20px;
     border-radius: 8px;
+    margin-top: 20px;
     margin-bottom: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.header pre {
+.run-header pre {
     background: #f4f4f4;
     padding: 10px;
     border-radius: 4px;
@@ -40,6 +90,7 @@ h1 {
 .benchmark {
     background: white;
     padding: 20px;
+    margin-top: 20px;
     margin-bottom: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -142,4 +193,18 @@ tr:nth-child(even) {
 
 .chart-container canvas {
     display: block;
+    max-width: 100%;
+}
+
+@media (max-width: 700px) {
+    .top-header {
+        flex-wrap: wrap;
+        gap: 10px 16px;
+    }
+
+    .runner-controls {
+        order: 3;
+        width: 100%;
+        margin-left: 0;
+    }
 }
