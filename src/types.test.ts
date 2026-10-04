@@ -1,32 +1,33 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { describe, it, expect } from 'vitest';
-import data from '../results/results.json';
-import type { BenchmarkSuiteResultCollection } from './types';
+import type { BenchmarkHistoryIndex, BenchmarkSuiteResult } from './types';
 
 describe('Data types validation', () => {
-    it('should match BenchmarkSuiteResultCollection type', () => {
-        // This will fail at compile time if the data doesn't match the type
-        const typedData: BenchmarkSuiteResultCollection = data;
+    it('links every history entry to a summary-only run file', () => {
+        const dataDirectory = 'public/data';
+        const typedData = JSON.parse(
+            fs.readFileSync(path.join(dataDirectory, 'index.json'), 'utf8')
+        ) as BenchmarkHistoryIndex;
 
-        // Runtime checks for basic structure
         expect(typedData).toHaveProperty('runs');
         expect(Array.isArray(typedData.runs)).toBe(true);
 
         typedData.runs.forEach((run) => {
             expect(run).toHaveProperty('suite');
-            expect(run).toHaveProperty('environment');
-            expect(run).toHaveProperty('version');
             expect(run).toHaveProperty('timestamp');
+            expect(run).toHaveProperty('file');
             expect(run).toHaveProperty('results');
-            expect(Array.isArray(run.results)).toBe(true);
+            expect(fs.existsSync(path.join(dataDirectory, run.file))).toBe(true);
+        });
 
-            run.results.forEach((result) => {
-                expect(result).toHaveProperty('name');
-                expect(result).toHaveProperty('description');
-                expect(result).toHaveProperty('runs');
-                expect(result).toHaveProperty('results');
-                expect(Array.isArray(result.runs)).toBe(true);
-                expect(Array.isArray(result.results)).toBe(true);
-            });
+        const latest = typedData.runs[typedData.runs.length - 1];
+        const detail = JSON.parse(
+            fs.readFileSync(path.join(dataDirectory, latest.file), 'utf8')
+        ) as BenchmarkSuiteResult;
+        expect(detail.timestamp).toBe(latest.timestamp);
+        detail.results.forEach((benchmark) => {
+            expect(benchmark.results.length).toBe(benchmark.runs.length);
         });
     });
 });

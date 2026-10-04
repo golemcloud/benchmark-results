@@ -1,4 +1,4 @@
-import { BenchmarkRunResult, BenchmarkSuiteResult, Metric, MetricKeys, RunConfig } from './types';
+import { BenchmarkRunMetadata, BenchmarkRunResult, Metric, MetricKeys, RunConfig } from './types';
 
 export const LEGACY_RUNNER_ID = 'github-actions-blacksmith-32vcpu';
 export const LEGACY_RUNNER_LABEL = 'GitHub Actions (Blacksmith 32 vCPU)';
@@ -14,18 +14,18 @@ export interface SourceDisplay {
     ref?: string;
 }
 
-export function getRunnerId(run: BenchmarkSuiteResult): string {
+export function getRunnerId(run: BenchmarkRunMetadata): string {
     return run.runner?.id ?? LEGACY_RUNNER_ID;
 }
 
-export function getRunnerLabel(run: BenchmarkSuiteResult): string {
+export function getRunnerLabel(run: BenchmarkRunMetadata): string {
     return (
         run.runner?.label ??
         (getRunnerId(run) === LEGACY_RUNNER_ID ? LEGACY_RUNNER_LABEL : getRunnerId(run))
     );
 }
 
-export function getRunnerOptions(runs: BenchmarkSuiteResult[], suite: string): RunnerOption[] {
+export function getRunnerOptions(runs: BenchmarkRunMetadata[], suite: string): RunnerOption[] {
     const runners = new Map<string, string>();
     runs.filter((run) => run.suite === suite).forEach((run) => {
         const runnerId = getRunnerId(run);
@@ -37,18 +37,18 @@ export function getRunnerOptions(runs: BenchmarkSuiteResult[], suite: string): R
 }
 
 export function getRunsForRunnerAndSuite(
-    runs: BenchmarkSuiteResult[],
+    runs: BenchmarkRunMetadata[],
     runnerId: string,
     suite: string
-): BenchmarkSuiteResult[] {
+): BenchmarkRunMetadata[] {
     return runs.filter((run) => getRunnerId(run) === runnerId && run.suite === suite);
 }
 
 export function getLatestRun(
-    runs: BenchmarkSuiteResult[],
+    runs: BenchmarkRunMetadata[],
     runnerId: string,
     suite: string
-): BenchmarkSuiteResult | undefined {
+): BenchmarkRunMetadata | undefined {
     for (let index = runs.length - 1; index >= 0; index--) {
         if (getRunnerId(runs[index]) === runnerId && runs[index].suite === suite) {
             return runs[index];
@@ -57,7 +57,7 @@ export function getLatestRun(
     return undefined;
 }
 
-export function getCommitUrl(run: BenchmarkSuiteResult): string | undefined {
+export function getCommitUrl(run: BenchmarkRunMetadata): string | undefined {
     const repository = run.source?.repository;
     const commitSha = run.source?.commitSha;
     if (!repository || !commitSha) return undefined;
@@ -74,7 +74,7 @@ export function getCommitUrl(run: BenchmarkSuiteResult): string | undefined {
     return `https://github.com/${repository}/commit/${commitSha}`;
 }
 
-export function getSourceDisplay(run: BenchmarkSuiteResult): SourceDisplay | undefined {
+export function getSourceDisplay(run: BenchmarkRunMetadata): SourceDisplay | undefined {
     const source = run.source;
     if (!source) return undefined;
 

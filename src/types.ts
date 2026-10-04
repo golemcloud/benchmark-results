@@ -2,14 +2,36 @@ export interface BenchmarkSuiteResultCollection {
     runs: BenchmarkSuiteResult[];
 }
 
-export interface BenchmarkSuiteResult {
+export interface BenchmarkRunMetadata {
     suite: string;
-    environment: string;
-    version: string;
     timestamp: string;
-    results: BenchmarkResult[];
     runner?: BenchmarkRunner;
     source?: BenchmarkSource;
+}
+
+export interface BenchmarkSuiteResult extends BenchmarkRunMetadata {
+    environment: string;
+    version: string;
+    results: BenchmarkResult[];
+}
+
+export interface BenchmarkHistoryIndex {
+    runs: BenchmarkHistoryRun[];
+}
+
+export interface BenchmarkHistoryRun extends BenchmarkRunMetadata {
+    file: string;
+    results: BenchmarkHistoryResult[];
+}
+
+export interface BenchmarkHistoryResult {
+    name: string;
+    results: BenchmarkHistoryRunResult[];
+}
+
+export interface BenchmarkHistoryRunResult {
+    run_config: RunConfig;
+    duration_results: Record<string, number>;
 }
 
 export interface BenchmarkRunner {

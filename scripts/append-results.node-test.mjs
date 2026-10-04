@@ -26,7 +26,16 @@ function sampleRun(overrides = {}) {
                 results: [
                     {
                         run_config: { clusterSize: 1, size: 1, length: 1 },
-                        duration_results: { invocation: { avg: 1, min: 1, max: 1 } },
+                        duration_results: {
+                            invocation: {
+                                avg: 1,
+                                min: 1,
+                                max: 1,
+                                median: 1,
+                                all: [1],
+                                per_iteration: [[1]],
+                            },
+                        },
                     },
                 ],
             },
@@ -38,48 +47,64 @@ function sampleRun(overrides = {}) {
 function withFiles(callback) {
     const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'benchmark-results-'));
     const inputPath = path.join(directory, 'input.json');
-    const resultsPath = path.join(directory, 'results.json');
+    const indexPath = path.join(directory, 'data', 'index.json');
     const run = sampleRun();
     fs.writeFileSync(inputPath, JSON.stringify({ runs: [run] }, null, 2));
-    fs.writeFileSync(resultsPath, '{\n  "runs": [\n    {\n      "suite": "legacy"\n    }\n  ]\n}');
+    fs.mkdirSync(path.dirname(indexPath), { recursive: true });
+    fs.writeFileSync(indexPath, '{"runs":[]}\n');
     try {
-        callback({ inputPath, resultsPath, run });
+        callback({ directory, inputPath, indexPath, run });
     } finally {
         fs.rmSync(directory, { recursive: true, force: true });
     }
 }
 
-test('appends one validated run without rewriting existing content', () => {
-    withFiles(({ inputPath, resultsPath, run }) => {
-        const before = fs.readFileSync(resultsPath, 'utf8');
-        assert.equal(appendResults(inputPath, resultsPath).status, 'appended');
-        const after = fs.readFileSync(resultsPath, 'utf8');
-        assert.ok(after.startsWith(`${before.slice(0, -'\n  ]\n}'.length)},`));
-        assert.deepEqual(JSON.parse(after).runs, [{ suite: 'legacy' }, run]);
+test('stores a summary-only run and compact history', () => {
+    withFiles(({ inputPath, indexPath, run }) => {
+        const result = appendResults(inputPath, indexPath);
+        assert.equal(result.status, 'appended');
+
+        const index = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
+        assert.equal(index.runs.length, 1);
+        assert.deepEqual(index.runs[0].results[0].results[0].duration_results, {
+            invocation: 1,
+        });
+
+        const detailPath = path.join(path.dirname(indexPath), index.runs[0].file);
+        const detail = JSON.parse(fs.readFileSync(detailPath, 'utf8'));
+        assert.equal(detail.timestamp, run.timestamp);
+        assert.equal(detail.results[0].results[0].duration_results.invocation.median, 1);
+        assert.equal(detail.results[0].results[0].duration_results.invocation.all, undefined);
+        assert.equal(
+            detail.results[0].results[0].duration_results.invocation.per_iteration,
+            undefined
+        );
     });
 });
 
 test('treats an identical run as an idempotent retry', () => {
-    withFiles(({ inputPath, resultsPath }) => {
-        appendResults(inputPath, resultsPath);
-        const once = fs.readFileSync(resultsPath, 'utf8');
-        assert.equal(appendResults(inputPath, resultsPath).status, 'already-present');
-        assert.equal(fs.readFileSync(resultsPath, 'utf8'), once);
+    withFiles(({ inputPath, indexPath }) => {
+        appendResults(inputPath, indexPath);
+        const once = fs.readFileSync(indexPath, 'utf8');
+        assert.equal(appendResults(inputPath, indexPath).status, 'already-present');
+        assert.equal(fs.readFileSync(indexPath, 'utf8'), once);
     });
 });
 
 test('rejects a conflicting run with the same identity', () => {
-    withFiles(({ inputPath, resultsPath, run }) => {
-        appendResults(inputPath, resultsPath);
+    withFiles(({ inputPath, indexPath, run }) => {
+        appendResults(inputPath, indexPath);
         fs.writeFileSync(
             inputPath,
             JSON.stringify({ runs: [sampleRun({ environment: 'different environment' })] })
         );
         assert.throws(
-            () => appendResults(inputPath, resultsPath),
+            () => appendResults(inputPath, indexPath),
             /a different run already exists/
         );
-        assert.deepEqual(JSON.parse(fs.readFileSync(resultsPath, 'utf8')).runs[1], run);
+        const index = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
+        const detailPath = path.join(path.dirname(indexPath), index.runs[0].file);
+        assert.equal(JSON.parse(fs.readFileSync(detailPath, 'utf8')).environment, run.environment);
     });
 });
 
