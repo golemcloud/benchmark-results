@@ -12,7 +12,7 @@
 
 ## Architecture
 - **Framework**: Vite + TypeScript SPA
-- **Data**: Static JSON (`results/results.json`) loaded at runtime
+- **Data**: Static history index and per-run JSON (`public/data/`) fetched at runtime
 - **Rendering**: DOM manipulation for tables/charts (Chart.js), markdown (marked)
 - **Structure**: `src/` with main.ts, types.ts, style.css; no backend/subprojects
 - **APIs**: None (static app)

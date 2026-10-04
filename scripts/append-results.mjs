@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import crypto from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -104,55 +105,99 @@ function runIdentity(run) {
     return `${run.runner?.id ?? 'legacy'}\0${run.suite}\0${run.timestamp}`;
 }
 
-export function appendResults(inputPath, resultsPath) {
+function withoutRawSamples(run) {
+    return JSON.parse(
+        JSON.stringify(run, (key, value) =>
+            key === 'all' || key === 'per_iteration' ? undefined : value
+        )
+    );
+}
+
+function historyRun(run, file) {
+    return {
+        suite: run.suite,
+        timestamp: run.timestamp,
+        runner: run.runner,
+        source: run.source,
+        file,
+        results: run.results.map((benchmark) => ({
+            name: benchmark.name,
+            results: benchmark.results.map((result) => ({
+                run_config: result.run_config,
+                duration_results: Object.fromEntries(
+                    Object.entries(result.duration_results ?? {})
+                        .filter(([, summary]) => Number.isFinite(summary.median))
+                        .map(([measurement, summary]) => [measurement, summary.median])
+                ),
+            })),
+        })),
+    };
+}
+
+export function storedRun(run) {
+    const file = `runs/${crypto.createHash('sha256').update(runIdentity(run)).digest('hex').slice(0, 24)}.json`;
+    const detail = withoutRawSamples(run);
+    return { detail, history: historyRun(detail, file) };
+}
+
+export function serializeIndex(index) {
+    return `{"runs":[\n${index.runs.map((run) => JSON.stringify(run)).join(',\n')}\n]}\n`;
+}
+
+function writeAtomically(filePath, content) {
+    fs.mkdirSync(path.dirname(filePath), { recursive: true });
+    const temporaryPath = path.join(
+        path.dirname(filePath),
+        `.${path.basename(filePath)}.${process.pid}.tmp`
+    );
+    try {
+        fs.writeFileSync(temporaryPath, content);
+        JSON.parse(fs.readFileSync(temporaryPath, 'utf8'));
+        fs.renameSync(temporaryPath, filePath);
+    } finally {
+        fs.rmSync(temporaryPath, { force: true });
+    }
+}
+
+export function appendResults(inputPath, indexPath = 'public/data/index.json') {
     const incoming = JSON.parse(fs.readFileSync(inputPath, 'utf8'));
     const run = validateIncomingCollection(incoming);
-    const existingText = fs.readFileSync(resultsPath, 'utf8');
-    const existing = requireObject(JSON.parse(existingText), 'results file');
-    if (!Array.isArray(existing.runs)) {
-        throw new Error('results file must contain a runs array');
+    const index = requireObject(JSON.parse(fs.readFileSync(indexPath, 'utf8')), 'history index');
+    if (!Array.isArray(index.runs)) {
+        throw new Error('history index must contain a runs array');
     }
 
     const identity = runIdentity(run);
-    const duplicate = existing.runs.find((candidate) => runIdentity(candidate) === identity);
+    const { detail, history } = storedRun(run);
+    const runPath = path.join(path.dirname(indexPath), history.file);
+    const duplicate = index.runs.find((candidate) => runIdentity(candidate) === identity);
     if (duplicate !== undefined) {
-        if (JSON.stringify(duplicate) !== JSON.stringify(run)) {
+        const existingDetail = fs.existsSync(runPath)
+            ? JSON.parse(fs.readFileSync(runPath, 'utf8'))
+            : undefined;
+        if (
+            JSON.stringify(duplicate) !== JSON.stringify(history) ||
+            JSON.stringify(existingDetail) !== JSON.stringify(detail)
+        ) {
             throw new Error(
                 `a different run already exists for ${run.runner.id} at ${run.timestamp}`
             );
         }
-        return { status: 'already-present', run };
+        return { status: 'already-present', run, files: [indexPath, runPath] };
     }
 
-    const suffix = '\n  ]\n}';
-    if (!existingText.endsWith(suffix)) {
-        throw new Error('results file does not use the expected pretty-printed JSON layout');
-    }
-    const serializedRun = JSON.stringify(run, null, 2)
-        .split('\n')
-        .map((line) => `    ${line}`)
-        .join('\n');
-    const updatedText = `${existingText.slice(0, -suffix.length)},\n${serializedRun}${suffix}`;
-    const temporaryPath = path.join(
-        path.dirname(resultsPath),
-        `.${path.basename(resultsPath)}.${process.pid}.tmp`
-    );
-    try {
-        fs.writeFileSync(temporaryPath, updatedText, { mode: fs.statSync(resultsPath).mode });
-        JSON.parse(fs.readFileSync(temporaryPath, 'utf8'));
-        fs.renameSync(temporaryPath, resultsPath);
-    } finally {
-        fs.rmSync(temporaryPath, { force: true });
-    }
-    return { status: 'appended', run };
+    writeAtomically(runPath, `${JSON.stringify(detail)}\n`);
+    index.runs.push(history);
+    writeAtomically(indexPath, serializeIndex(index));
+    return { status: 'appended', run, files: [indexPath, runPath] };
 }
 
 function main() {
-    const [inputPath, resultsPath = 'results/results.json'] = process.argv.slice(2);
+    const [inputPath, indexPath] = process.argv.slice(2);
     if (!inputPath) {
-        throw new Error('usage: npm run append-results -- <run.json> [results.json]');
+        throw new Error('usage: npm run append-results -- <run.json> [index.json]');
     }
-    const result = appendResults(inputPath, resultsPath);
+    const result = appendResults(inputPath, indexPath);
     process.stdout.write(
         `${result.status}: ${result.run.runner.id} ${result.run.suite} ${result.run.timestamp}\n`
     );

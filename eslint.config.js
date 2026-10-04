@@ -14,6 +14,7 @@ export default [
       sourceType: 'module',
       globals: {
         console: 'readonly',
+        fetch: 'readonly',
         window: 'readonly',
         document: 'readonly',
         HTMLDivElement: 'readonly',

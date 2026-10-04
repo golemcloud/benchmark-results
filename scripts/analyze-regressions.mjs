@@ -29,7 +29,7 @@ function collectMeasurements(run) {
                     benchmark: benchmark.name,
                     config: result.run_config,
                     measurement,
-                    value: summary.median,
+                    value: typeof summary === 'number' ? summary : summary.median,
                 });
             }
         }
@@ -265,7 +265,7 @@ export function analyzeRegressions(
 }
 
 function parseArguments(argv) {
-    const options = { results: 'results/results.json' };
+    const options = { results: 'public/data/index.json' };
     for (let index = 0; index < argv.length; index++) {
         const argument = argv[index];
         if (argument === '--runner') options.runner = argv[++index];

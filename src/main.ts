@@ -5,10 +5,10 @@ import { marked } from 'marked';
 import sanitizeHtml from 'sanitize-html';
 import { Chart } from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
-import data from '../results/results.json';
 import {
+    BenchmarkHistoryIndex,
+    BenchmarkHistoryRun,
     BenchmarkSuiteResult,
-    BenchmarkSuiteResultCollection,
     BenchmarkResult,
     BenchmarkRunResult,
     type Metric,
@@ -27,12 +27,11 @@ import {
     toLogarithmicTimelinePosition,
 } from './utils';
 
-const typedData = data as BenchmarkSuiteResultCollection;
+let typedData: BenchmarkHistoryIndex;
 const charts: Record<string, Chart> = {};
-const initialRun = typedData.runs[typedData.runs.length - 1];
-const selectedSuite = initialRun.suite;
-let selectedRunnerId = getRunnerId(initialRun);
-let lastRun: BenchmarkSuiteResult = initialRun;
+let selectedSuite: string;
+let selectedRunnerId: string;
+let lastRun: BenchmarkSuiteResult;
 type ViewMode = 'historical' | 'last-run';
 let viewMode: ViewMode = 'historical';
 type TimelineScale = 'logarithmic' | 'linear';
@@ -49,6 +48,19 @@ const CHART_COLORS = [
     'olive',
     'cyan',
 ];
+const DATA_BASE_URL = `${import.meta.env.BASE_URL}data/`;
+
+async function fetchJson<T>(path: string): Promise<T> {
+    const response = await fetch(`${DATA_BASE_URL}${path}`);
+    if (!response.ok) {
+        throw new Error(`Failed to load benchmark data (${response.status})`);
+    }
+    return response.json() as Promise<T>;
+}
+
+async function loadRun(run: BenchmarkHistoryRun): Promise<BenchmarkSuiteResult> {
+    return fetchJson<BenchmarkSuiteResult>(run.file);
+}
 
 function renderTable(
     key: string,
@@ -203,11 +215,14 @@ function renderResults() {
         option.selected = runner.id === selectedRunnerId;
         runnerSelect.appendChild(option);
     });
-    runnerSelect.addEventListener('change', () => {
+    runnerSelect.addEventListener('change', async () => {
         selectedRunnerId = runnerSelect.value;
-        const latestRun = getLatestRun(typedData.runs, selectedRunnerId, selectedSuite);
+        const latestRun = getLatestRun(typedData.runs, selectedRunnerId, selectedSuite) as
+            | BenchmarkHistoryRun
+            | undefined;
         if (!latestRun) return;
-        lastRun = latestRun;
+        runnerSelect.disabled = true;
+        lastRun = await loadRun(latestRun);
         destroyCharts();
         renderResults();
         setupTableInteractivity();
@@ -343,12 +358,23 @@ function renderResults() {
     });
 }
 
-function init() {
-    renderResults();
-    setupTableInteractivity();
+async function init() {
+    try {
+        typedData = await fetchJson<BenchmarkHistoryIndex>('index.json');
+        const initialRun = typedData.runs[typedData.runs.length - 1];
+        if (!initialRun) throw new Error('No benchmark runs are available');
+        selectedSuite = initialRun.suite;
+        selectedRunnerId = getRunnerId(initialRun);
+        lastRun = await loadRun(initialRun);
+        renderResults();
+        setupTableInteractivity();
+    } catch (error) {
+        const app = document.querySelector<HTMLDivElement>('#app')!;
+        app.textContent = error instanceof Error ? error.message : String(error);
+    }
 }
 
-function getHistoricalChartData(benchmarkName: string, metric: Metric = 'median') {
+function getHistoricalChartData(benchmarkName: string) {
     const benchmark = lastRun.results.find((b) => b.name === benchmarkName);
     if (!benchmark) return { datasets: [], latestTimestamp: 0 };
 
@@ -361,7 +387,7 @@ function getHistoricalChartData(benchmarkName: string, metric: Metric = 'median'
         typedData.runs,
         selectedRunnerId,
         lastRun.suite
-    );
+    ) as BenchmarkHistoryRun[];
     const latestTimestamp = Math.max(
         ...comparableRuns.map((run) => new Date(run.timestamp).getTime())
     );
@@ -388,7 +414,7 @@ function getHistoricalChartData(benchmarkName: string, metric: Metric = 'median'
                             timelineScale === 'logarithmic'
                                 ? toLogarithmicTimelinePosition(timestamp, latestTimestamp)
                                 : timestamp,
-                        y: result.duration_results[key][metric],
+                        y: result.duration_results[key],
                     };
                 }
             })
@@ -537,15 +563,6 @@ function setupTableInteractivity() {
                         chart.data.datasets = datasets;
                         chart.update();
                     }
-
-                    // Update historical chart for the benchmark
-                    const historicalChartId = `historical-chart-${benchmarkName.replace(/\s+/g, '-')}`;
-                    const historicalChart = charts[historicalChartId];
-                    if (historicalChart) {
-                        const { datasets } = getHistoricalChartData(benchmarkName, metric);
-                        historicalChart.data.datasets = datasets;
-                        historicalChart.update();
-                    }
                 }
             });
         });
@@ -629,4 +646,4 @@ function setupTableInteractivity() {
     });
 }
 
-init();
+void init();

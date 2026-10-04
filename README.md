@@ -14,7 +14,10 @@ The app is automatically built and deployed to GitHub Pages on pushes to the `ma
 
 ## Data
 
-Benchmark results are embedded in the app as JSON data. Update the data in `src/main.ts` or import from JSON files in the `results/` directory.
+The static app fetches benchmark data from `public/data/` at runtime. `index.json` contains compact
+metadata and median history for charts. Each entry links to a minified summary-only file under
+`public/data/runs/`, which is loaded when that runner is selected. Raw `all` and `per_iteration`
+samples stay in the original benchmark artifact and are not copied into the site repository.
 
 Completed runs are appended with the validated, idempotent publisher:
 
@@ -24,13 +27,14 @@ npm run append-results -- /path/to/run.json
 
 The input must contain exactly one completed suite run with runner and source metadata. Replaying
 the identical runner, suite, and timestamp is a no-op; conflicting data for that identity is
-rejected. The command atomically updates `results/results.json` while preserving its append-only
-layout.
+rejected. The command writes one immutable run file, then atomically updates the history index.
+An interrupted write can leave an unreferenced run file, but never a history entry without its
+detail file; retrying safely completes the append.
 
 To analyze regressions for the latest Amp orb run:
 
 ```shell
-npm run analyze-regressions -- results/results.json --runner amp-orb-a1.xxlarge
+npm run analyze-regressions -- public/data/index.json --runner amp-orb-a1.xxlarge
 ```
 
 The analyzer deterministically replays runs from the same runner and suite. A series is a benchmark,
