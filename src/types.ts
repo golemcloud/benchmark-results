@@ -1,3 +1,5 @@
+import type { EntryIdentity } from './record';
+
 export interface BenchmarkSuiteResultCollection {
     runs: BenchmarkSuiteResult[];
 }
@@ -10,6 +12,8 @@ export interface BenchmarkRunMetadata {
 }
 
 export interface BenchmarkSuiteResult extends BenchmarkRunMetadata {
+    schema_version: 2;
+    harness_version: number;
     environment: string;
     version: string;
     results: BenchmarkResult[];
@@ -20,12 +24,13 @@ export interface BenchmarkHistoryIndex {
 }
 
 export interface BenchmarkHistoryRun extends BenchmarkRunMetadata {
+    schema_version: 2;
+    harness_version: number;
     file: string;
     results: BenchmarkHistoryResult[];
 }
 
-export interface BenchmarkHistoryResult {
-    name: string;
+export interface BenchmarkHistoryResult extends EntryIdentity {
     results: BenchmarkHistoryRunResult[];
 }
 
@@ -45,8 +50,7 @@ export interface BenchmarkSource {
     ref?: string;
 }
 
-export interface BenchmarkResult {
-    name: string;
+export interface BenchmarkResult extends EntryIdentity {
     description: string;
     runs: RunConfig[];
     results: BenchmarkRunResult[];
@@ -63,6 +67,7 @@ export interface BenchmarkRunResult {
     run_config: RunConfig;
     duration_results: Record<string, DurationResult>;
     count_results?: Record<string, CountResult>;
+    failures?: Record<string, { count: number; perIteration?: string[][] }>;
 }
 
 export interface DurationResult {
@@ -74,7 +79,7 @@ export interface DurationResult {
     p95: number;
     p99: number;
     all?: number[];
-    per_iteration?: number[][];
+    perIteration?: number[][];
 }
 
 export interface CountResult {
@@ -82,8 +87,8 @@ export interface CountResult {
     min: number;
     max: number;
     all?: number[];
-    per_iteration?: number[][];
+    perIteration?: number[][];
 }
 
-export type Metric = Exclude<keyof DurationResult, 'all' | 'per_iteration'>;
+export type Metric = Exclude<keyof DurationResult, 'all' | 'perIteration'>;
 export const MetricKeys = ['avg', 'min', 'max', 'median', 'p90', 'p95', 'p99'];

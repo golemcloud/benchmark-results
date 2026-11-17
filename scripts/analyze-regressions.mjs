@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { validateRecord } from './record.mjs';
 
 const DEFAULT_RUNNER = 'amp-orb-a1.xxlarge';
 const DEFAULT_SUITE = 'CI';
@@ -16,16 +17,16 @@ function configKey(config) {
 }
 
 function measurementKey(benchmark, result, measurement) {
-    return `${benchmark}\0${configKey(result.run_config)}\0${measurement}`;
+    return `${benchmark.series_key}\0${benchmark.name}\0${configKey(result.run_config)}\0${measurement}`;
 }
 
 function collectMeasurements(run) {
     const measurements = new Map();
     for (const benchmark of run.results) {
         for (const result of benchmark.results) {
-            for (const [measurement, summary] of Object.entries(result.duration_results)) {
-                measurements.set(measurementKey(benchmark.name, result, measurement), {
-                    series: measurementKey(benchmark.name, result, measurement),
+            for (const [measurement, summary] of Object.entries(result.duration_results ?? {})) {
+                measurements.set(measurementKey(benchmark, result, measurement), {
+                    series: measurementKey(benchmark, result, measurement),
                     benchmark: benchmark.name,
                     config: result.run_config,
                     measurement,
@@ -154,6 +155,7 @@ export function analyzeRegressions(
     collection,
     { runner = DEFAULT_RUNNER, suite = DEFAULT_SUITE, timestamp } = {}
 ) {
+    collection.runs.forEach(validateRecord);
     const runs = collection.runs
         .filter((run) => run.runner?.id === runner && run.suite === suite)
         .sort((left, right) => left.timestamp.localeCompare(right.timestamp));

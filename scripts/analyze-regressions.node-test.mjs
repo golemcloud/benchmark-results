@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import { analyzeRegressions } from './analyze-regressions.mjs';
+import { seriesKey } from './record.mjs';
 
 function benchmark(name, values, measurement = 'invocation') {
     return {
@@ -14,12 +15,18 @@ function benchmark(name, values, measurement = 'invocation') {
 }
 
 function run(day, groups, runner = 'amp-orb-a1.xxlarge') {
+    const environment = { runner_id: runner, hardware_fingerprint: 'cpu', storage_profile: 'postgres', sockets_enabled: false };
     return {
+        schema_version: 2,
+        harness_version: 1,
         suite: 'CI',
         timestamp: `2026-08-${String(day).padStart(2, '0')}T00:00:00Z`,
         runner: { id: runner },
         source: { commitSha: String(day).repeat(40).slice(0, 40) },
-        results: Object.entries(groups).map(([name, values]) => benchmark(name, values)),
+        results: Object.entries(groups).map(([name, values]) => ({
+            ...benchmark(name, values), entry_version: 1, iterations: 3,
+            measurement_environment: environment, series_key: seriesKey(1, 1, environment),
+        })),
     };
 }
 

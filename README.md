@@ -4,6 +4,8 @@ A single-page TypeScript application for visualizing benchmark results.
 
 ## Development
 
+Use Node.js 24. The publisher and browser share the TypeScript identity contract.
+
 1. Install dependencies: `npm install`
 2. Start development server: `npm run dev`
 3. Build for production: `npm run build`
@@ -15,9 +17,26 @@ The app is automatically built and deployed to GitHub Pages on pushes to the `ma
 ## Data
 
 The static app fetches benchmark data from `public/data/` at runtime. `index.json` contains compact
-metadata and median history for charts. Each entry links to a minified summary-only file under
-`public/data/runs/`, which is loaded when that runner is selected. Raw `all` and `per_iteration`
-samples stay in the original benchmark artifact and are not copied into the site repository.
+metadata and median history for charts. Each entry links to the complete schema-2 record under
+`public/data/runs/`, which is loaded when that runner is selected. The record retains every raw
+`all` and `perIteration` sample, count and failure. The index is a derived compact view.
+
+Schema 2 requires `harness_version`, and each benchmark requires `entry_version`, `iterations`,
+`series_key` and `measurement_environment`. The key is the SHA-256 of the UTF-8 JSON tuple
+`[harness_version, entry_version, runner_id, hardware_fingerprint, storage_profile, sockets_enabled]`.
+The environment fields come from `measurement_environment`. Workload parameters and measurement
+paths identify entries within that series. Source commits, fixture hashes and per-agent bounds
+never enter the key. Optional scalability fields pass through unchanged.
+
+The normal reader accepts schema 2 only. Before deploying it, pause schema-1 publishers, validate
+the conversion on a copy of the history, and coordinate the schema-2 producer rollout. With the
+history backed up, run `node scripts/convert-history.mjs public/data/index.json` once in the approved
+history-conversion commit. The script preserves links and all available measurements. It assigns
+manual versions 0, derives hardware identity from the recorded environment without the volatile
+hostname, and segregates unrecorded runners as `historical-unknown-*`. It records unavailable
+storage/sockets settings and missing samples in `historical_unavailable`; the historical sockets
+key placeholder is not evidence that sockets were disabled. Unknown iteration counts are 0, never
+fabricated samples. Running the conversion on converted history changes nothing.
 
 Completed runs are appended with the validated, idempotent publisher:
 
@@ -37,8 +56,8 @@ To analyze regressions for the latest Amp orb run:
 npm run analyze-regressions -- public/data/index.json --runner amp-orb-a1.xxlarge
 ```
 
-The analyzer deterministically replays runs from the same runner and suite. A series is a benchmark,
-its complete key-sorted run configuration, and a measurement. Its baseline is the median of the
+The analyzer deterministically replays runs from the same runner and suite. A series is its explicit
+series key, benchmark, complete key-sorted run configuration, and measurement. Its baseline is the median of the
 last 3–5 observations since the latest automatic rebase. The regression threshold is 25% with 3–4
 observations; with 5 it is the larger of 25% and three scaled median absolute deviations
 (`3 * 1.4826 * MAD / median`).

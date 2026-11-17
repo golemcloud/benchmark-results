@@ -5,6 +5,7 @@ import { marked } from 'marked';
 import sanitizeHtml from 'sanitize-html';
 import { Chart } from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
+import { validateRecord } from './record';
 import {
     BenchmarkHistoryIndex,
     BenchmarkHistoryRun,
@@ -59,7 +60,9 @@ async function fetchJson<T>(path: string): Promise<T> {
 }
 
 async function loadRun(run: BenchmarkHistoryRun): Promise<BenchmarkSuiteResult> {
-    return fetchJson<BenchmarkSuiteResult>(run.file);
+    const result = await fetchJson<BenchmarkSuiteResult>(run.file);
+    await validateRecord(result);
+    return result;
 }
 
 function renderTable(
@@ -100,7 +103,7 @@ function renderTable(
 
     const tbody = document.createElement('tbody');
     results
-        .filter((r) => r.duration_results[key])
+        .filter((r) => r.duration_results?.[key])
         .forEach((runResult) => {
             const tr = document.createElement('tr');
             const config = runResult.run_config;
@@ -136,6 +139,22 @@ function renderBenchmark(benchmark: BenchmarkResult): HTMLElement {
     h3.textContent = benchmark.name;
     section.appendChild(h3);
 
+    const failures = benchmark.results.reduce(
+        (sum, result) =>
+            sum +
+            Object.values(result.failures ?? {}).reduce(
+                (count, failure) => count + failure.count,
+                0
+            ),
+        0
+    );
+    if (failures > 0) {
+        const warning = document.createElement('p');
+        warning.setAttribute('role', 'status');
+        warning.textContent = `${failures} failed attempts recorded. Missing measurements are not plotted.`;
+        section.appendChild(warning);
+    }
+
     if (viewMode === 'historical') {
         const historicalContainer = document.createElement('div');
         historicalContainer.className = 'chart-container';
@@ -157,11 +176,11 @@ function renderBenchmark(benchmark: BenchmarkResult): HTMLElement {
     // Collect all unique duration keys
     const allKeys = new Set<string>();
     benchmark.results.forEach((runResult) => {
-        Object.keys(runResult.duration_results).forEach((key) => allKeys.add(key));
+        Object.keys(runResult.duration_results ?? {}).forEach((key) => allKeys.add(key));
     });
 
     allKeys.forEach((key) => {
-        const hasData = benchmark.results.some((r) => r.duration_results[key]);
+        const hasData = benchmark.results.some((r) => r.duration_results?.[key]);
         if (!hasData) return;
 
         const h4 = document.createElement('h4');
@@ -361,6 +380,7 @@ function renderResults() {
 async function init() {
     try {
         typedData = await fetchJson<BenchmarkHistoryIndex>('index.json');
+        await Promise.all(typedData.runs.map(validateRecord));
         const initialRun = typedData.runs[typedData.runs.length - 1];
         if (!initialRun) throw new Error('No benchmark runs are available');
         selectedSuite = initialRun.suite;
@@ -376,57 +396,78 @@ async function init() {
 
 function getHistoricalChartData(benchmarkName: string) {
     const benchmark = lastRun.results.find((b) => b.name === benchmarkName);
-    if (!benchmark) return { datasets: [], latestTimestamp: 0 };
+    if (!benchmark || !benchmark.results.length) return { datasets: [], latestTimestamp: 0 };
 
     // Find the config with largest parameters
     const largestConfig = findLargestConfig(benchmark.results);
 
-    // Find the duration key with the lowest median for this config
-    const keys = Object.keys(largestConfig.duration_results);
     const comparableRuns = getRunsForRunnerAndSuite(
         typedData.runs,
         selectedRunnerId,
         lastRun.suite
     ) as BenchmarkHistoryRun[];
+    const configIdentity = (config: object) =>
+        JSON.stringify(Object.entries(config).sort(([a], [b]) => a.localeCompare(b)));
+    const selectedConfig = configIdentity(largestConfig.run_config);
+    const keys = [
+        ...new Set(
+            comparableRuns.flatMap((run) =>
+                run.results
+                    .filter((entry) => entry.name === benchmarkName)
+                    .flatMap((entry) => entry.results)
+                    .filter((result) => configIdentity(result.run_config) === selectedConfig)
+                    .flatMap((result) => Object.keys(result.duration_results ?? {}))
+            )
+        ),
+    ];
     const latestTimestamp = Math.max(
         ...comparableRuns.map((run) => new Date(run.timestamp).getTime())
     );
     // Collect data for all duration keys in the largest config
-    const datasets = keys.map((key, index) => {
-        const data = comparableRuns
-            .map((run) => {
-                const bench = run.results.find((b) => b.name === benchmarkName);
-                if (!bench) return null;
-                const result = bench.results.find(
-                    (r) =>
-                        r.run_config.clusterSize === largestConfig.run_config.clusterSize &&
-                        r.run_config.size === largestConfig.run_config.size &&
-                        r.run_config.length === largestConfig.run_config.length &&
-                        r.run_config.disableCompilationCache ===
-                            largestConfig.run_config.disableCompilationCache
-                );
-                if (!result || !result.duration_results?.[key]) {
-                    return null;
-                } else {
-                    const timestamp = new Date(run.timestamp).getTime();
-                    return {
-                        x:
-                            timelineScale === 'logarithmic'
-                                ? toLogarithmicTimelinePosition(timestamp, latestTimestamp)
-                                : timestamp,
-                        y: result.duration_results[key],
-                    };
-                }
-            })
-            .filter((p) => p !== null);
+    const series = [
+        ...new Set(
+            comparableRuns.flatMap((run) =>
+                run.results
+                    .filter((entry) => entry.name === benchmarkName)
+                    .map((entry) => entry.series_key)
+            )
+        ),
+    ];
+    const datasets = keys.flatMap((key, metricIndex) =>
+        series.map((seriesKey, seriesIndex) => {
+            const index = metricIndex * series.length + seriesIndex;
+            const data = comparableRuns
+                .map((run) => {
+                    const bench = run.results.find(
+                        (b) => b.name === benchmarkName && b.series_key === seriesKey
+                    );
+                    if (!bench) return null;
+                    const result = bench.results.find(
+                        (r) => configIdentity(r.run_config) === selectedConfig
+                    );
+                    if (!result || result.duration_results?.[key] === undefined) {
+                        return null;
+                    } else {
+                        const timestamp = new Date(run.timestamp).getTime();
+                        return {
+                            x:
+                                timelineScale === 'logarithmic'
+                                    ? toLogarithmicTimelinePosition(timestamp, latestTimestamp)
+                                    : timestamp,
+                            y: result.duration_results[key],
+                        };
+                    }
+                })
+                .filter((p) => p !== null);
 
-        return {
-            label: `${key} (Size: ${largestConfig.run_config.size}, Length: ${largestConfig.run_config.length})`,
-            data,
-            borderColor: CHART_COLORS[index % CHART_COLORS.length],
-            fill: false,
-        };
-    });
+            return {
+                label: `${key} [${seriesKey.slice(0, 8)}] (Size: ${largestConfig.run_config.size}, Length: ${largestConfig.run_config.length})`,
+                data,
+                borderColor: CHART_COLORS[index % CHART_COLORS.length],
+                fill: false,
+            };
+        })
+    );
 
     return { datasets, latestTimestamp };
 }
@@ -438,7 +479,7 @@ function getChartData(benchmarkName: string, metric: Metric) {
     // Collect all unique keys
     const allKeys = new Set<string>();
     benchmark.results.forEach((runResult) => {
-        Object.keys(runResult.duration_results).forEach((key) => allKeys.add(key));
+        Object.keys(runResult.duration_results ?? {}).forEach((key) => allKeys.add(key));
     });
 
     const datasets: Array<{
@@ -450,7 +491,7 @@ function getChartData(benchmarkName: string, metric: Metric) {
     let colorIndex = 0;
 
     allKeys.forEach((key) => {
-        const hasData = benchmark.results.some((r) => r.duration_results[key]);
+        const hasData = benchmark.results.some((r) => r.duration_results?.[key]);
         if (!hasData) return;
 
         // Group by clusterSize and length for this key
@@ -463,7 +504,7 @@ function getChartData(benchmarkName: string, metric: Metric) {
             }
         > = {};
         benchmark.results
-            .filter((r) => r.duration_results[key])
+            .filter((r) => r.duration_results?.[key])
             .forEach((r) => {
                 const groupKey = `${r.run_config.clusterSize}-${r.run_config.length}`;
                 if (!groups[groupKey]) {

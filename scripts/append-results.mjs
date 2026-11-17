@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import crypto from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { validateRecord } from './record.mjs';
 
 function requireObject(value, name) {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) {
@@ -51,7 +52,11 @@ function validateBenchmark(benchmarkValue, index) {
         const resultName = `${name}.results[${resultIndex}]`;
         const result = requireObject(resultValue, resultName);
         requireObject(result.run_config, `${resultName}.run_config`);
-        validateMeasurements(result.duration_results, `${resultName}.duration_results`);
+        if (Object.keys(result.duration_results ?? {}).length) {
+            validateMeasurements(result.duration_results, `${resultName}.duration_results`);
+        } else if (!Object.values(result.failures ?? {}).some((failure) => failure.count > 0)) {
+            throw new Error(`${resultName} must contain measurements or recorded failures`);
+        }
         if (result.count_results !== undefined) {
             validateMeasurements(result.count_results, `${resultName}.count_results`);
         }
@@ -65,6 +70,7 @@ export function validateIncomingCollection(value) {
     }
 
     const run = requireObject(collection.runs[0], 'run');
+    validateRecord(run);
     requireString(run.suite, 'run.suite');
     requireString(run.environment, 'run.environment');
     requireString(run.version, 'run.version');
@@ -102,15 +108,7 @@ export function validateIncomingCollection(value) {
 }
 
 function runIdentity(run) {
-    return `${run.runner?.id ?? 'legacy'}\0${run.suite}\0${run.timestamp}`;
-}
-
-function withoutRawSamples(run) {
-    return JSON.parse(
-        JSON.stringify(run, (key, value) =>
-            key === 'all' || key === 'per_iteration' ? undefined : value
-        )
-    );
+    return `${run.runner.id}\0${run.suite}\0${run.timestamp}`;
 }
 
 function historyRun(run, file) {
@@ -119,9 +117,15 @@ function historyRun(run, file) {
         timestamp: run.timestamp,
         runner: run.runner,
         source: run.source,
+        schema_version: run.schema_version,
+        harness_version: run.harness_version,
         file,
         results: run.results.map((benchmark) => ({
             name: benchmark.name,
+            entry_version: benchmark.entry_version,
+            series_key: benchmark.series_key,
+            iterations: benchmark.iterations,
+            measurement_environment: benchmark.measurement_environment,
             results: benchmark.results.map((result) => ({
                 run_config: result.run_config,
                 duration_results: Object.fromEntries(
@@ -136,7 +140,7 @@ function historyRun(run, file) {
 
 export function storedRun(run) {
     const file = `runs/${crypto.createHash('sha256').update(runIdentity(run)).digest('hex').slice(0, 24)}.json`;
-    const detail = withoutRawSamples(run);
+    const detail = structuredClone(run);
     return { detail, history: historyRun(detail, file) };
 }
 

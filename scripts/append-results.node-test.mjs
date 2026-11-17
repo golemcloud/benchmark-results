@@ -5,9 +5,13 @@ import path from 'node:path';
 import test from 'node:test';
 
 import { appendResults, validateIncomingCollection } from './append-results.mjs';
+import { seriesKey } from './record.mjs';
 
 function sampleRun(overrides = {}) {
+    const environment = { runner_id: 'amp-orb-a1.xxlarge', hardware_fingerprint: 'cpu', storage_profile: 'postgres', sockets_enabled: false };
     return {
+        schema_version: 2,
+        harness_version: 1,
         suite: 'CI',
         environment: 'test environment',
         version: '0.0.0',
@@ -21,6 +25,10 @@ function sampleRun(overrides = {}) {
         results: [
             {
                 name: 'latency-small',
+                entry_version: 1,
+                iterations: 1,
+                measurement_environment: environment,
+                series_key: seriesKey(1, 1, environment),
                 description: 'Measures invocation latency.',
                 runs: [{ clusterSize: 1, size: 1, length: 1 }],
                 results: [
@@ -33,7 +41,7 @@ function sampleRun(overrides = {}) {
                                 max: 1,
                                 median: 1,
                                 all: [1],
-                                per_iteration: [[1]],
+                                perIteration: [[1]],
                             },
                         },
                     },
@@ -59,7 +67,7 @@ function withFiles(callback) {
     }
 }
 
-test('stores a summary-only run and compact history', () => {
+test('stores every raw sample while keeping the history index compact', () => {
     withFiles(({ inputPath, indexPath, run }) => {
         const result = appendResults(inputPath, indexPath);
         assert.equal(result.status, 'appended');
@@ -74,11 +82,8 @@ test('stores a summary-only run and compact history', () => {
         const detail = JSON.parse(fs.readFileSync(detailPath, 'utf8'));
         assert.equal(detail.timestamp, run.timestamp);
         assert.equal(detail.results[0].results[0].duration_results.invocation.median, 1);
-        assert.equal(detail.results[0].results[0].duration_results.invocation.all, undefined);
-        assert.equal(
-            detail.results[0].results[0].duration_results.invocation.per_iteration,
-            undefined
-        );
+        assert.deepEqual(detail.results[0].results[0].duration_results.invocation.all, [1]);
+        assert.deepEqual(detail.results[0].results[0].duration_results.invocation.perIteration, [[1]]);
     });
 });
 
