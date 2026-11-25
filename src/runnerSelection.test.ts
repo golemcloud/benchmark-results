@@ -7,8 +7,6 @@ import {
     getRunnerOptions,
     getRunsForRunnerAndSuite,
     getSourceDisplay,
-    LEGACY_RUNNER_ID,
-    LEGACY_RUNNER_LABEL,
 } from './utils';
 
 function result(
@@ -17,6 +15,8 @@ function result(
     runner?: BenchmarkSuiteResult['runner']
 ): BenchmarkSuiteResult {
     return {
+        schema_version: 2,
+        harness_version: 1,
         suite,
         environment: 'test',
         version: '0.0.0',
@@ -27,13 +27,10 @@ function result(
 }
 
 describe('runner selection', () => {
-    it('assigns legacy runs to the known GitHub Actions runner', () => {
+    it('rejects runs without a recorded runner identity', () => {
         const legacyRun = result('2026-01-01T00:00:00Z');
 
-        expect(getRunnerId(legacyRun)).toBe(LEGACY_RUNNER_ID);
-        expect(getRunnerOptions([legacyRun], 'CI')).toEqual([
-            { id: LEGACY_RUNNER_ID, label: LEGACY_RUNNER_LABEL },
-        ]);
+        expect(() => getRunnerId(legacyRun)).toThrow('runner.id is required');
     });
 
     it('returns the latest appended run for the selected runner', () => {

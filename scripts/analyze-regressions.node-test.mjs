@@ -13,13 +13,21 @@ function benchmark(name, values, measurement = 'invocation') {
     };
 }
 
+const SERIES_KEY = 'a'.repeat(64);
+
 function run(day, groups, runner = 'amp-orb-a1.xxlarge') {
     return {
+        schema_version: 2,
+        harness_version: 1,
         suite: 'CI',
         timestamp: `2026-08-${String(day).padStart(2, '0')}T00:00:00Z`,
         runner: { id: runner },
         source: { commitSha: String(day).repeat(40).slice(0, 40) },
-        results: Object.entries(groups).map(([name, values]) => benchmark(name, values)),
+        results: Object.entries(groups).map(([name, values]) => ({
+            ...benchmark(name, values),
+            entry_version: 1,
+            series_key: SERIES_KEY,
+        })),
     };
 }
 

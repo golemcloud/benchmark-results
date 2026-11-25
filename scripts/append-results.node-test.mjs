@@ -5,43 +5,10 @@ import path from 'node:path';
 import test from 'node:test';
 
 import { appendResults, validateIncomingCollection } from './append-results.mjs';
+import { liveRun } from './test-fixtures.mjs';
 
 function sampleRun(overrides = {}) {
-    return {
-        suite: 'CI',
-        environment: 'test environment',
-        version: '0.0.0',
-        timestamp: '2026-08-19T10:15:20.243211382Z',
-        runner: { id: 'amp-orb-a1.xxlarge', label: 'Amp orb (a1.xxlarge)' },
-        source: {
-            repository: 'golemcloud/golem',
-            commitSha: '4358cac70a1dd11f186cb0f22f855a7a96e05cfc',
-            ref: 'refs/heads/main',
-        },
-        results: [
-            {
-                name: 'latency-small',
-                description: 'Measures invocation latency.',
-                runs: [{ clusterSize: 1, size: 1, length: 1 }],
-                results: [
-                    {
-                        run_config: { clusterSize: 1, size: 1, length: 1 },
-                        duration_results: {
-                            invocation: {
-                                avg: 1,
-                                min: 1,
-                                max: 1,
-                                median: 1,
-                                all: [1],
-                                per_iteration: [[1]],
-                            },
-                        },
-                    },
-                ],
-            },
-        ],
-        ...overrides,
-    };
+    return { ...liveRun(), ...overrides };
 }
 
 function withFiles(callback) {
@@ -59,7 +26,7 @@ function withFiles(callback) {
     }
 }
 
-test('stores a summary-only run and compact history', () => {
+test('stores the complete record and a compact history', () => {
     withFiles(({ inputPath, indexPath, run }) => {
         const result = appendResults(inputPath, indexPath);
         assert.equal(result.status, 'appended');
@@ -67,18 +34,13 @@ test('stores a summary-only run and compact history', () => {
         const index = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
         assert.equal(index.runs.length, 1);
         assert.deepEqual(index.runs[0].results[0].results[0].duration_results, {
-            invocation: 1,
+            invocation: 10,
         });
 
         const detailPath = path.join(path.dirname(indexPath), index.runs[0].file);
         const detail = JSON.parse(fs.readFileSync(detailPath, 'utf8'));
         assert.equal(detail.timestamp, run.timestamp);
-        assert.equal(detail.results[0].results[0].duration_results.invocation.median, 1);
-        assert.equal(detail.results[0].results[0].duration_results.invocation.all, undefined);
-        assert.equal(
-            detail.results[0].results[0].duration_results.invocation.per_iteration,
-            undefined
-        );
+        assert.deepEqual(detail, run);
     });
 });
 
@@ -98,10 +60,7 @@ test('rejects a conflicting run with the same identity', () => {
             inputPath,
             JSON.stringify({ runs: [sampleRun({ environment: 'different environment' })] })
         );
-        assert.throws(
-            () => appendResults(inputPath, indexPath),
-            /a different run already exists/
-        );
+        assert.throws(() => appendResults(inputPath, indexPath), /a different run already exists/);
         const index = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
         const detailPath = path.join(path.dirname(indexPath), index.runs[0].file);
         assert.equal(JSON.parse(fs.readFileSync(detailPath, 'utf8')).environment, run.environment);

@@ -1,7 +1,5 @@
 import { BenchmarkRunMetadata, BenchmarkRunResult, Metric, MetricKeys, RunConfig } from './types';
 
-export const LEGACY_RUNNER_ID = 'github-actions-blacksmith-32vcpu';
-export const LEGACY_RUNNER_LABEL = 'GitHub Actions (Blacksmith 32 vCPU)';
 const DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
 
 export interface RunnerOption {
@@ -14,15 +12,21 @@ export interface SourceDisplay {
     ref?: string;
 }
 
+/** The site reads schema 2 only; publication validates the full record and its series keys. */
+export function requireSchemaTwo(run: BenchmarkRunMetadata): void {
+    if (run.schema_version !== 2) {
+        throw new Error(`Benchmark run ${run.timestamp} is not schema 2`);
+    }
+    getRunnerId(run);
+}
+
 export function getRunnerId(run: BenchmarkRunMetadata): string {
-    return run.runner?.id ?? LEGACY_RUNNER_ID;
+    if (!run.runner?.id) throw new Error('runner.id is required');
+    return run.runner.id;
 }
 
 export function getRunnerLabel(run: BenchmarkRunMetadata): string {
-    return (
-        run.runner?.label ??
-        (getRunnerId(run) === LEGACY_RUNNER_ID ? LEGACY_RUNNER_LABEL : getRunnerId(run))
-    );
+    return run.runner?.label ?? getRunnerId(run);
 }
 
 export function getRunnerOptions(runs: BenchmarkRunMetadata[], suite: string): RunnerOption[] {
