@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { CONVERTED_HARNESS_VERSION, validateHistoryRun, validateRecord } from './record.mjs';
 
 function requireString(value, name) {
-    if (typeof value !== 'string' || value.length === 0) {
+    if (typeof value !== 'string' || value.trim().length === 0) {
         throw new Error(`${name} must be a non-empty string`);
     }
 }
@@ -127,9 +127,19 @@ export function appendResults(inputPath, indexPath = 'public/data/index.json') {
 }
 
 function main() {
-    const [inputPath, indexPath] = process.argv.slice(2);
-    if (!inputPath) {
-        throw new Error('usage: npm run append-results -- <run.json> [index.json]');
+    const args = process.argv.slice(2);
+    const validateOnly = args[0] === '--validate-only';
+    const [inputPath, indexPath] = validateOnly ? args.slice(1) : args;
+    if (!inputPath || (validateOnly ? args.length !== 2 : args.length > 2)) {
+        throw new Error('usage: npm run append-results -- [--validate-only] <run.json> [index.json]');
+    }
+    if (validateOnly) {
+        const run = validateIncomingCollection(JSON.parse(fs.readFileSync(inputPath, 'utf8')));
+        if (run.harness_version === CONVERTED_HARNESS_VERSION) {
+            throw new Error('run.harness_version 0 is reserved for converted history');
+        }
+        process.stdout.write(`valid: ${run.runner.id} ${run.suite} ${run.timestamp}\n`);
+        return;
     }
     const result = appendResults(inputPath, indexPath);
     process.stdout.write(

@@ -54,6 +54,14 @@ Completed runs are appended with the validated, idempotent publisher:
 npm run append-results -- /path/to/run.json
 ```
 
+To check the same publication contract without reading or writing the history index:
+
+```shell
+npm run append-results -- --validate-only /path/to/run.json
+```
+
+Golem's merge job uses this read-only mode even when publication is disabled.
+
 The input must contain exactly one complete schema-2 suite run with runner and source metadata, and
 every iteration result for each configuration. Replaying
 the identical runner, suite, and timestamp is a no-op; conflicting data for that identity is
