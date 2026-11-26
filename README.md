@@ -15,9 +15,38 @@ The app is automatically built and deployed to GitHub Pages on pushes to the `ma
 ## Data
 
 The static app fetches benchmark data from `public/data/` at runtime. `index.json` contains compact
-metadata and median history for charts. Each entry links to a minified summary-only file under
-`public/data/runs/`, which is loaded when that runner is selected. Raw `all` and `per_iteration`
-samples stay in the original benchmark artifact and are not copied into the site repository.
+metadata and median history for charts. Each entry links to the complete minified record under
+`public/data/runs/`, which is loaded when that runner is selected. The record keeps every raw
+sample, iteration result and failure the harness wrote; the index is a derived compact view.
+
+Records use schema 2, written by Golem's `golem-test-framework/src/benchmark/results.rs`. The
+reader accepts nothing else. Each record requires `harness_version`, and each entry requires
+`entry_version`, `iterations`, `measurement_environment` and `series_key`. The key is the
+SHA-256 of the UTF-8 JSON tuple `[harness_version, entry_version, runner_id, hardware_fingerprint,
+storage_profile, sockets_enabled]`; the publisher recomputes it and rejects a mismatch. Workload
+parameters and the entry name select observations within a series. Source commits, artifact hashes
+and per-agent bounds never enter it. Optional fields, such as `ceiling`, pass through unchanged.
+
+History published before schema 2 was converted once with `node scripts/convert-history.mjs
+public/data/index.json`. Converted runs have harness and entry version 0, which the publisher
+refuses for new runs. Their hardware fingerprint hashes the recorded CPU lines and the total
+memory rounded up to a power of two, because reported memory varies within one machine class (113
+to 124 Gb counts as 128). The OS, kernel and hostname are excluded; the CPU architecture was not
+recorded. Runs without a
+recorded runner are attributed to `github-actions-blacksmith-32vcpu`, as the reader did before.
+Storage profile and sockets were not recorded; `historical_unavailable` lists such fields, and the
+sockets placeholder is not evidence that sockets were disabled. An unknown iteration count is 0.
+Running the conversion again changes nothing.
+
+The schema-2 reader and the converted history deploy together; neither works without the other.
+Roll out in this order:
+
+1. Pause the schema-1 publisher, or land the Golem schema-2 writer first. The publisher rejects
+   schema-1 runs.
+2. Rebase the reader commit onto the current `master`. Do not merge or rebase the conversion
+   commit: rerun the converter on the rebased history, so runs appended in the meantime are
+   converted too, and commit the result.
+3. Push both commits together, then resume schema-2 publishing.
 
 Completed runs are appended with the validated, idempotent publisher:
 
@@ -25,7 +54,8 @@ Completed runs are appended with the validated, idempotent publisher:
 npm run append-results -- /path/to/run.json
 ```
 
-The input must contain exactly one completed suite run with runner and source metadata. Replaying
+The input must contain exactly one complete schema-2 suite run with runner and source metadata, and
+every iteration result for each configuration. Replaying
 the identical runner, suite, and timestamp is a no-op; conflicting data for that identity is
 rejected. The command writes one immutable run file, then atomically updates the history index.
 An interrupted write can leave an unreferenced run file, but never a history entry without its
@@ -37,8 +67,8 @@ To analyze regressions for the latest Amp orb run:
 npm run analyze-regressions -- public/data/index.json --runner amp-orb-a1.xxlarge
 ```
 
-The analyzer deterministically replays runs from the same runner and suite. A series is a benchmark,
-its complete key-sorted run configuration, and a measurement. Its baseline is the median of the
+The analyzer deterministically replays runs from the same runner and suite. A series is a series key,
+a benchmark name, its complete key-sorted run configuration, and a measurement. Its baseline is the median of the
 last 3–5 observations since the latest automatic rebase. The regression threshold is 25% with 3–4
 observations; with 5 it is the larger of 25% and three scaled median absolute deviations
 (`3 * 1.4826 * MAD / median`).

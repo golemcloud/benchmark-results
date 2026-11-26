@@ -2,13 +2,7 @@ import fs from 'node:fs';
 import crypto from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-
-function requireObject(value, name) {
-    if (value === null || typeof value !== 'object' || Array.isArray(value)) {
-        throw new Error(`${name} must be an object`);
-    }
-    return value;
-}
+import { CONVERTED_HARNESS_VERSION, validateHistoryRun, validateRecord } from './record.mjs';
 
 function requireString(value, name) {
     if (typeof value !== 'string' || value.length === 0) {
@@ -16,101 +10,30 @@ function requireString(value, name) {
     }
 }
 
-function requireFiniteNumber(value, name) {
-    if (typeof value !== 'number' || !Number.isFinite(value)) {
-        throw new Error(`${name} must be a finite number`);
-    }
-}
-
-function validateMeasurements(measurements, name) {
-    const entries = Object.entries(requireObject(measurements, name));
-    if (entries.length === 0) {
-        throw new Error(`${name} must not be empty`);
-    }
-    for (const [measurementName, summaryValue] of entries) {
-        const summary = requireObject(summaryValue, `${name}.${measurementName}`);
-        requireFiniteNumber(summary.avg, `${name}.${measurementName}.avg`);
-        requireFiniteNumber(summary.min, `${name}.${measurementName}.min`);
-        requireFiniteNumber(summary.max, `${name}.${measurementName}.max`);
-    }
-}
-
-function validateBenchmark(benchmarkValue, index) {
-    const name = `run.results[${index}]`;
-    const benchmark = requireObject(benchmarkValue, name);
-    requireString(benchmark.name, `${name}.name`);
-    requireString(benchmark.description, `${name}.description`);
-    if (!Array.isArray(benchmark.runs) || benchmark.runs.length === 0) {
-        throw new Error(`${name}.runs must be a non-empty array`);
-    }
-    if (!Array.isArray(benchmark.results) || benchmark.results.length !== benchmark.runs.length) {
-        throw new Error(`${name}.results must contain one result per run configuration`);
-    }
-
-    benchmark.results.forEach((resultValue, resultIndex) => {
-        const resultName = `${name}.results[${resultIndex}]`;
-        const result = requireObject(resultValue, resultName);
-        requireObject(result.run_config, `${resultName}.run_config`);
-        validateMeasurements(result.duration_results, `${resultName}.duration_results`);
-        if (result.count_results !== undefined) {
-            validateMeasurements(result.count_results, `${resultName}.count_results`);
-        }
-    });
-}
-
+/** Accepts exactly one complete schema-2 run with source provenance. */
 export function validateIncomingCollection(value) {
-    const collection = requireObject(value, 'input');
-    if (!Array.isArray(collection.runs) || collection.runs.length !== 1) {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) {
+        throw new Error('input must be an object');
+    }
+    if (!Array.isArray(value.runs) || value.runs.length !== 1) {
         throw new Error('input.runs must contain exactly one completed suite run');
     }
 
-    const run = requireObject(collection.runs[0], 'run');
-    requireString(run.suite, 'run.suite');
-    requireString(run.environment, 'run.environment');
-    requireString(run.version, 'run.version');
-    requireString(run.timestamp, 'run.timestamp');
-    if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/.test(run.timestamp)) {
-        throw new Error('run.timestamp must be a UTC ISO-8601 timestamp');
+    const run = validateRecord(value.runs[0]);
+    const source = run.source;
+    if (source === null || typeof source !== 'object') {
+        throw new Error('run.source must be an object');
     }
-
-    const runner = requireObject(run.runner, 'run.runner');
-    requireString(runner.id, 'run.runner.id');
-    if (runner.label !== undefined) {
-        requireString(runner.label, 'run.runner.label');
-    }
-
-    const source = requireObject(run.source, 'run.source');
     requireString(source.repository, 'run.source.repository');
     if (!/^[0-9a-f]{40}$/i.test(source.commitSha)) {
         throw new Error('run.source.commitSha must be a full Git commit SHA');
     }
     requireString(source.ref, 'run.source.ref');
-
-    if (!Array.isArray(run.results) || run.results.length === 0) {
-        throw new Error('run.results must be a non-empty array');
-    }
-    const names = new Set();
-    run.results.forEach((benchmark, index) => {
-        validateBenchmark(benchmark, index);
-        if (names.has(benchmark.name)) {
-            throw new Error(`run.results contains duplicate benchmark ${benchmark.name}`);
-        }
-        names.add(benchmark.name);
-    });
-
     return run;
 }
 
 function runIdentity(run) {
-    return `${run.runner?.id ?? 'legacy'}\0${run.suite}\0${run.timestamp}`;
-}
-
-function withoutRawSamples(run) {
-    return JSON.parse(
-        JSON.stringify(run, (key, value) =>
-            key === 'all' || key === 'per_iteration' ? undefined : value
-        )
-    );
+    return `${run.runner.id}\0${run.suite}\0${run.timestamp}`;
 }
 
 function historyRun(run, file) {
@@ -118,10 +41,14 @@ function historyRun(run, file) {
         suite: run.suite,
         timestamp: run.timestamp,
         runner: run.runner,
-        source: run.source,
+        ...(run.source === undefined ? {} : { source: run.source }),
+        schema_version: run.schema_version,
+        harness_version: run.harness_version,
         file,
         results: run.results.map((benchmark) => ({
             name: benchmark.name,
+            entry_version: benchmark.entry_version,
+            series_key: benchmark.series_key,
             results: benchmark.results.map((result) => ({
                 run_config: result.run_config,
                 duration_results: Object.fromEntries(
@@ -134,9 +61,10 @@ function historyRun(run, file) {
     };
 }
 
+/** The detail file keeps the complete record; the index entry is a derived compact view. */
 export function storedRun(run) {
     const file = `runs/${crypto.createHash('sha256').update(runIdentity(run)).digest('hex').slice(0, 24)}.json`;
-    const detail = withoutRawSamples(run);
+    const detail = structuredClone(run);
     return { detail, history: historyRun(detail, file) };
 }
 
@@ -162,10 +90,16 @@ function writeAtomically(filePath, content) {
 export function appendResults(inputPath, indexPath = 'public/data/index.json') {
     const incoming = JSON.parse(fs.readFileSync(inputPath, 'utf8'));
     const run = validateIncomingCollection(incoming);
-    const index = requireObject(JSON.parse(fs.readFileSync(indexPath, 'utf8')), 'history index');
-    if (!Array.isArray(index.runs)) {
+    if (run.harness_version === CONVERTED_HARNESS_VERSION) {
+        throw new Error('run.harness_version 0 is reserved for converted history');
+    }
+    const index = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
+    if (!Array.isArray(index?.runs)) {
         throw new Error('history index must contain a runs array');
     }
+    index.runs.forEach((candidate, position) =>
+        validateHistoryRun(candidate, `history index runs[${position}]`)
+    );
 
     const identity = runIdentity(run);
     const { detail, history } = storedRun(run);
