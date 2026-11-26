@@ -57,6 +57,10 @@ function schemaOne(runner) {
 
 test('series key matches the writer digest of its six identity inputs', () => {
     assert.equal(
+        seriesKey(2, 3, ENVIRONMENT),
+        '9905faa1e871f7cab96a278f371b15b238f7e77b80c04664fb35c371db3e4a24'
+    );
+    assert.equal(
         seriesKey(1, 3, ENVIRONMENT),
         '5442c64164c6cf4f48cfee226ddc0693ebe07501934e1195a922d37f7840f572'
     );

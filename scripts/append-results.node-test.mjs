@@ -3,8 +3,10 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
+import { spawnSync } from 'node:child_process';
 
 import { appendResults, validateIncomingCollection } from './append-results.mjs';
+import { seriesKey } from './record.mjs';
 import { liveRun } from './test-fixtures.mjs';
 
 function sampleRun(overrides = {}) {
@@ -41,6 +43,41 @@ test('stores the complete record and a compact history', () => {
         const detail = JSON.parse(fs.readFileSync(detailPath, 'utf8'));
         assert.equal(detail.timestamp, run.timestamp);
         assert.deepEqual(detail, run);
+    });
+});
+
+test('validation-only CLI checks the publication contract without writing history', () => {
+    withFiles(({ directory, inputPath, indexPath, run }) => {
+        const originalIndex = fs.readFileSync(indexPath, 'utf8');
+        for (const [name, mutate] of [
+            ['valid', () => {}],
+            ['duplicate entry', (run) => run.results.push(structuredClone(run.results[0]))],
+            ['short SHA', (run) => { run.source.commitSha = 'abc'; }],
+            ['missing ref', (run) => { delete run.source.ref; }],
+            ['blank ref', (run) => { run.source.ref = ' '; }],
+            ['blank repository', (run) => { run.source.repository = ' '; }],
+            ['reserved harness', (run) => {
+                run.harness_version = 0;
+                for (const entry of run.results) {
+                    entry.entry_version = 0;
+                    entry.series_key = seriesKey(0, 0, entry.measurement_environment);
+                }
+            }],
+        ]) {
+            const candidate = structuredClone(run);
+            mutate(candidate);
+            const input = JSON.stringify({ runs: [candidate] });
+            fs.writeFileSync(inputPath, input);
+            const result = spawnSync(process.execPath, [
+                new URL('./append-results.mjs', import.meta.url).pathname,
+                '--validate-only', inputPath,
+            ], { cwd: directory, encoding: 'utf8' });
+            assert.equal(result.status === 0, name === 'valid', `${name}: ${result.stderr}`);
+            if (name === 'valid') assert.match(result.stdout, /^valid:/);
+            assert.equal(fs.readFileSync(inputPath, 'utf8'), input);
+            assert.equal(fs.readFileSync(indexPath, 'utf8'), originalIndex);
+            assert.deepEqual(fs.readdirSync(path.dirname(indexPath)), ['index.json']);
+        }
     });
 });
 
