@@ -88,3 +88,15 @@ the state (`new-regression`, `regression-update`, `active-regression`, `candidat
 authoritative notification signal. `candidates` always contains every candidate and its baseline
 details, including the source commit of each baseline observation; `topCandidates` is limited to
 five. Pass `--timestamp <exact UTC timestamp>` to replay only through a particular published run.
+
+To analyze the newest published CI run for an exact Golem commit without measuring or publishing:
+
+```shell
+node scripts/analyze-ci-benchmarks.mjs <results-checkout> <40-char Golem SHA> <runner-id> <output-dir>
+```
+
+It verifies the selected detail record against its index entry, runs the analyzer through that run,
+and writes `selection.json` (record path, SHA-256 and recorded failures) and `analysis.json` to the
+output directory, refusing to overwrite either. Without a matching run, `analysis.json` has status
+`missing-ci-result` and `shouldAlert: false`. Golem's `analyze_ci_benchmarks.sh` launcher calls it
+from a fresh clone of this repository.
